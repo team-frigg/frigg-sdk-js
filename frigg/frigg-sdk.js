@@ -198,15 +198,17 @@ FRIGG.Client = function (params){
         console.log(slots);
         this._bindTemplate(this._cleanTemplateName(template.label), slots)
 
-        this._updateDebugger(sceneId);
+        this._updateDebugger(scene, template);
     }
 
     this._cleanTemplateName = function(templateName){
         return templateName.replace(" ", "_").replace("é", "e");
     }
 
-    this._updateDebugger = function(sceneId){
-        this.params.debuggerElement.innerHTML = "<h2>Scene "+sceneId+"</h2>";
+    this._updateDebugger = function(scene, template){
+        var sceneId = scene.id;
+
+        this.params.debuggerElement.innerHTML = "<h2>Scene "+sceneId+ " (" + template.label + ")</h2>";
         var connectionCount = 0;
         
         for (var i in this.project.connections) {

@@ -24,3 +24,39 @@
 .inFront {
     left: 0;
 }
+
+
+/* COMPONENTS */
+
+.container {
+    width: 100%;
+    height: 100%;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.container.carded  {
+    padding: 4em;
+
+    width: calc(100% - 8em);
+    height: calc(100% - 8em);
+}
+
+.card {
+
+    width: 100%;
+    height: 100%;
+
+    background: white;
+}
+
+
+
+.tpl_accueil .front {
+    display: block;
+    margin: auto;
+    width: 80%;
+    max-width: 500px;
+}

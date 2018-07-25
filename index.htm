@@ -27,15 +27,32 @@
             <p frigg-slot-link="next">GOTO NEXT</p>
         </section>
 
-        <section id="tpl_accueil" class="scene">
-            <li frigg-slot-html="background"  >placeholder</li>
-            <li frigg-slot-html="front"  >placeholder</li>
-            <li frigg-slot-html="title"  >placeholder</li>
-            <li frigg-slot-html="baseline"  >placeholder</li>
-            <li frigg-slot-html="button_next"  >placeholder</li>
+        <section id="tpl_accueil" class="scene tpl_accueil">
+            <div frigg-slot-bg="background" class="container">
+                <img class="front" frigg-slot-srcAlt="front" />
+
+                <ul>
+                    <li frigg-slot-html="title"  >title placeholder</li>
+                    <li frigg-slot-html="baseline"  >baseline placeholder</li>
+                    <li frigg-slot-html="button_next"  >next placeholder</li>
+                </ul>
+            </div>
+
+            
         </section>
 
         <section id="tpl_intersticiel" class="scene">
+            <div frigg-slot-bg="background" class="container carded">
+                
+                <div class="card">
+                    <h2 frigg-slot-html="title"></h2>
+                    <p><audio frigg-slot-srcAlt="main_audio" controls></p>
+
+                    <p frigg-slot-html="main_text"></p>
+                </div>
+
+            </div>
+
             <li frigg-slot-html="title"  >placeholder</li>
             <li frigg-slot-html="background"  >placeholder</li>
             <li frigg-slot-html="main_audio"  >placeholder</li>
