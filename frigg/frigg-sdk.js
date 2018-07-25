@@ -1,3 +1,18 @@
+//POLYFILL
+if (Element.prototype.getAttributeNames == undefined) {
+  Element.prototype.getAttributeNames = function () {
+    var attributes = this.attributes;
+    var length = attributes.length;
+    var result = new Array(length);
+    for (var i = 0; i < length; i++) {
+      result[i] = attributes[i].name;
+    }
+    return result;
+  };
+}
+
+
+//FRIGG
 var FRIGG = {};
 
 FRIGG.Client = function (params){
@@ -21,9 +36,12 @@ FRIGG.Client = function (params){
         }
     };
 
-    this._init = function (params) {
-        //this.params.templateElement.style.display = "none";
-    }(params); //
+    this.allAttributes = [];
+
+    this._init = function (self, params) {
+        //self.params.templateElement.style.display = "none";
+        self.allAttributes = Object.keys(self.params.slotHandler);
+    }(this, params); //
 
     
 
@@ -36,9 +54,36 @@ FRIGG.Client = function (params){
         return clone;
     }
 
+    this._bindElement = function(slotElement, sceneData) {
+
+        for (var a = 0; a < this.allAttributes.length; a++) {
+            var attribute = this.allAttributes[a];
+            var value = slotElement.getAttribute(attribute);
+
+            if (!value) {
+                continue;
+            }
+
+            var mediaValue = sceneData[value];
+            this.params.slotHandler[attribute](slotElement, mediaValue);
+        }
+    }
+
     this._bindTemplate = function(templateName, sceneData) {
         var clone = this._cloneElement(this.params.templatePrefix + templateName);
 
+        var selector = "[" + this.allAttributes.join("],[") + "]";
+
+        var slotElements = clone.querySelectorAll(selector);
+        
+        console.log(slotElements);
+        for (var i = 0; i < slotElements.length; i++) {
+            var slotElement = slotElements[i];
+            this._bindElement(slotElement, sceneData);
+        }
+
+        this.params.containerElement.appendChild(clone);
+/*
         for(var key in this.params.slotHandler){
             var slotElements = clone.querySelectorAll("["+key+"]");
             
@@ -74,7 +119,7 @@ FRIGG.Client = function (params){
         }
 
 
-        this.params.containerElement.appendChild(clone);
+        */
     }
 
     this.run = function(projectId){
