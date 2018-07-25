@@ -4,6 +4,10 @@
     <title>Frigg player</title>
     <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
     <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
+
 </head>
 <body>
     
@@ -114,11 +118,27 @@
         </section>
 
         <section id="tpl_page_carte" class="scene">
-            <li frigg-slot-html="map_url"  >placeholder</li>
-            <li frigg-slot-html="menu_icon"  >placeholder</li>
+            
+            <div class="container">
+                <div id='map' style='width: 400px; height: 300px;'></div>
+                <script>
+                mapboxgl.accessToken = 'pk.eyJ1Ijoib2N0ZXQtc3R1ZGlvIiwiYSI6ImNqYzdqZDU5NTAyMDgycXFvaWE0dzB1b2IifQ.4LocJzKYCxejHd6i80nzfg';
+                var map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v9'
+                });
+                </script>
+
+                <p><img frigg-slot-srcAlt="menu_icon" /></p>
+
+                <li frigg-slot-html="map_url"  >placeholder</li>
+            
             <li frigg-slot-html="points_of_interest"  >placeholder</li>
             <li frigg-slot-html="bottom_icons"  >placeholder</li>
             <li frigg-slot-html="bottom_links"  >placeholder</li>
+            </div>
+
+            
         </section>
 
         <section id="tpl_menu" class="scene">
