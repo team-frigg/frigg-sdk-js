@@ -61,6 +61,12 @@ FRIGG.Client = function (params){
 
     this._cloneElement = function(elementId) {
         var original = this.params.templateElement.querySelector("#" + elementId);
+
+        if (!original) {
+            console.error("Cannot clone template : " + elementId);
+            return;
+        }
+
         var clone = original.cloneNode(true);
 
         clone.setAttribute("id", "");
@@ -159,6 +165,8 @@ FRIGG.Client = function (params){
 
     this._loadProject = function(projectId, projectReadyCallback) {
         var url = "http://admin.systeme-frigg.org/api/project/" + projectId;
+        //var url = "http://frigg.local/api/project/" + projectId;
+
         var request = new XMLHttpRequest();
 
         request.open('GET', url);
@@ -188,9 +196,13 @@ FRIGG.Client = function (params){
 
         var slots = this._buildSlotContent(scene);
         console.log(slots);
-        this._bindTemplate(template.label, slots)
+        this._bindTemplate(this._cleanTemplateName(template.label), slots)
 
         this._updateDebugger(sceneId);
+    }
+
+    this._cleanTemplateName = function(templateName){
+        return templateName.replace(" ", "_").replace("é", "e");
     }
 
     this._updateDebugger = function(sceneId){
