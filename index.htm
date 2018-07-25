@@ -13,15 +13,11 @@
         <hr />
         <h1>TEMPLATE ZONE (hidden)</h1>
 
-        <section id="tpl_simple" frigg-slot-bg="main_media">
-
-            <div>
-                <h2 frigg-slot-html="title" frigg-slot-bg="main_media" frigg-slot-link="event" >Title placeholder</h2>
-            </div>
-
+        <section id="tpl_simple">
+            <h2 frigg-slot-html="title"  >Title placeholder</h2>
             <p frigg-slot-html="content">Content placeholder</p>
-            <img frigg-slot-srcAlt="main_media" src="http://via.placeholder.com/350x150" />
-
+            <p><img height="50px" frigg-slot-srcAlt="photo" src="http://via.placeholder.com/35x35/00ff00/" alt="Frigg"></p>
+            <p><audio frigg-slot-srcAlt="sound" controls></p>
         </section>
 
     </div>
@@ -30,7 +26,7 @@
 
 <script type="text/javascript" src="frigg/frigg-sdk.js"></script>
 <script type="text/javascript">
-    var projectId = 3;
+    var projectId = 2;
 
     var frigg = new FRIGG.Client();
     frigg.run(projectId);

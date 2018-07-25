@@ -17,21 +17,27 @@ var FRIGG = {};
 
 FRIGG.Client = function (params){
 
+    this.project = {};
+
+    this.sceneElementHistory = [];
+    this.currentSceneElement = null;
+
     this.params = {
+        'mediaFilePrefix': 'http://admin.systeme-frigg.org/storage/',
         'templatePrefix' : "tpl_",
         'containerElement' : document.getElementById("friggContainer"),
         'templateElement' : document.getElementById("friggTemplates"),
 
         'slotHandler' : {
             'frigg-slot-html' : function(element, media) {
-                element.innerHTML = media;
+                element.innerHTML = media.content;
             },
             'frigg-slot-bg' : function(element, media) {
-                element.style.backgroundImage = "url(" + media + ")";
+                element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + media.content + ")";
             },
             'frigg-slot-srcAlt' : function(element, media) {
-                element.setAttribute("src", media); //media.content
-                element.setAttribute("alt", media); //media.desc
+                element.setAttribute("src", this.params.mediaFilePrefix + media.content);
+                element.setAttribute("alt", media.description);
             },
             'frigg-slot-link' : function(element, media) {
                 element.addEventListener("click", function(event){
@@ -99,15 +105,15 @@ FRIGG.Client = function (params){
 
     this._bindOneElement = function(elementToBind, index, elementSlots) {
 
-        console.log(elementToBind);
-        console.log("Bind element at index " + index);
-        console.log(elementSlots);
+        //console.log(elementToBind);
+        //console.log("Bind element at index " + index);
+        //console.log(elementSlots);
 
         for(var slot in elementSlots) {
             var slotValues = elementSlots[slot];
             var value;
 
-            console.log("Slot: " + slot);
+            //console.log("Slot: " + slot);
 
             if (index >= slotValues.length) {
                 value = slotValues[ slotValues.length -1 ];
@@ -115,11 +121,24 @@ FRIGG.Client = function (params){
                 value = slotValues[ index ];
             }
             
-            console.log(" value: " + value);
+            //console.log(" value: " + value);
 
-            this.params.slotHandler[slot](elementToBind, value);
+            this.params.slotHandler[slot].bind(this)(elementToBind, value);
         }
 
+    }
+
+    this._pushNewScene = function(newScene) {
+        if (this.currentSceneElement) {
+            this.currentSceneElement.classList.add("inBackground");
+            this.currentSceneElement.classList.remove("inFront")
+        }
+        
+        newScene.classList.add("inFront");
+        this.params.containerElement.appendChild(newScene);
+
+        this.currentSceneElement = newScene;
+        this.sceneElementHistory.push(newScene);
     }
 
     this._bindTemplate = function(templateName, sceneData) {
@@ -134,16 +153,68 @@ FRIGG.Client = function (params){
             this._bindElement(slotElement, sceneData);
         }
 
-        this.params.containerElement.appendChild(clone);
+        this._pushNewScene(clone);
+    }
+
+    this._loadProject = function(projectId, projectReadyCallback) {
+        var url = "http://admin.systeme-frigg.org/api/project/" + projectId;
+        var request = new XMLHttpRequest();
+
+        request.open('GET', url);
+        request.addEventListener('load', function (event){
+            this.project = JSON.parse(event.target.responseText);
+            this._projectIsReady();
+        }.bind(this));
+
+        request.addEventListener('error', function (){
+            this.project = {};
+        }.bind(this));
+
+        request.send();
+    }
+
+    this._projectIsReady = function(){
+        console.log(this.project);
+        this._showScene(this.project.start_scene_id);
+    }
+
+    this._showScene = function(sceneId){
+        var scene = this.project.scenes[sceneId];
+        console.log(scene);
+
+        var template = this.project.templates[scene.template_id];
+
+        var slots = this._buildSlotContent(scene);
+        this._bindTemplate(template.label, slots)
 
     }
 
+    this._buildSlotContent = function(scene) {
+        var slots={};
+
+        for (var i = 0; i < scene.medias.length; i++) {
+            var mediaInfo = scene.medias[i];
+
+            slots[mediaInfo.slot] = [];
+
+            for (var m = 0; m < mediaInfo.id.length; m++) {
+                slots[mediaInfo.slot].push( this.project.medias[ mediaInfo.id[m] ] );
+            }
+
+        }
+
+        return slots;
+    }
+
     this.run = function(projectId){
-        this._bindTemplate("simple", {
+
+        this._loadProject(projectId);
+
+        /*this._bindTemplate("simple", {
             'title': ["Hello", "Hi", "Super"],
             'content': ["Lorem ipsum"],
             'event': ['test1', 'test2'],
             'main_media': ["http://via.placeholder.com/35x15/00ff00/", "http://via.placeholder.com/35x15/ffff00/"]
-        });
+        });*/
     }
 }
