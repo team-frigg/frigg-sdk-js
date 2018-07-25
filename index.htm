@@ -33,7 +33,7 @@
 
 <script type="text/javascript" src="frigg/frigg-sdk.js"></script>
 <script type="text/javascript">
-    var projectId = 2;
+    var projectId = window.location.hash ? window.location.hash.replace("#", "") : 1;
 
     var frigg = new FRIGG.Client();
     frigg.run(projectId);
