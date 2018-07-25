@@ -27,24 +27,25 @@ FRIGG.Client = function (params){
         'templatePrefix' : "tpl_",
         'containerElement' : document.getElementById("friggContainer"),
         'templateElement' : document.getElementById("friggTemplates"),
+        'debuggerElement' : document.getElementById("friggDebugger"),
 
         'slotHandler' : {
-            'frigg-slot-html' : function(element, media) {
-                element.innerHTML = media.content;
+            'frigg-slot-html' : function(element, slotData) {
+                element.innerHTML = slotData.content;
             },
-            'frigg-slot-bg' : function(element, media) {
-                element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + media.content + ")";
+            'frigg-slot-bg' : function(element, slotData) {
+                element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + slotData.content + ")";
             },
-            'frigg-slot-srcAlt' : function(element, media) {
-                element.setAttribute("src", this.params.mediaFilePrefix + media.content);
-                element.setAttribute("alt", media.description);
+            'frigg-slot-srcAlt' : function(element, slotData) {
+                element.setAttribute("src", this.params.mediaFilePrefix + slotData.content);
+                element.setAttribute("alt", slotData.description);
             },
-            'frigg-slot-link' : function(element, media) {
+            'frigg-slot-link' : function(element, slotData) {
                 element.addEventListener("click", function(event){
                     event.preventDefault();
-
-                    alert(media);
-                })
+                    console.log("vers la scene " +slotData.destination_scene_id);
+                    this._showScene(slotData.destination_scene_id);
+                }.bind(this))
             },
         }
     };
@@ -134,8 +135,8 @@ FRIGG.Client = function (params){
             this.currentSceneElement.classList.remove("inFront")
         }
         
-        newScene.classList.add("inFront");
         this.params.containerElement.appendChild(newScene);
+        newScene.classList.add("inFront");
 
         this.currentSceneElement = newScene;
         this.sceneElementHistory.push(newScene);
@@ -175,6 +176,7 @@ FRIGG.Client = function (params){
 
     this._projectIsReady = function(){
         console.log(this.project);
+        //this._showScene(3);
         this._showScene(this.project.start_scene_id);
     }
 
@@ -185,36 +187,72 @@ FRIGG.Client = function (params){
         var template = this.project.templates[scene.template_id];
 
         var slots = this._buildSlotContent(scene);
+        console.log(slots);
         this._bindTemplate(template.label, slots)
 
+        this._updateDebugger(sceneId);
+    }
+
+    this._updateDebugger = function(sceneId){
+        this.params.debuggerElement.innerHTML = "<h2>Scene "+sceneId+"</h2>";
+        var connectionCount = 0;
+        
+        for (var i in this.project.connections) {
+            var connection = this.project.connections[i];
+            if (connection.origin_scene_id == sceneId) {
+                this.params.debuggerElement.appendChild(this._makeDebuggerItem(connection));
+                connectionCount++;
+            }
+        }
+
+        if (connectionCount==0){
+            this.params.debuggerElement.innerHTML += "<p>Pas de connections</p>";
+        }
+    }
+
+    this._makeDebuggerItem = function(connection){
+        var item = document.createElement("li");
+        item.innerHTML = connection.label + " (vers scene " + connection.destination_scene_id + ")";
+        item.addEventListener('click', function(){
+            this._showScene(connection.destination_scene_id);
+        }.bind(this));
+
+        return item;
     }
 
     this._buildSlotContent = function(scene) {
         var slots={};
 
-        for (var i = 0; i < scene.medias.length; i++) {
-            var mediaInfo = scene.medias[i];
-
-            slots[mediaInfo.slot] = [];
-
-            for (var m = 0; m < mediaInfo.id.length; m++) {
-                slots[mediaInfo.slot].push( this.project.medias[ mediaInfo.id[m] ] );
-            }
-
-        }
+        slots = this._buildSlotContentArray(slots, scene, 'medias');
+        slots = this._buildSlotContentArray(slots, scene, 'connections');
 
         return slots;
     }
 
+    this._buildSlotContentArray = function(slots, scene, key){
+        if (scene[key] == undefined) {
+            return slots;
+        }
+
+        for (var i = 0; i < scene[key].length; i++) {
+            var info = scene[key][i];
+            slots[info.slot] = [];
+
+            if (! Array.isArray(info.id)){
+                info.id = [info.id];
+            }
+
+
+            for (var m = 0; m < info.id.length; m++) {
+                slots[info.slot].push( this.project[key][ info.id[m] ] );
+            }
+
+        }
+        
+        return slots;
+    }
+
     this.run = function(projectId){
-
         this._loadProject(projectId);
-
-        /*this._bindTemplate("simple", {
-            'title': ["Hello", "Hi", "Super"],
-            'content': ["Lorem ipsum"],
-            'event': ['test1', 'test2'],
-            'main_media': ["http://via.placeholder.com/35x15/00ff00/", "http://via.placeholder.com/35x15/ffff00/"]
-        });*/
     }
 }

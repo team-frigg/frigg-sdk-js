@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Frigg player</title>
+    <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     
@@ -9,15 +11,20 @@
         
     </div>
 
+    <div id="friggDebugger">
+    </div>
+
     <div id="friggTemplates">
         <hr />
         <h1>TEMPLATE ZONE (hidden)</h1>
 
-        <section id="tpl_simple">
+        <section id="tpl_simple" class="scene">
             <h2 frigg-slot-html="title"  >Title placeholder</h2>
             <p frigg-slot-html="content">Content placeholder</p>
             <p><img height="50px" frigg-slot-srcAlt="photo" src="http://via.placeholder.com/35x35/00ff00/" alt="Frigg"></p>
             <p><audio frigg-slot-srcAlt="sound" controls></p>
+
+            <p frigg-slot-link="next">GOTO NEXT</p>
         </section>
 
     </div>
