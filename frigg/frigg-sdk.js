@@ -33,6 +33,13 @@ FRIGG.Client = function (params){
                 element.setAttribute("src", media); //media.content
                 element.setAttribute("alt", media); //media.desc
             },
+            'frigg-slot-link' : function(element, media) {
+                element.addEventListener("click", function(event){
+                    event.preventDefault();
+
+                    alert(media);
+                })
+            },
         }
     };
 
@@ -55,6 +62,8 @@ FRIGG.Client = function (params){
     }
 
     this._bindElement = function(slotElement, sceneData) {
+        var numberOfClones = 0;
+        var elementSlots = {};
 
         for (var a = 0; a < this.allAttributes.length; a++) {
             var attribute = this.allAttributes[a];
@@ -64,9 +73,53 @@ FRIGG.Client = function (params){
                 continue;
             }
 
-            var mediaValue = sceneData[value];
-            this.params.slotHandler[attribute](slotElement, mediaValue);
+            var slotData = sceneData[value];
+
+            if (!slotData) {
+                continue;
+            }
+
+            elementSlots[attribute] = slotData;
+
+            numberOfClones = Math.max(slotData.length -1, numberOfClones);
         }
+
+        var parent = slotElement.parentNode;
+
+        this._bindOneElement(slotElement, 0, elementSlots);
+        
+        for (var i = 0; i < numberOfClones; i++) {
+            var clone = slotElement.cloneNode(true);
+            parent.appendChild(clone);
+
+            this._bindOneElement(clone, i+1, elementSlots);
+        }
+
+    }
+
+    this._bindOneElement = function(elementToBind, index, elementSlots) {
+
+        console.log(elementToBind);
+        console.log("Bind element at index " + index);
+        console.log(elementSlots);
+
+        for(var slot in elementSlots) {
+            var slotValues = elementSlots[slot];
+            var value;
+
+            console.log("Slot: " + slot);
+
+            if (index >= slotValues.length) {
+                value = slotValues[ slotValues.length -1 ];
+            } else {
+                value = slotValues[ index ];
+            }
+            
+            console.log(" value: " + value);
+
+            this.params.slotHandler[slot](elementToBind, value);
+        }
+
     }
 
     this._bindTemplate = function(templateName, sceneData) {
@@ -76,57 +129,21 @@ FRIGG.Client = function (params){
 
         var slotElements = clone.querySelectorAll(selector);
         
-        console.log(slotElements);
         for (var i = 0; i < slotElements.length; i++) {
             var slotElement = slotElements[i];
             this._bindElement(slotElement, sceneData);
         }
 
         this.params.containerElement.appendChild(clone);
-/*
-        for(var key in this.params.slotHandler){
-            var slotElements = clone.querySelectorAll("["+key+"]");
-            
-            for (var i = 0; i < slotElements.length; i++) {
-                var slotElement = slotElements[i];
-                var mediaKey = slotElement.getAttribute(key);
 
-                var mediaData = sceneData[mediaKey];
-
-                if (Array.isArray(mediaData)){
-
-                    var futureParent = slotElement.parentNode;
-
-                    //handle source
-                    this.params.slotHandler[key](slotElement, mediaData[0]);
-
-                    for (var i = 1; i < mediaData.length; i++) {
-                        var innerClone = slotElement.cloneNode(true);
-                        this.params.slotHandler[key](innerClone, mediaData[i]);
-                        futureParent.appendChild(innerClone);
-                    }
-
-                    
-
-                } else {
-                    this.params.slotHandler[key](slotElement, mediaData);
-                }
-
-                
-
-            }
-
-        }
-
-
-        */
     }
 
     this.run = function(projectId){
         this._bindTemplate("simple", {
-            'title': ["Hello", "Hi"],
-            'content': "Lorem ipsum",
-            'main_media': "http://via.placeholder.com/30x30"
+            'title': ["Hello", "Hi", "Super"],
+            'content': ["Lorem ipsum"],
+            'event': ['test1', 'test2'],
+            'main_media': ["http://via.placeholder.com/35x15/00ff00/", "http://via.placeholder.com/35x15/ffff00/"]
         });
     }
 }
