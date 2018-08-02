@@ -31,16 +31,34 @@ FRIGG.Client = function (config){
 
         'slotHandler' : {
             'frigg-slot-html' : function(element, slotData) {
+                if (slotData == null) {
+                    element.classList.add("empty");
+                    return;
+                }
+
                 element.innerHTML = slotData.content;
             },
             'frigg-slot-bg' : function(element, slotData) {
+                if (slotData == null) {
+                    return;
+                }
+
                 element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + slotData.content + ")";
             },
             'frigg-slot-srcAlt' : function(element, slotData) {
+                if (slotData == null) {
+                    element.classList.add("empty");
+                    return;
+                }
+
                 element.setAttribute("src", this.params.mediaFilePrefix + slotData.content);
                 element.setAttribute("alt", slotData.description);
             },
             'frigg-slot-link' : function(element, slotData) {
+                if (slotData == null) {
+                    return;
+                }
+
                 element.classList.add("link");
 
                 element.addEventListener("click", function(event){
@@ -100,6 +118,12 @@ FRIGG.Client = function (config){
         var numberOfClones = 0;
         var elementSlots = {};
 
+        var recap = {
+            binded: {},
+            missing: {},
+            
+        };
+
         for (var a = 0; a < this.allAttributes.length; a++) {
             var attribute = this.allAttributes[a];
             var value = slotElement.getAttribute(attribute);
@@ -111,9 +135,11 @@ FRIGG.Client = function (config){
             var slotData = sceneData[value];
 
             if (!slotData) {
+                recap.missing[attribute] = true;
                 continue;
             }
 
+            recap.binded[attribute] = true;
             elementSlots[attribute] = slotData;
 
             numberOfClones = Math.max(slotData.length -1, numberOfClones);
@@ -130,19 +156,32 @@ FRIGG.Client = function (config){
             this._bindOneElement(clone, i+1, elementSlots);
         }
 
+
+        //console.log("Recap slots : ");
+        //console.log(recap);
+        
+        var binded = Object.keys(recap.binded).length;
+        var missing = Object.keys(recap.missing).length;
+
+        if (binded == 0 && missing > 0) {
+            for (var attribute in recap.missing) {
+                this.params.slotHandler[attribute].bind(this)(slotElement, null);
+            }
+        }
+
     }
 
     this._bindOneElement = function(elementToBind, index, elementSlots) {
 
         //console.log(elementToBind);
-        //console.log("Bind element at index " + index);
+        console.log("Bind element at index " + index);
         //console.log(elementSlots);
 
         for(var slot in elementSlots) {
             var slotValues = elementSlots[slot];
             var value;
 
-            //console.log("Slot: " + slot);
+            console.log("Slot: " + slot);
 
             if (index >= slotValues.length) {
                 value = slotValues[ slotValues.length -1 ];
@@ -150,7 +189,7 @@ FRIGG.Client = function (config){
                 value = slotValues[ index ];
             }
             
-            //console.log(" value: " + value);
+            console.log(" value: " + value);
 
             this.params.slotHandler[slot].bind(this)(elementToBind, value);
         }
@@ -248,13 +287,13 @@ FRIGG.Client = function (config){
             
             var sceneId = connection.origin_scene_id;
 
-            console.log("Connection " + connectionId + " from scene " + sceneId + " ...");
+            //console.log("Connection " + connectionId + " from scene " + sceneId + " ...");
             
             if (alreadyMapped[sceneId] && alreadyMapped[sceneId][connectionId]) {
                 //already mapped
-                console.log("already mapped");
+                //console.log("already mapped");
             } else if (this.project.scenes[sceneId]) {
-                console.log("to be mapped to scene " + sceneId);
+                //console.log("to be mapped to scene " + sceneId);
 
                 //add it to the scene
                 var scene = this.project.scenes[sceneId];
@@ -284,7 +323,7 @@ FRIGG.Client = function (config){
         }
 
         
-        console.log(this.project);
+        //console.log(this.project);
 
         
     }

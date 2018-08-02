@@ -6,7 +6,7 @@
 
 .scene {
     transition: all 0.2s;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0%;
     
@@ -16,6 +16,11 @@
     background: white;
 
 }
+
+.empty {
+    display: none;
+}
+
 
 .inBackground {
     left: -100%;
