@@ -15,7 +15,7 @@ if (Element.prototype.getAttributeNames == undefined) {
 //FRIGG
 var FRIGG = {};
 
-FRIGG.Client = function (params){
+FRIGG.Client = function (config){
 
     this.project = {};
 
@@ -47,15 +47,36 @@ FRIGG.Client = function (params){
                     this._showScene(slotData.destination_scene_id);
                 }.bind(this))
             },
+        }, 
+
+        'onTemplateLoaded' : {
+            
         }
     };
 
     this.allAttributes = [];
 
-    this._init = function (self, params) {
-        //self.params.templateElement.style.display = "none";
+    this._mergeObject = function(objectA, objectB){
+
+        if (! objectA || ! objectB) {
+            return;
+        }
+
+        for(var key in objectB) {
+            objectA[key] = objectB[key];
+        }
+
+    };
+
+    this._init = function (self, config) {
+        
+        if (config) {
+            self._mergeObject(self.params, config);
+            
+        }
+
         self.allAttributes = Object.keys(self.params.slotHandler);
-    }(this, params); //
+    }(this, config); //
 
     
 
@@ -160,7 +181,14 @@ FRIGG.Client = function (params){
             this._bindElement(slotElement, sceneData);
         }
 
+        
+
         this._pushNewScene(clone);
+
+
+        if (this.params.onTemplateLoaded[templateName] != undefined) {
+            this.params.onTemplateLoaded[templateName](clone);
+        }
     }
 
     this._loadProject = function(projectId, projectReadyCallback) {
@@ -197,6 +225,9 @@ FRIGG.Client = function (params){
         var slots = this._buildSlotContent(scene);
         console.log(slots);
         this._bindTemplate(this._cleanTemplateName(template.label), slots)
+
+
+
 
         this._updateDebugger(scene, template);
     }

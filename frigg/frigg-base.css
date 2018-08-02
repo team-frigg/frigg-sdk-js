@@ -3,6 +3,7 @@
 }
 
 #friggDebugger {
+	z-index: 100;
     font-size: 0.8em;
     position: absolute;
     bottom: 0.5em;

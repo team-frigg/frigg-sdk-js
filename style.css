@@ -8,7 +8,7 @@
     transition: all 0.2s;
     position: absolute;
     top: 0;
-    left: 100%;
+    left: 0%;
     
     height: 100%;
     width: 100%;
@@ -23,6 +23,7 @@
 
 .inFront {
     left: 0;
+    z-index: 1;
 }
 
 
@@ -59,4 +60,13 @@
     margin: auto;
     width: 80%;
     max-width: 500px;
+
+    z-index: 1;
+}
+
+
+
+.mapContainer {
+    height: 100%;
+    width: 100%;
 }
