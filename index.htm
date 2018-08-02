@@ -121,9 +121,6 @@
             
             <div class="container" style="">
                 <div class='mapContainer'></div>
-
-                
-
                 <p><img frigg-slot-srcAlt="menu_icon" /></p>
 
                 <li frigg-slot-html="map_url"  >placeholder</li>
@@ -160,8 +157,9 @@
 
     var config = {
         "onTemplateLoaded" : {
-            'page_carte': function (element) {
-                //console.log("page_carte")
+            'page_carte': function (element, sceneData) {
+                console.log("page_carte");
+                console.log(sceneData);
                 
                 var theMapId = "theMap";//"map" + Date.now();
                 element.querySelector('.mapContainer').setAttribute('id', theMapId);

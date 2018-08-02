@@ -43,7 +43,6 @@ FRIGG.Client = function (config){
             'frigg-slot-link' : function(element, slotData) {
                 element.addEventListener("click", function(event){
                     event.preventDefault();
-                    console.log("vers la scene " +slotData.destination_scene_id);
                     this._showScene(slotData.destination_scene_id);
                 }.bind(this))
             },
@@ -181,13 +180,10 @@ FRIGG.Client = function (config){
             this._bindElement(slotElement, sceneData);
         }
 
-        
-
         this._pushNewScene(clone);
 
-
         if (this.params.onTemplateLoaded[templateName] != undefined) {
-            this.params.onTemplateLoaded[templateName](clone);
+            this.params.onTemplateLoaded[templateName](clone, sceneData);
         }
     }
 
@@ -200,6 +196,7 @@ FRIGG.Client = function (config){
         request.open('GET', url);
         request.addEventListener('load', function (event){
             this.project = JSON.parse(event.target.responseText);
+            this._prepareProject();
             this._projectIsReady();
         }.bind(this));
 
@@ -210,9 +207,88 @@ FRIGG.Client = function (config){
         request.send();
     }
 
+    this._prepareProject = function(){
+
+        this._mapAnonymousConnections();
+        
+    }
+
+    this._mapAnonymousConnections = function(){
+
+        var alreadyMapped = {};
+
+        //fill already mapped connections, by scene id.
+        for(var sceneId in this.project.scenes) {
+            var scene = this.project.scenes[sceneId];
+            
+            alreadyMapped[sceneId] = {};
+
+            for(var connectionIndex in scene.connections) {
+                var connection = scene.connections[connectionIndex];
+
+                if (Array.isArray(connection.id)) {
+                    for (var i = 0; i < connection.id.length; i++) {
+                        alreadyMapped[sceneId][connection.id[i]] = true;
+                    }
+                } else {
+                    alreadyMapped[sceneId][connection.id] = true;
+                }
+
+            }
+            
+        }
+
+        //browse all connection to find unmapped connection by scene id ...
+        var mapTodo = {};
+
+        for(var connectionId in this.project.connections) {
+            var connection = this.project.connections[connectionId];
+            
+            var sceneId = connection.origin_scene_id;
+
+            console.log("Connection " + connectionId + " from scene " + sceneId + " ...");
+            
+            if (alreadyMapped[sceneId] && alreadyMapped[sceneId][connectionId]) {
+                //already mapped
+                console.log("already mapped");
+            } else if (this.project.scenes[sceneId]) {
+                console.log("to be mapped to scene " + sceneId);
+
+                //add it to the scene
+                var scene = this.project.scenes[sceneId];
+
+                if (!scene.connections) {
+                    scene.connections = [];
+                }
+
+                if (!mapTodo[sceneId]) {
+                    mapTodo[sceneId] = {};
+                }
+
+                mapTodo[sceneId][connectionId] = true;
+
+            }
+        }
+
+        //...then map them as "_anonymous" to the origin scene.
+
+        for(var sceneId in mapTodo) {
+            var scene = this.project.scenes[sceneId];
+
+            scene.connections.push({
+                'id': Object.keys(mapTodo[sceneId]),
+                'slot': "_anonymous"
+            });
+        }
+
+        
+        console.log(this.project);
+
+        
+    }
+    
     this._projectIsReady = function(){
         console.log(this.project);
-        //this._showScene(3);
         this._showScene(this.project.start_scene_id);
     }
 
@@ -223,11 +299,8 @@ FRIGG.Client = function (config){
         var template = this.project.templates[scene.template_id];
 
         var slots = this._buildSlotContent(scene);
-        console.log(slots);
+    
         this._bindTemplate(this._cleanTemplateName(template.label), slots)
-
-
-
 
         this._updateDebugger(scene, template);
     }
