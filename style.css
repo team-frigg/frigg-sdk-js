@@ -26,6 +26,10 @@
     z-index: 1;
 }
 
+.link {
+    cursor: pointer;
+}
+
 
 /* COMPONENTS */
 
@@ -86,5 +90,7 @@
     color: white;
     background-color: rgb(53, 32, 97);
     border: 3px solid white; 
+
+    width: 150px;
 }
 

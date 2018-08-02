@@ -33,7 +33,7 @@
 
         <section id="tpl_accueil" class="scene tpl_accueil">
             <div frigg-slot-bg="background" class="container">
-                <img class="front" frigg-slot-srcAlt="front" />
+                <img class="front" frigg-slot-srcAlt="front"  frigg-slot-link="_anonymous_connection" />
 
                 <ul>
                     <li frigg-slot-html="title"  >title placeholder</li>
@@ -181,18 +181,22 @@
 
                     var latitude = destionationScene.geo_latitude;
                     var longitude = destionationScene.geo_longitude;
+                    var level = destionationScene.geo_level;
+
                     var label = destionationScene.label;
+
+                    //by level : 
+                    //https://www.mapbox.com/mapbox.js/api/v3.1.1/l-layergroup/
+                    //on https://www.mapbox.com/mapbox-gl-js/api/#map.event:zoomend 
 
                     if (latitude && longitude) {
                
-
-
                         var popupElt = document.createElement('div');
                         popupElt.className = 'map-popup';
                         popupElt.innerHTML = "<h3>" + label + '</h3>' + "<p>" + connection.label + '</p>';
 
                         var popupMarker = new mapboxgl.Marker(popupElt)
-                          .setOffset([0, -50])
+                          .setOffset([0, -70])
                           .setLngLat([longitude, latitude])
                           .addTo(map);
 

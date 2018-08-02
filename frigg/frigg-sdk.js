@@ -41,6 +41,8 @@ FRIGG.Client = function (config){
                 element.setAttribute("alt", slotData.description);
             },
             'frigg-slot-link' : function(element, slotData) {
+                element.classList.add("link");
+
                 element.addEventListener("click", function(event){
                     event.preventDefault();
                     this._showScene(slotData.destination_scene_id);
