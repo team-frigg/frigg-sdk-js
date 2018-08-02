@@ -251,6 +251,7 @@ FRIGG.Client = function (config){
     this._prepareProject = function(){
 
         this._mapAnonymousConnections();
+        this._fixSvgBug();
         
     }
 
@@ -327,6 +328,16 @@ FRIGG.Client = function (config){
 
         
     }
+
+    this._fixSvgBug = function(){
+        for(mediaId in this.project.medias){
+            var media = this.project.medias[mediaId];
+
+            if (media.type == 'image' && media.content.endsWith('.') ) {
+                media.content = media.content + "svg";
+            }
+        }
+    }
     
     this._projectIsReady = function(){
         console.log(this.project);
@@ -347,7 +358,8 @@ FRIGG.Client = function (config){
     }
 
     this._cleanTemplateName = function(templateName){
-        return templateName.replace(" ", "_").replace("é", "e");
+        var pattern = /[\u0065\u24D4\uFF45\u00E8\u00E9\u00EA\u1EC1\u1EBF\u1EC5\u1EC3\u1EBD\u0113\u1E15\u1E17\u0115\u0117\u00EB\u1EBB\u011B\u0205\u0207\u1EB9\u1EC7\u0229\u1E1D\u0119\u1E19\u1E1B\u0247\u025B\u01DD]/g;
+        return templateName.replace(" ", "_").replace(pattern, "e");
     }
 
     this._updateDebugger = function(scene, template){

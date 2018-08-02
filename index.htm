@@ -19,9 +19,7 @@
     </div>
 
     <div id="friggTemplates">
-        <hr />
-        <h1>TEMPLATE ZONE (hidden)</h1>
-
+        
         <section id="tpl_simple" class="scene">
             <h2 frigg-slot-html="title"  >Title placeholder</h2>
             <p frigg-slot-html="content">Content placeholder</p>
@@ -71,8 +69,9 @@
             <li frigg-slot-html="background"  >placeholder</li>
             <li frigg-slot-html="main_audio"  >placeholder</li>
             <li frigg-slot-html="main_text"  >placeholder</li>
-            <li frigg-slot-html="bottom_icons"  >placeholder</li>
-            <li frigg-slot-html="bottom_links"  >placeholder</li>
+            <li >
+                <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" />
+            </li>
             <li frigg-slot-html="audio_icon"  >placeholder</li>
             <li frigg-slot-html="map_icon"  >placeholder</li>
             <li frigg-slot-html="menu_icon"  >placeholder</li>
@@ -83,14 +82,14 @@
             <li frigg-slot-html="background"  >placeholder</li>
             <li frigg-slot-html="main_audio"  >placeholder</li>
             <li frigg-slot-html="main_text"  >placeholder</li>
-            <li frigg-slot-html="bottom_icons"  >placeholder</li>
-            <li frigg-slot-html="bottom_links"  >placeholder</li>
-            
+            <li >
+                <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" />
+            </li>
             <li frigg-slot-html="audio_icon"  >placeholder</li>
             <li frigg-slot-html="back_icon"  >placeholder</li>
         </section>
 
-        <section id="tpl_page_media" class="scene">
+        <section id="tpl_page_medias" class="scene">
             <li frigg-slot-html="header"  >placeholder</li>
             <li frigg-slot-html="title"  >placeholder</li>
             <li frigg-slot-html="main_audio"  >placeholder</li>
