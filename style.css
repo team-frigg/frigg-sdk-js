@@ -67,9 +67,8 @@
 .tpl_accueil .front {
     display: block;
     margin: auto;
-    width: 80%;
-    max-width: 500px;
-
+    height: 100%;
+    
     z-index: 1;
 }
 

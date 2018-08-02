@@ -20,6 +20,7 @@ FRIGG.Client = function (config){
     this.project = {};
 
     this.sceneElementHistory = [];
+    this.sceneIdHistory = [];
     this.currentSceneElement = null;
 
     this.params = {
@@ -196,20 +197,22 @@ FRIGG.Client = function (config){
 
     }
 
-    this._pushNewScene = function(newScene) {
+    this._pushNewScene = function(newScene, sceneId) {
         if (this.currentSceneElement) {
             this.currentSceneElement.classList.add("inBackground");
             this.currentSceneElement.classList.remove("inFront")
         }
         
+        newScene.setAttribute("frigg-scene-id", sceneId);
         this.params.containerElement.appendChild(newScene);
         newScene.classList.add("inFront");
 
         this.currentSceneElement = newScene;
         this.sceneElementHistory.push(newScene);
+        this.sceneIdHistory.push(sceneId);
     }
 
-    this._bindTemplate = function(templateName, sceneData) {
+    this._bindTemplate = function(templateName, sceneData, sceneId) {
         var clone = this._cloneElement(this.params.templatePrefix + templateName);
 
         var selector = "[" + this.allAttributes.join("],[") + "]";
@@ -221,7 +224,7 @@ FRIGG.Client = function (config){
             this._bindElement(slotElement, sceneData);
         }
 
-        this._pushNewScene(clone);
+        this._pushNewScene(clone, sceneId);
 
         if (this.params.onTemplateLoaded[templateName] != undefined) {
             this.params.onTemplateLoaded[templateName](clone, sceneData, this);
@@ -344,17 +347,66 @@ FRIGG.Client = function (config){
         this._showScene(this.project.start_scene_id);
     }
 
-    this._showScene = function(sceneId){
-        var scene = this.project.scenes[sceneId];
-        console.log(scene);
+    this._sceneIndexInHistory = function(sceneId){
+        var index = this.sceneIdHistory.indexOf(sceneId);
+        return index;    
+    }
 
+    this._clearHistoryUntil = function(sceneId, sceneIndex){
+
+        console.log("CURRENT HISTORY:");
+        console.log(this.sceneElementHistory);
+
+
+        var count = this.sceneElementHistory.length;
+
+        for (var i = count - 1; i > sceneIndex; i--) {
+            var sceneElement = this.sceneElementHistory[i];
+            sceneElement.parentNode.removeChild(sceneElement);
+        }
+
+        this.sceneElementHistory = this.sceneElementHistory.slice(0, sceneIndex+1);
+        this.sceneIdHistory = this.sceneIdHistory.slice(0, sceneIndex+1);
+        
+        
+        console.log("CLEARED HISTORY:");
+        console.log(this.sceneElementHistory);
+
+        return this.sceneElementHistory[ this.sceneElementHistory.length - 1];
+    }
+
+    this._restoreScene = function(sceneId, scene){
+        this._pushNewScene(scene, sceneId);
+
+        /*if (this.params.onTemplateRestored[templateName] != undefined) {
+            this.params.onTemplateRestored[templateName](scene, sceneData, this);
+        }*/
+
+        return false;    
+    }
+
+    this._showScene = function(sceneId){
+
+        var scene = this.project.scenes[sceneId];
         var template = this.project.templates[scene.template_id];
 
+        var sceneIndex = this._sceneIndexInHistory(sceneId);
+
+        if (sceneIndex > -1) {
+            var sceneElement = this._clearHistoryUntil(sceneId, sceneIndex);
+            this._restoreScene(sceneId, sceneElement);
+            this._updateDebugger(scene, template);
+            return;
+        }
+
+        
         var slots = this._buildSlotContent(scene);
     
-        this._bindTemplate(this._cleanTemplateName(template.label), slots)
-
+        this._bindTemplate(this._cleanTemplateName(template.label), slots, sceneId)
         this._updateDebugger(scene, template);
+
+        console.log("SHOW SCENE END:");
+        console.log(this.sceneElementHistory);
     }
 
     this._cleanTemplateName = function(templateName){

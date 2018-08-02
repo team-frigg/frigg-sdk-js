@@ -51,17 +51,17 @@
                     <p><audio frigg-slot-srcAlt="main_audio" controls></p>
 
                     <p frigg-slot-html="main_text"></p>
+
+                    <p frigg-slot-link="_anonymous_connection">
+                        <img frigg-slot-srcAlt="button_next_image"  />
+                        <span frigg-slot-html="button_next_string"></span>
+                    </p>
                 </div>
 
             </div>
 
-            <li frigg-slot-html="title"  >placeholder</li>
-            <li frigg-slot-html="background"  >placeholder</li>
-            <li frigg-slot-html="main_audio"  >placeholder</li>
-            <li frigg-slot-html="main_text"  >placeholder</li>
             <li frigg-slot-html="audio_icon"  >placeholder</li>
-            <li frigg-slot-html="button_next_string"  >placeholder</li>
-            <li frigg-slot-html="button_next_image"  >placeholder</li>
+
         </section>
 
         <section id="tpl_livre" class="scene">
@@ -189,13 +189,17 @@
                     //on https://www.mapbox.com/mapbox-gl-js/api/#map.event:zoomend 
 
                     if (latitude && longitude) {
-               
+                        
+                        /*var listener = function(event){
+
+                        }*/
+
                         var popupElt = document.createElement('div');
                         popupElt.className = 'map-popup';
                         popupElt.innerHTML = "<h3>" + label + '</h3>' + "<p>" + connection.label + '</p>';
 
                         var popupMarker = new mapboxgl.Marker(popupElt)
-                          .setOffset([0, -70])
+                          .setOffset([0, -60])
                           .setLngLat([longitude, latitude])
                           .addTo(map);
 
