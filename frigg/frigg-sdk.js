@@ -183,7 +183,7 @@ FRIGG.Client = function (config){
         this._pushNewScene(clone);
 
         if (this.params.onTemplateLoaded[templateName] != undefined) {
-            this.params.onTemplateLoaded[templateName](clone, sceneData);
+            this.params.onTemplateLoaded[templateName](clone, sceneData, this);
         }
     }
 
@@ -277,7 +277,7 @@ FRIGG.Client = function (config){
 
             scene.connections.push({
                 'id': Object.keys(mapTodo[sceneId]),
-                'slot': "_anonymous"
+                'slot': "_anonymous_connection"
             });
         }
 

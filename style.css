@@ -70,3 +70,21 @@
     height: 100%;
     width: 100%;
 }
+
+.map-marker {
+  background-color: yellow;  
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.map-popup {
+    text-align: center;
+    size: 1em;
+    padding: 0.5em;
+    color: white;
+    background-color: rgb(53, 32, 97);
+    border: 3px solid white; 
+}
+

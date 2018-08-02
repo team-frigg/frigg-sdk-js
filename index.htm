@@ -157,22 +157,54 @@
 
     var config = {
         "onTemplateLoaded" : {
-            'page_carte': function (element, sceneData) {
+            'page_carte': function (element, sceneData, frigg) {
                 console.log("page_carte");
                 console.log(sceneData);
-                
+                console.log(frigg.project);
+
                 var theMapId = "theMap";//"map" + Date.now();
                 element.querySelector('.mapContainer').setAttribute('id', theMapId);
-
-                //mapboxgl.accessToken = 'pk.eyJ1Ijoib2N0ZXQtc3R1ZGlvIiwiYSI6ImNqYzdqZDU5NTAyMDgycXFvaWE0dzB1b2IifQ.4LocJzKYCxejHd6i80nzfg';
 
                 mapboxgl.accessToken = 'pk.eyJ1IjoidGFiYXNjb3ZpZGVvIiwiYSI6ImNqaHVqd283bTBuYWYzcXFpdmdya3Y3eXAifQ.wDWy30KVv4--PEV0icwAAg';
 
                 var map = new mapboxgl.Map({
                     container: theMapId,
-                    //style: 'mapbox://styles/octet-studio/cjkck57dh1aix2rqn26xfy58f'
                     style: 'mapbox://styles/tabascovideo/cjikfqj3209iv2snz12qvnnx7'
                 });
+
+                
+                //poi & popup
+                for(var connectionIndex in sceneData['_anonymous_connection']){
+                    var connection = sceneData['_anonymous_connection'][connectionIndex];
+                    var destionationSceneId = connection.destination_scene_id;
+                    var destionationScene = frigg.project.scenes[destionationSceneId];
+
+                    var latitude = destionationScene.geo_latitude;
+                    var longitude = destionationScene.geo_longitude;
+                    var label = destionationScene.label;
+
+                    if (latitude && longitude) {
+               
+
+
+                        var popupElt = document.createElement('div');
+                        popupElt.className = 'map-popup';
+                        popupElt.innerHTML = "<h3>" + label + '</h3>' + "<p>" + connection.label + '</p>';
+
+                        var popupMarker = new mapboxgl.Marker(popupElt)
+                          .setOffset([0, -50])
+                          .setLngLat([longitude, latitude])
+                          .addTo(map);
+
+                        
+                        var markerElt = document.createElement('div');
+                        markerElt.className = 'map-marker';
+
+                        var marker = new mapboxgl.Marker(markerElt)
+                          .setLngLat([longitude, latitude])
+                          .addTo(map);
+                    }
+                }
 
                 map.resize();
                 
