@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <title>Frigg player</title>
     <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -64,7 +65,7 @@
 
         </section>
 
-        <section id="tpl_livre" class="scene">
+        <section id="tpl_livre" class="scene contentPage">
 
 
             <header>
@@ -93,7 +94,7 @@
 
 
 
-        <section id="tpl_chapitre" class="scene">
+        <section id="tpl_chapitre" class="scene contentPage">
 
             <header>
                 <div class="diaporama">
@@ -118,14 +119,23 @@
 
         </section>
 
-        <section id="tpl_page_medias" class="scene">
-            <li frigg-slot-html="header"  >placeholder</li>
-            <li frigg-slot-html="title"  >placeholder</li>
-            <li frigg-slot-html="main_audio"  >placeholder</li>
-            <li frigg-slot-html="main_text"  >placeholder</li>
-            
-            <li frigg-slot-html="audio_icon"  >placeholder</li>
-            <li frigg-slot-html="close_icon"  >placeholder</li>
+        <section id="tpl_page_medias" class="scene contentPage">
+            <header>
+                <div class="diaporama">
+                    <img frigg-slot-srcAlt="header" />
+                </div>
+
+                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon"  /></p>
+                <p class="mapButton"><img frigg-slot-srcAlt="map_icon"  /></p>
+            </header>
+
+            <section frigg-slot-bg="background" class="mainContent">
+                <h2 frigg-slot-html="title">placeholder</h2>
+                <div frigg-slot-html="main_text">placeholder</div>
+
+                <p frigg-slot-bg="audio_icon"><audio frigg-slot-srcAlt="main_audio" controls></p>
+            </section>
+
         </section>
 
         <section id="tpl_page_video" class="scene">

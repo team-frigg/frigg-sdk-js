@@ -13,3 +13,9 @@
     padding: 1em;
     border: 1px solid black;
 }
+
+#friggDebugger .separated {
+	border-top: 1px solid black;
+	padding-top: 0.3em;
+	margin-top: 0.3em;
+}

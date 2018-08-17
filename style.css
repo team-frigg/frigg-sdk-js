@@ -98,7 +98,7 @@
 
 /* tpl_livre */
 
-.tpl_livre header {
+.contentPage header {
     position: absolute;
     top: 0;
     left: 0;
@@ -106,7 +106,7 @@
     height: 35%;
 }
 
-.tpl_livre .mainContent {
+.contentPage .mainContent {
     position: absolute;
     top: 35%;
     left: 0;
@@ -114,10 +114,10 @@
     height: 45%;
 
     overflow-y: scroll;
-    
+
 }
 
-.tpl_livre footer {
+.contentPage footer {
     position: absolute;
     top: 80%;
     left: 0;
@@ -129,18 +129,18 @@
 }
 
 
-.tpl_livre header .diaporama {
+.contentPage header .diaporama {
     height: 100%;
 }
 
-.tpl_livre header .diaporama img {
+.contentPage header .diaporama img {
     display: inline-block;
     height: 100%;
     object-fit: contain;
 }
 
 
-.tpl_livre footer img {
+.contentPage footer img {
     display: inline-block;
     height: 100%;
 }

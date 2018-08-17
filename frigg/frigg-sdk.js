@@ -212,6 +212,17 @@ FRIGG.Client = function (config){
         this.sceneIdHistory.push(sceneId);
     }
 
+    this._pushExistingScene = function(newScene, sceneId) {
+        if (this.currentSceneElement) {
+            this.currentSceneElement.classList.add("inBackground");
+            this.currentSceneElement.classList.remove("inFront")
+        }
+        
+        newScene.classList.add("inFront");
+
+        this.currentSceneElement = newScene;
+    }
+
     this._bindTemplate = function(templateName, sceneData, sceneId) {
         var fullTemplateName = this.params.templatePrefix + templateName;
         var clone = this._cloneElement(fullTemplateName);
@@ -378,13 +389,34 @@ FRIGG.Client = function (config){
     }
 
     this._restoreScene = function(sceneId, scene){
-        this._pushNewScene(scene, sceneId);
+        this._pushExistingScene(scene, sceneId);
 
         /*if (this.params.onTemplateRestored[templateName] != undefined) {
             this.params.onTemplateRestored[templateName](scene, sceneData, this);
         }*/
 
         return false;    
+    }
+
+    this.hasPreviousScene = function(){
+        var previousSceneIndex = this.sceneIdHistory.length -2;
+
+        if (previousSceneIndex < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    this.previousScene = function(){
+        var previousSceneIndex = this.sceneIdHistory.length -2;
+
+        if (previousSceneIndex < 0) {
+            return;
+        }
+
+        var previousSceneId = this.sceneIdHistory[ previousSceneIndex ];
+        this.showScene(previousSceneId);
     }
 
     this.showScene = function(sceneId){
@@ -433,6 +465,11 @@ FRIGG.Client = function (config){
         if (connectionCount==0){
             this.params.debuggerElement.innerHTML += "<p>Pas de connections</p>";
         }
+
+        if (this.hasPreviousScene()) {
+            this.params.debuggerElement.appendChild(this._makeDebuggerPreviousItem() );    
+        }
+        
     }
 
     this._makeDebuggerItem = function(connection){
@@ -440,6 +477,17 @@ FRIGG.Client = function (config){
         item.innerHTML = connection.label + " (vers scene " + connection.destination_scene_id + ")";
         item.addEventListener('click', function(){
             this.showScene(connection.destination_scene_id);
+        }.bind(this));
+
+        return item;
+    }
+
+    this._makeDebuggerPreviousItem = function(){
+        var item = document.createElement("li");
+        item.setAttribute("class", "separated");
+        item.innerHTML = "Scéne précédente";
+        item.addEventListener('click', function(){
+            this.previousScene();
         }.bind(this));
 
         return item;
