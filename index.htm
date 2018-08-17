@@ -94,15 +94,28 @@
 
 
         <section id="tpl_chapitre" class="scene">
-            <li frigg-slot-html="header"  >placeholder</li>
-            <li frigg-slot-html="background"  >placeholder</li>
-            <li frigg-slot-html="main_audio"  >placeholder</li>
-            <li frigg-slot-html="main_text"  >placeholder</li>
-            <li >
+
+            <header>
+                <div class="diaporama">
+                    <img frigg-slot-srcAlt="header" />
+                </div>
+
+                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon"  /></p>
+                <p class="mapButton"><img frigg-slot-srcAlt="map_icon"  /></p>
+            </header>
+
+            <section frigg-slot-bg="background" class="mainContent">
+                <h2 frigg-slot-html="title">placeholder</h2>
+                <div frigg-slot-html="main_text">placeholder</div>
+
+                <p frigg-slot-bg="audio_icon"><audio frigg-slot-srcAlt="main_audio" controls></p>
+            </section>
+
+            <footer>
                 <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" />
-            </li>
-            <li frigg-slot-html="audio_icon"  >placeholder</li>
-            <li frigg-slot-html="back_icon"  >placeholder</li>
+            </footer>
+
+
         </section>
 
         <section id="tpl_page_medias" class="scene">
@@ -196,12 +209,13 @@
                     style: 'mapbox://styles/tabascovideo/cjikfqj3209iv2snz12qvnnx7'
                 });
 
+
                 
-                //poi & popup
-                for(var connectionIndex in sceneData['_anonymous_connection']){
-                    var connection = sceneData['_anonymous_connection'][connectionIndex];
-                    var destionationSceneId = connection.destination_scene_id;
-                    var destionationScene = frigg.project.scenes[destionationSceneId];
+                
+                var createMarker = function(map, frigg, connection){
+                    
+                    var destinationSceneId = connection.destination_scene_id;
+                    var destionationScene = frigg.project.scenes[destinationSceneId];
 
                     var latitude = destionationScene.geo_latitude;
                     var longitude = destionationScene.geo_longitude;
@@ -213,29 +227,42 @@
                     //https://www.mapbox.com/mapbox.js/api/v3.1.1/l-layergroup/
                     //on https://www.mapbox.com/mapbox-gl-js/api/#map.event:zoomend 
 
-                    if (latitude && longitude) {
-                        
-                        /*var listener = function(event){
-
-                        }*/
-
-                        var popupElt = document.createElement('div');
-                        popupElt.className = 'map-popup';
-                        popupElt.innerHTML = "<h3>" + label + '</h3>' + "<p>" + connection.label + '</p>';
-
-                        var popupMarker = new mapboxgl.Marker(popupElt)
-                          .setOffset([0, -60])
-                          .setLngLat([longitude, latitude])
-                          .addTo(map);
-
-                        
-                        var markerElt = document.createElement('div');
-                        markerElt.className = 'map-marker';
-
-                        var marker = new mapboxgl.Marker(markerElt)
-                          .setLngLat([longitude, latitude])
-                          .addTo(map);
+                    if (!latitude || !longitude) {
+                        return;
                     }
+
+                    var popupElt = document.createElement('div');
+                    popupElt.className = 'map-popup';
+                    popupElt.innerHTML = "<h3>" + label + '</h3>' + "<p>" + connection.label + '</p>';
+
+                    var popupMarker = new mapboxgl.Marker(popupElt)
+                      .setOffset([0, -60])
+                      .setLngLat([longitude, latitude])
+                      .addTo(map);
+
+                    
+                    var markerElt = document.createElement('div');
+                    markerElt.className = 'map-marker';
+
+                    var marker = new mapboxgl.Marker(markerElt)
+                      .setLngLat([longitude, latitude])
+                      .addTo(map);
+
+                    var listener = function(){
+                        //alert("To : " + destinationSceneId);
+                        frigg.showScene(destinationSceneId);
+                    }
+
+                    markerElt.addEventListener('click', listener);
+                    popupElt.addEventListener('click', listener);
+                
+                }
+
+                //poi & popup
+                for(var connectionIndex in sceneData['_anonymous_connection']){
+                    var connection = sceneData['_anonymous_connection'][connectionIndex];
+                    createMarker(map, frigg, connection);
+                    
                 }
 
                 map.resize();

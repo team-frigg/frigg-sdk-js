@@ -64,7 +64,7 @@ FRIGG.Client = function (config){
 
                 element.addEventListener("click", function(event){
                     event.preventDefault();
-                    this._showScene(slotData.destination_scene_id);
+                    this.showScene(slotData.destination_scene_id);
                 }.bind(this))
             },
         }, 
@@ -346,7 +346,7 @@ FRIGG.Client = function (config){
     
     this._projectIsReady = function(){
         console.log(this.project);
-        this._showScene(this.project.start_scene_id);
+        this.showScene(this.project.start_scene_id);
     }
 
     this._sceneIndexInHistory = function(sceneId){
@@ -387,7 +387,7 @@ FRIGG.Client = function (config){
         return false;    
     }
 
-    this._showScene = function(sceneId){
+    this.showScene = function(sceneId){
 
         var scene = this.project.scenes[sceneId];
         var template = this.project.templates[scene.template_id];
@@ -439,7 +439,7 @@ FRIGG.Client = function (config){
         var item = document.createElement("li");
         item.innerHTML = connection.label + " (vers scene " + connection.destination_scene_id + ")";
         item.addEventListener('click', function(){
-            this._showScene(connection.destination_scene_id);
+            this.showScene(connection.destination_scene_id);
         }.bind(this));
 
         return item;
