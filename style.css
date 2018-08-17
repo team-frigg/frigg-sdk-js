@@ -60,9 +60,15 @@
     height: 100%;
 
     background: white;
+
+    overflow-y: scroll;
 }
 
 
+/* TEMPLATES */ 
+
+
+/* tpl_accueil */ 
 
 .tpl_accueil .front {
     display: block;
@@ -71,6 +77,74 @@
     
     z-index: 1;
 }
+
+/* tpl_intersticiel */
+
+.tpl_intersticiel .next {
+    text-align: center;
+    margin: 1em;
+}
+
+.tpl_intersticiel .next .image {
+    width: 60px;
+}
+
+.tpl_intersticiel .next .string {
+    background-color: rgb(53, 32, 97);
+    color: white;
+
+    padding: 0.5em;
+}
+
+/* tpl_livre */
+
+.tpl_livre header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 35%;
+}
+
+.tpl_livre .mainContent {
+    position: absolute;
+    top: 35%;
+    left: 0;
+    right: 0;
+    height: 45%;
+
+    overflow-y: scroll;
+    
+}
+
+.tpl_livre footer {
+    position: absolute;
+    top: 80%;
+    left: 0;
+    right: 0;
+    height: calc(20% - 1em);
+    padding: 0.5em 0;
+
+    text-align: center;
+}
+
+
+.tpl_livre header .diaporama {
+    height: 100%;
+}
+
+.tpl_livre header .diaporama img {
+    display: inline-block;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+.tpl_livre footer img {
+    display: inline-block;
+    height: 100%;
+}
+
 
 
 
@@ -96,5 +170,33 @@
     border: 3px solid white; 
 
     width: 150px;
+}
+
+
+.menuButton {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 40px;
+    width: 40px;
+}
+
+.menuButton img {
+    width: 100%;
+}
+
+
+.closeButton, .mapButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    height: 40px;
+    width: 40px;
+}
+
+.closeButton img, .mapButton img {
+    width: 100%;
 }
 

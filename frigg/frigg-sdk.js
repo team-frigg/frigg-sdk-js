@@ -213,7 +213,9 @@ FRIGG.Client = function (config){
     }
 
     this._bindTemplate = function(templateName, sceneData, sceneId) {
-        var clone = this._cloneElement(this.params.templatePrefix + templateName);
+        var fullTemplateName = this.params.templatePrefix + templateName;
+        var clone = this._cloneElement(fullTemplateName);
+        clone.classList.add(fullTemplateName); //replace id by class...
 
         var selector = "[" + this.allAttributes.join("],[") + "]";
 
