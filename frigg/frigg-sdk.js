@@ -23,6 +23,8 @@ FRIGG.Client = function (config){
     this.sceneIdHistory = [];
     this.currentSceneElement = null;
 
+    this.forcedInitialScene = null;
+
     this.params = {
         'mediaFilePrefix': 'http://admin.systeme-frigg.org/storage/',
         'templatePrefix' : "tpl_",
@@ -356,8 +358,8 @@ FRIGG.Client = function (config){
     }
     
     this._projectIsReady = function(){
-        console.log(this.project);
-        this.showScene(this.project.start_scene_id);
+        var sceneId = this.forcedInitialScene ? this.forcedInitialScene : this.project.start_scene_id;
+        this.showScene(sceneId);
     }
 
     this._sceneIndexInHistory = function(sceneId){
@@ -525,7 +527,8 @@ FRIGG.Client = function (config){
         return slots;
     }
 
-    this.run = function(projectId){
+    this.run = function(projectId, sceneId){
+        this.forcedInitialScene = sceneId;
         this._loadProject(projectId);
     }
 }
