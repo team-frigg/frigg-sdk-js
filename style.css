@@ -14,7 +14,7 @@ body {
 }
 
 .scene {
-    transition: all 0.2s;
+    /*transition: all 0.2s;*/
     position: fixed;
     top: 0;
     left: 0%;
@@ -153,6 +153,11 @@ body {
 
 /* contentPage : */
 
+.contentPage .container {
+    width: 100%;
+    height: 100%;
+}
+
 .contentPage header {
     position: absolute;
     top: 0;
@@ -178,7 +183,7 @@ body {
     left: 0;
     right: 0;
     height: 10%;
-    padding: 0;
+    padding: 0em;
 
     text-align: center;
 }
@@ -215,9 +220,22 @@ body {
 }
 
 
+.contentPage footer .body {
+    padding: 0.5em 2em;
+    width: calc(100% - 5em);
+    height: calc(100% - 1em);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
 .contentPage footer img {
-    display: inline-block;
+    display: block;
     height: 100%;
+
+
 }
 
 
@@ -226,13 +244,6 @@ body {
     background-size: cover;
 }
 
-.contentPage .mainContent .body {
-    margin: 0em 2.5em;
-    background: white;
-    padding: 3em;
-    height: calc(100% - 8em);
-    overflow-y: scroll;
-}
 
 
 .contentPage .mainContent .bt.heading {
@@ -244,6 +255,34 @@ body {
     font-style: italic;
     padding: 0.5em 0;
 }
+
+
+
+
+.contentPage .mainContent .body {
+    margin: 0em 2.5em;
+    background: white;
+    padding: 3em;
+    height: calc(100% - 8em);
+    overflow-y: scroll;
+}
+
+
+
+
+
+
+.tpl_livre.contentPage .mainContent .body {
+    margin: 0em 0em;
+    border-radius: 0 0 50vw 50vw;
+}
+
+.tpl_livre.contentPage footer {
+    height: calc(10% - 1em);
+    padding-bottom: 1em;
+}
+
+
 
 
 

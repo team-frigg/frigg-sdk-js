@@ -76,17 +76,19 @@
 
         <section id="tpl_livre" class="scene contentPage">
 
+            <div frigg-slot-bg="background" class="container">
+            
 
             <header>
                 <div class="diaporama">
                     <img frigg-slot-srcAlt="header" />
                 </div>
 
-                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon"  /></p>
-                <p class="mapButton"><img frigg-slot-srcAlt="map_icon"  /></p>
+                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p>
+                <p class="mapButton"><img frigg-slot-srcAlt="map_icon" frigg-slot-link="map_link" /></p>
             </header>
 
-            <section frigg-slot-bg="background" class="mainContent">
+            <section class="mainContent">
 
                 <div class="body">
                     <h2 frigg-slot-html="title">placeholder</h2>
@@ -98,9 +100,12 @@
             </section>
 
             <footer>
-                <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" />
+                <div class="body">
+                    <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" />
+                </div>
             </footer>
 
+            </div>
 
         </section>
 
@@ -129,7 +134,9 @@
             </section>
 
             <footer>
-                <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" />
+                <div class="body">
+                    <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" />
+                </div>
             </footer>
 
 
