@@ -153,13 +153,15 @@
                     <img frigg-slot-srcAlt="header" />
                 </div>
 
-                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon"  /></p>
-                <p class="mapButton"><img frigg-slot-srcAlt="map_icon"  /></p>
+                <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
             </header>
 
             <section frigg-slot-bg="background" class="mainContent">
-                <h2 frigg-slot-html="title">placeholder</h2>
-                <div frigg-slot-html="main_text">placeholder</div>
+
+                <div class="body">
+                    <h2 frigg-slot-html="title">placeholder</h2>
+                    <div frigg-slot-html="main_text">placeholder</div>
+                </div>
 
                 <p frigg-slot-bg="audio_icon"><audio frigg-slot-srcAlt="main_audio" controls></p>
             </section>
@@ -176,12 +178,40 @@
             <li frigg-slot-html="close_icon"  >placeholder</li>
         </section>
 
+
+
+
         <section id="tpl_page_quiz" class="scene">
+            <div frigg-slot-bg="background" class="container carded">
+                
+                <div class="card">
+                    <audio frigg-slot-srcAlt="main_audio" class="audioPlayer" controls> </audio>
+
+                    <div class="content">
+                        <div frigg-slot-html="question" class="main_text"></div>
+
+                        <ul class="items">
+                            <li frigg-slot-link="items_target" frigg-slot-html="items"></li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <li frigg-slot-html="audio_icon"  >placeholder</li>
+
+
+
             <li frigg-slot-html="background"  >placeholder</li>
             <li frigg-slot-html="question"  >placeholder</li>
             <li frigg-slot-html="main_audio"  >placeholder</li>
             <li frigg-slot-html="audio_icon"  >placeholder</li>
         </section>
+
+
+
 
         <section id="tpl_page_carte" class="scene">
 
@@ -216,11 +246,16 @@
         </section>
 
         <section id="tpl_page_informations" class="scene">
-            <li frigg-slot-html="title"  >placeholder</li>
-            <li frigg-slot-html="main_text"  >placeholder</li>
-            <li frigg-slot-html="images"  >placeholder</li>
-            <li frigg-slot-html="map_icon"  >placeholder</li>
-            <li frigg-slot-html="menu_icon"  >placeholder</li>
+            <div class="container">
+
+                <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+
+                <h2 frigg-slot-html="title"  >placeholder</h2>
+            
+                <div frigg-slot-html="main_text"  >placeholder</div>
+                <div frigg-slot-html="images"  >placeholder</div>
+
+            </div>
         </section>
     </div>
 

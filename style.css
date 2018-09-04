@@ -284,6 +284,32 @@ body {
 
 
 
+/* QUIZ */
+
+.tpl_page_quiz .items {
+    padding-top: 2em;
+
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.tpl_page_quiz .items li {
+    flex-basis: 40%;
+    list-style: none;
+    text-align: center;
+    background-color: rgb(53, 32, 97);
+    color: white;
+
+    padding: 1em;
+    margin-top: 1em;
+
+    text-transform: uppercase;
+
+
+}
+
+
 
 
 
