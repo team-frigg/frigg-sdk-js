@@ -271,6 +271,13 @@ FRIGG.Client = function (config){
         this._mapAnonymousConnections();
         this._fixSvgBug();
         
+        this._prepareDebugger();
+    }
+
+    this._prepareDebugger = function(){
+        this.params.debuggerElement.addEventListener("click", function(){
+            this.classList.toggle("hidden");
+        })
     }
 
     this._mapAnonymousConnections = function(){

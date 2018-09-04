@@ -4,6 +4,14 @@
     border: 0;
 }
 
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: rgb(53, 32, 97);
+
+    overscroll-behavior-y: none;
+
+}
+
 .scene {
     transition: all 0.2s;
     position: fixed;
@@ -18,7 +26,7 @@
 }
 
 .empty {
-    display: none;
+    display: none !important;
 }
 
 
@@ -56,13 +64,20 @@
 
 .card {
 
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 1em);
+    height: calc(100% - 1em);
+    padding: 1em;
 
     background: white;
+}
 
+.card .content {
+
+    width: 100%;
+    height: calc(100% - 5em);
     overflow-y: scroll;
 }
+
 
 
 /* TEMPLATES */ 
@@ -94,7 +109,41 @@
     color: white;
 
     padding: 0.5em;
+    margin-top: 2em;
+    display: block;
 }
+
+.tpl_intersticiel .card {
+    text-align: center;
+    font-style: italic;
+    position: relative;
+
+}
+
+.tpl_intersticiel .card .audioPlayer {
+    position: absolute;
+    top: -3em;
+    right: -1em;
+
+}
+
+.tpl_intersticiel .content {
+    line-height: 1.4em;
+}
+
+
+.tpl_intersticiel .content .title {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-weight: bold;
+}
+
+.tpl_intersticiel .content .main_text {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+
 
 /* tpl_livre */
 

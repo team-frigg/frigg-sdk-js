@@ -2,9 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
     <title>Frigg player</title>
     <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
     <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
@@ -16,7 +20,7 @@
         
     </div>
 
-    <div id="friggDebugger">
+    <div id="friggDebugger" class="hidden">
     </div>
 
     <div id="friggTemplates">
@@ -48,10 +52,12 @@
             <div frigg-slot-bg="background" class="container carded">
                 
                 <div class="card">
-                    <h2 frigg-slot-html="title"></h2>
-                    <p><audio frigg-slot-srcAlt="main_audio" controls></p>
+                    <audio frigg-slot-srcAlt="main_audio" class="audioPlayer" controls> </audio>
 
-                    <p frigg-slot-html="main_text"></p>
+                    <div class="content">
+                        <h2 frigg-slot-html="title" class="title"></h2>
+                        <div frigg-slot-html="main_text" class="main_text"></div>
+                    </div>
 
                     <p frigg-slot-link="_anonymous_connection" class="next">
                         <img class="image" frigg-slot-srcAlt="button_next_image"  />
