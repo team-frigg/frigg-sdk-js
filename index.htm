@@ -71,6 +71,9 @@
 
         </section>
 
+
+
+
         <section id="tpl_livre" class="scene contentPage">
 
 
@@ -84,10 +87,14 @@
             </header>
 
             <section frigg-slot-bg="background" class="mainContent">
-                <h2 frigg-slot-html="title">placeholder</h2>
-                <div frigg-slot-html="main_text">placeholder</div>
 
-                <p frigg-slot-bg="audio_icon"><audio frigg-slot-srcAlt="main_audio" controls></p>
+                <div class="body">
+                    <h2 frigg-slot-html="title">placeholder</h2>
+                    <div frigg-slot-html="main_text">placeholder</div>
+                </div>
+
+                
+                <p frigg-slot-bg="audio_icon" class="audioPlayer"><audio frigg-slot-srcAlt="main_audio" controls></p>
             </section>
 
             <footer>
@@ -112,10 +119,13 @@
             </header>
 
             <section frigg-slot-bg="background" class="mainContent">
-                <h2 frigg-slot-html="title">placeholder</h2>
-                <div frigg-slot-html="main_text">placeholder</div>
 
-                <p frigg-slot-bg="audio_icon"><audio frigg-slot-srcAlt="main_audio" controls></p>
+                <div class="body">
+                    <h2 frigg-slot-html="title">placeholder</h2>
+                    <div frigg-slot-html="main_text">placeholder</div>
+                </div>
+
+                <p frigg-slot-bg="audio_icon" class="audioPlayer"><audio frigg-slot-srcAlt="main_audio" controls></p>
             </section>
 
             <footer>
@@ -124,6 +134,11 @@
 
 
         </section>
+
+
+
+
+
 
         <section id="tpl_page_medias" class="scene contentPage">
             <header>
@@ -165,7 +180,7 @@
 
             <div class="container" style="">
                 <div class='mapContainer'></div>
-                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon"  /></p>
+                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p>
 
                 <ul>
                     <li frigg-slot-bg="bottom_icons" frigg-slot-links="bottom_links"  >placeholder</li>
@@ -177,13 +192,13 @@
         </section>
 
         <section id="tpl_menu" class="scene">
-            <div class="container" style="">
-                <p class="closeButton"><img frigg-slot-srcAlt="close_button"  /></p>
-                
+            <div class="container">
+                <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+
                 <p frigg-slot-html="title" >placeholder</p>
 
                 <ul>
-                    <li frigg-slot-html="items" frigg-slot-links="items_target">placeholder</li>
+                    <li frigg-slot-html="items" frigg-slot-link="items_target">placeholder</li>
                 </ul>
             </div>
 

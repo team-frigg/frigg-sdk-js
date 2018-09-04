@@ -33,13 +33,13 @@ FRIGG.Client = function (config){
         'debuggerElement' : document.getElementById("friggDebugger"),
 
         'slotHandler' : {
-            'frigg-slot-html' : function(element, slotData) {
+            'frigg-slot-html' : function(element, slotData, frigg) {
                 if (slotData == null) {
                     element.classList.add("empty");
                     return;
                 }
 
-                element.innerHTML = slotData.content;
+                element.innerHTML = frigg.betterText(slotData.content);
             },
             'frigg-slot-bg' : function(element, slotData) {
                 if (slotData == null) {
@@ -117,6 +117,27 @@ FRIGG.Client = function (config){
         return clone;
     }
 
+    this.betterText = function(source){
+        var converters = [
+            {
+                'pattern': /\*\*([^\*]+)\*\*/g,
+                'string': '<h2 class="bt heading">$1</h2>'
+            },
+
+            {
+                'pattern': /\*([^\*]+)\*/g,
+                'string': '<em class="bt em">$1</em>'
+            },
+        ];
+
+        for (var i = 0; i < converters.length; i++) {
+            converter = converters[i];
+            source = source.replace(converter.pattern, converter.string);
+        }
+
+        return source;
+    }
+
     this._bindElement = function(slotElement, sceneData) {
         var numberOfClones = 0;
         var elementSlots = {};
@@ -168,7 +189,7 @@ FRIGG.Client = function (config){
 
         if (binded == 0 && missing > 0) {
             for (var attribute in recap.missing) {
-                this.params.slotHandler[attribute].bind(this)(slotElement, null);
+                this.params.slotHandler[attribute].bind(this)(slotElement, null, this);
             }
         }
 
@@ -194,7 +215,7 @@ FRIGG.Client = function (config){
             
             console.log(" value: " + value);
 
-            this.params.slotHandler[slot].bind(this)(elementToBind, value);
+            this.params.slotHandler[slot].bind(this)(elementToBind, value, this);
         }
 
     }

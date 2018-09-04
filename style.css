@@ -7,6 +7,7 @@
 body {
     font-family: 'Montserrat', sans-serif;
     color: rgb(53, 32, 97);
+    line-height: 1.4em;
 
     overscroll-behavior-y: none;
 
@@ -69,6 +70,9 @@ body {
     padding: 1em;
 
     background: white;
+
+    max-width: 600px;
+    margin: auto;
 }
 
 .card .content {
@@ -128,7 +132,7 @@ body {
 }
 
 .tpl_intersticiel .content {
-    line-height: 1.4em;
+    
 }
 
 
@@ -145,22 +149,24 @@ body {
 
 
 
-/* tpl_livre */
+/* tpl_livre + tpl_chapitre */
+
+/* contentPage : */
 
 .contentPage header {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 35%;
+    height: 30%;
 }
 
 .contentPage .mainContent {
     position: absolute;
-    top: 35%;
+    top: 30%;
     left: 0;
     right: 0;
-    height: 45%;
+    height: 60%;
 
     overflow-y: scroll;
 
@@ -168,13 +174,22 @@ body {
 
 .contentPage footer {
     position: absolute;
-    top: 80%;
+    top: 90%;
     left: 0;
     right: 0;
-    height: calc(20% - 1em);
-    padding: 0.5em 0;
+    height: 10%;
+    padding: 0;
 
     text-align: center;
+}
+
+
+.contentPage .audioPlayer {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    opacity: 0.3;
 }
 
 
@@ -183,9 +198,20 @@ body {
 }
 
 .contentPage header .diaporama img {
-    display: inline-block;
+    display: block;
     height: 100%;
-    object-fit: contain;
+    width: 100%;
+    object-fit: cover;
+
+    position: absolute;
+    top:0;
+    left:0;
+
+    transition: transform 0.3s;
+}
+
+.contentPage header .diaporama img.gone {
+    transform: translateX(-100vw) scale(0.2);
 }
 
 
@@ -193,6 +219,33 @@ body {
     display: inline-block;
     height: 100%;
 }
+
+
+
+.contentPage .mainContent{
+    background-size: cover;
+}
+
+.contentPage .mainContent .body {
+    margin: 0em 2.5em;
+    background: white;
+    padding: 3em;
+    height: calc(100% - 8em);
+    overflow-y: scroll;
+}
+
+
+.contentPage .mainContent .bt.heading {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.contentPage .mainContent .bt.em {
+    font-style: italic;
+    padding: 0.5em 0;
+}
+
+
 
 
 
