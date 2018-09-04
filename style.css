@@ -313,6 +313,33 @@ body {
 
 
 
+/* menu */
+
+.tpl_menu {
+    background: rgb(53, 32, 97);
+}
+
+.tpl_menu .items {
+    margin-top: 3em;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    list-style: none;
+
+    color: white;
+    font-size: 3em;
+    line-height: 1.5em;
+
+    text-transform: uppercase;
+}
+
+
+/* info */
+
+.tpl_page_informations {
+    
+}
+
 
 
 .mapContainer {
@@ -342,8 +369,9 @@ body {
 
 .menuButton {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0.5em;
+    left: 0.5em;
+
 
     height: 40px;
     width: 40px;
@@ -356,8 +384,8 @@ body {
 
 .closeButton, .mapButton {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 0.5em;
+    right: 0.5em;
 
     height: 40px;
     width: 40px;

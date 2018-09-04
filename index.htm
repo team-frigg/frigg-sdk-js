@@ -169,13 +169,16 @@
         </section>
 
         <section id="tpl_page_video" class="scene">
+            <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+
             <li frigg-slot-html="main_video"  >placeholder</li>
-            <li frigg-slot-html="close_icon"  >placeholder</li>
         </section>
 
         <section id="tpl_page_diaporama" class="scene">
+            <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+
             <li frigg-slot-html="images"  >placeholder</li>
-            <li frigg-slot-html="close_icon"  >placeholder</li>
+
         </section>
 
 
@@ -234,7 +237,7 @@
 
                 <p frigg-slot-html="title" >placeholder</p>
 
-                <ul>
+                <ul class="items">
                     <li frigg-slot-html="items" frigg-slot-link="items_target">placeholder</li>
                 </ul>
             </div>
@@ -245,15 +248,22 @@
             
         </section>
 
-        <section id="tpl_page_informations" class="scene">
+        <section id="tpl_page_informations" class="scene contentPage">
             <div class="container">
 
                 <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
-                <h2 frigg-slot-html="title"  >placeholder</h2>
-            
-                <div frigg-slot-html="main_text"  >placeholder</div>
-                <div frigg-slot-html="images"  >placeholder</div>
+                <div class="body">
+                    <h2 frigg-slot-html="title">placeholder</h2>
+                    <div frigg-slot-html="main_text">placeholder</div>
+
+                    <div class="images" >
+                        <img frigg-slot-srcAlt="images" />
+                    </div>
+                </div>
+
+
+
 
             </div>
         </section>
@@ -265,7 +275,7 @@
 <script type="text/javascript">
     var hash = window.location.hash ? window.location.hash.replace("#", "") : null;
 
-    var projectId = 1;
+    var projectId = 3;
     var sceneId = 0;
     
     if (hash) {
