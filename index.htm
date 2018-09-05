@@ -17,7 +17,7 @@
 <body>
     
     <div id="friggContainer">
-        
+        <p class="pleaseWait">Chargement en cours, veuillez patienter...</p>
     </div>
 
     <div id="friggDebugger" class="hidden">
@@ -373,6 +373,28 @@
 
     var frigg = new FRIGG.Client(config);
     frigg.run(projectId, sceneId);
+
+    window.addEventListener("hashchange", function(){
+        var hash = window.location.hash ? window.location.hash.replace("#", "") : null;
+
+        var projectId = 3;
+        var sceneId = 0;
+        
+        if (hash) {
+            var parts = hash.split("-");
+
+            if (parts.length >= 1){
+                projectId = parts[0];
+            }
+
+            if (parts.length == 2){
+                sceneId = parts[1];
+            }
+        }
+
+        frigg.showScene(sceneId);
+    });
+
 
 </script>
 </body>

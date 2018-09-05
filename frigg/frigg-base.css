@@ -6,14 +6,14 @@
 	z-index: 100;
     font-size: 0.8em;
     position: absolute;
-    bottom: 0.5em;
+    bottom: 50%;
     right: 0.5em;
 
     background: white;
     padding: 1em;
     border: 1px solid black;
 
-    transform-origin: 100% 100%;
+    transform-origin: 100% 50%;
     transition: transform 0.2s;
 }
 

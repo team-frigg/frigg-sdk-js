@@ -17,6 +17,7 @@ var FRIGG = {};
 
 FRIGG.Client = function (config){
 
+    this.currentVariables = {}
     this.project = {};
 
     this.sceneElementHistory = [];
@@ -57,12 +58,14 @@ FRIGG.Client = function (config){
                 element.setAttribute("src", this.params.mediaFilePrefix + slotData.content);
                 element.setAttribute("alt", slotData.description);
             },
-            'frigg-slot-link' : function(element, slotData) {
+            'frigg-slot-link' : function(element, slotData, frigg) {
                 if (slotData == null) {
                     return;
                 }
 
-                element.classList.add("link");
+                var className = frigg.getClassForLinkSlot(slotData);
+
+                element.classList.add(className);
 
                 element.addEventListener("click", function(event){
                     event.preventDefault();
@@ -77,6 +80,59 @@ FRIGG.Client = function (config){
     };
 
     this.allAttributes = [];
+
+    this.getClassForLinkSlot = function(slotLinkData){
+        var standardClass = "link";
+        var openLinkClass = "open-link";
+        var closedLinkClass = "closed-link";
+
+        if (!slotLinkData.conditions.variables) {
+            return standardClass;
+        }
+
+        var conditionGt = this._handleConditionGt(slotLinkData.conditions.variables, this.currentVariables);
+        if (conditionGt == "CONDITION_NOK") {
+            return closedLinkClass;
+        }
+
+        if (conditionGt == "CONDITION_OK") {
+            return openLinkClass;
+        }
+
+        return standardClass;
+    }
+
+    this._handleConditionGt = function(condition, currentVariables) {
+
+        if (!condition) {
+            return;
+        }
+
+        if (condition.length == 0) {
+            return;
+        }
+
+        var condition = condition[0];
+
+        var parts = condition.split(">");
+
+        if (parts.length != 2) {
+            return "NO_CONDITION";
+        }
+
+        var name = parts[0].trim();
+        var value = parseInt(parts[1].trim());
+
+        if (!currentVariables[name]) {
+            return "CONDITION_NOK";
+        }
+
+        if (currentVariables[name] < value) {
+            return "CONDITION_NOK";
+        }
+
+        return "CONDITION_OK";
+    }
 
     this._mergeObject = function(objectA, objectB){
 
@@ -212,7 +268,7 @@ FRIGG.Client = function (config){
             } else {
                 value = slotValues[ index ];
             }
-            
+
             console.log(" value: " + value);
 
             this.params.slotHandler[slot].bind(this)(elementToBind, value, this);
@@ -395,25 +451,28 @@ FRIGG.Client = function (config){
         return index;    
     }
 
+    //include itself !
     this._clearHistoryUntil = function(sceneId, sceneIndex){
 
         console.log("CURRENT HISTORY:");
         console.log(this.sceneElementHistory);
-
+        console.log(this.sceneIdHistory);
 
         var count = this.sceneElementHistory.length;
 
-        for (var i = count - 1; i > sceneIndex; i--) {
+        for (var i = count - 1; i >= sceneIndex; i--) {
+            console.log("Remove child : " + i);
             var sceneElement = this.sceneElementHistory[i];
             sceneElement.parentNode.removeChild(sceneElement);
+            console.log(sceneElement);
         }
 
-        this.sceneElementHistory = this.sceneElementHistory.slice(0, sceneIndex+1);
-        this.sceneIdHistory = this.sceneIdHistory.slice(0, sceneIndex+1);
-        
+        this.sceneElementHistory = this.sceneElementHistory.slice(0, sceneIndex);
+        this.sceneIdHistory = this.sceneIdHistory.slice(0, sceneIndex);
         
         console.log("CLEARED HISTORY:");
         console.log(this.sceneElementHistory);
+        console.log(this.sceneIdHistory);
 
         return this.sceneElementHistory[ this.sceneElementHistory.length - 1];
     }
@@ -449,21 +508,78 @@ FRIGG.Client = function (config){
         this.showScene(previousSceneId);
     }
 
+    this._handleSceneVariables = function(scene) {
+        if (! scene.variables) {
+            return;
+        }
+
+        var vars = scene.variables.split("\n");
+        for (var i = 0; i < vars.length; i++) {
+            var line = vars[i];
+
+            this._handleSceneVariableLine(scene, line);
+        }
+    }
+
+    this._handleSceneVariableLine = function(scene, line) {
+        this._handleSceneVariableLine_equals(scene, line);
+        this._handleSceneVariableLine_increment(scene, line);
+    }
+
+    this._handleSceneVariableLine_equals = function(scene, line) {
+        var parts = line.split("=");
+
+        if (parts.length != 2){
+            return false;
+        }
+
+        var name = parts[0].trim();
+        var value = parts[1].trim();
+
+        this.currentVariables[name] = parseInt(value);
+
+        return true;
+    }
+
+    this._handleSceneVariableLine_increment = function(scene, line) {
+        var parts = line.split("+");
+
+        if (parts.length != 2){
+            return false;
+        }
+
+        var name = parts[0].trim();
+        var value = parts[1].trim();
+        var newValue = parseInt(value);
+
+        if (this.currentVariables[name]){
+            newValue += parseInt(this.currentVariables[name]);
+        }
+
+        this.currentVariables[name] = newValue;
+
+        return true;
+    }
+
     this.showScene = function(sceneId){
 
+        window.location.hash = this.project.project_id + "-" + sceneId;
+
         var scene = this.project.scenes[sceneId];
+
+        this._handleSceneVariables(scene);
+
         var template = this.project.templates[scene.template_id];
 
         var sceneIndex = this._sceneIndexInHistory(sceneId);
 
         if (sceneIndex > -1) {
             var sceneElement = this._clearHistoryUntil(sceneId, sceneIndex);
-            this._restoreScene(sceneId, sceneElement);
-            this._updateDebugger(scene, template);
-            return;
+            //this._restoreScene(sceneId, sceneElement);
+            //this._updateDebugger(scene, template);
+            //return;
         }
 
-        
         var slots = this._buildSlotContent(scene);
     
         this._bindTemplate(this._cleanTemplateName(template.label), slots, sceneId)
@@ -499,6 +615,12 @@ FRIGG.Client = function (config){
         if (this.hasPreviousScene()) {
             this.params.debuggerElement.appendChild(this._makeDebuggerPreviousItem() );    
         }
+
+        //vars
+        var count = 0;
+        for (var v in this.currentVariables) {
+            this.params.debuggerElement.appendChild(this._makeDebuggerVariableItem(count++, v, this.currentVariables[v]) );
+        }
         
     }
 
@@ -520,6 +642,13 @@ FRIGG.Client = function (config){
             this.previousScene();
         }.bind(this));
 
+        return item;
+    }
+
+    this._makeDebuggerVariableItem = function(index, name, value){
+        var item = document.createElement("li");
+        if (index==0) item.setAttribute("class", "separated");
+        item.innerHTML = "Variable : " + name + " = " + value ;
         return item;
     }
 
