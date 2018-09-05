@@ -17,6 +17,8 @@ var FRIGG = {};
 
 FRIGG.Client = function (config){
 
+    this.pausableElements = [];
+
     this.currentVariables = {}
     this.project = {};
 
@@ -57,6 +59,8 @@ FRIGG.Client = function (config){
 
                 element.setAttribute("src", this.params.mediaFilePrefix + slotData.content);
                 element.setAttribute("alt", slotData.description);
+
+                if (element.pause) this.pausableElements.push(element);
             },
             'frigg-slot-link' : function(element, slotData, frigg) {
                 if (slotData == null) {
@@ -302,7 +306,17 @@ FRIGG.Client = function (config){
         this.currentSceneElement = newScene;
     }
 
+    this._pauseAndResetPausableElements = function(){
+        for (var i = 0; i < this.pausableElements.length; i++) {
+            this.pausableElements[i].pause();
+        }
+
+        this.pausableElements = [];
+    }
+
     this._bindTemplate = function(templateName, sceneData, sceneId) {
+        this._pauseAndResetPausableElements();
+
         var fullTemplateName = this.params.templatePrefix + templateName;
         var clone = this._cloneElement(fullTemplateName);
         clone.classList.add(fullTemplateName); //replace id by class...
