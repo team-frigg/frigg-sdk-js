@@ -364,6 +364,13 @@ body {
   height: 50px;
   border-radius: 50%;
   cursor: pointer;
+
+  z-index: 0;
+}
+
+.map-marker.hidden, .map-popup.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .map-popup {
@@ -375,6 +382,7 @@ body {
     border: 3px solid white; 
 
     width: 150px;
+    z-index: 1000;
 }
 
 

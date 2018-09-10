@@ -278,9 +278,7 @@
         "onTemplateLoaded" : {
             'page_carte': function (element, sceneData, frigg) {
                 console.log("page_carte");
-                console.log(sceneData);
-                console.log(frigg.project);
-
+                
                 var theMapId = "theMap";//"map" + Date.now();
                 element.querySelector('.mapContainer').setAttribute('id', theMapId);
 
@@ -291,8 +289,20 @@
                     style: 'mapbox://styles/tabascovideo/cjikfqj3209iv2snz12qvnnx7'
                 });
 
+                //var mapElements = [];
+                var thresholdLevel = 16;
+                function getLevelName(level){
+                    if (!level) {
+                        return "primary";
+                    }
 
-                
+                    if (level >= thresholdLevel) {
+                        return "primary";
+                    }
+
+                    return "secondary";
+                }
+
                 
                 var createMarker = function(map, frigg, connection){
                     
@@ -301,7 +311,7 @@
 
                     var latitude = destionationScene.geo_latitude;
                     var longitude = destionationScene.geo_longitude;
-                    var level = destionationScene.geo_level;
+                    var level = getLevelName(destionationScene.geo_level);
 
                     var label = destionationScene.label;
 
@@ -314,17 +324,17 @@
                     }
 
                     var popupElt = document.createElement('div');
-                    popupElt.className = 'map-popup';
-                    popupElt.innerHTML = "<h3>" + label + '</h3>' + "<p>" + connection.label + '</p>';
+                    popupElt.className = 'map-popup map-item map-level-'+ level;
+                    popupElt.innerHTML = "<h3>" + label + '</h3>';
 
-                    var popupMarker = new mapboxgl.Marker(popupElt)
-                      .setOffset([0, -60])
+                    var popupMarker = new mapboxgl.Marker({'element': popupElt, anchor: 'bottom'})
+                      .setOffset([0, -25])
                       .setLngLat([longitude, latitude])
                       .addTo(map);
 
                     
                     var markerElt = document.createElement('div');
-                    markerElt.className = 'map-marker';
+                    markerElt.className = 'map-marker map-item map-level-'+ level;
 
                     var marker = new mapboxgl.Marker(markerElt)
                       .setLngLat([longitude, latitude])
@@ -332,7 +342,7 @@
 
                     var listener = function(){
                         //alert("To : " + destinationSceneId);
-                        frigg.showScene(destinationSceneId);
+                        frigg.gotoScene(destinationSceneId);
                     }
 
                     markerElt.addEventListener('click', listener);
@@ -340,12 +350,44 @@
                 
                 }
 
+                
+
                 //poi & popup
                 for(var connectionIndex in sceneData['_anonymous_connection']){
                     var connection = sceneData['_anonymous_connection'][connectionIndex];
                     createMarker(map, frigg, connection);
                     
                 }
+
+                map.on("zoomend", function(data){
+                    var zoom = Math.round(this.getZoom());
+
+                    var toHide = null;
+                    if (zoom <= thresholdLevel) {
+                        toHide = ".map-level-secondary";
+                    }
+
+                    console.log("Map zoom : " + zoom + " vs threshold : " + thresholdLevel);
+                    console.log(" items to hide : " + toHide);
+
+                    var applyClassBySelector = function(container, selector, className, method){
+                        var method = (typeof method !== 'undefined') ? method : "add";
+
+                        var allItems = container.querySelectorAll(selector);
+                        for (var i = 0; i < allItems.length; i++) {
+                            var item = allItems[i];
+                            item.classList[method](className);
+                        }
+                    }
+
+
+                    var container = this.getContainer();
+                    applyClassBySelector(container, ".map-item", "hidden", "remove");
+                    if (toHide) applyClassBySelector(container, toHide, "hidden", "add");
+
+                    console.log(data);
+                    console.log(this.getZoom());
+                });
 
                 map.resize();
                 
