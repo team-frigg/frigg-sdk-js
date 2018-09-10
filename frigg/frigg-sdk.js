@@ -73,7 +73,7 @@ FRIGG.Client = function (config){
 
                 element.addEventListener("click", function(event){
                     event.preventDefault();
-                    this.showScene(slotData.destination_scene_id);
+                    this.gotoScene(slotData.destination_scene_id);
                 }.bind(this))
             },
         }, 
@@ -348,6 +348,8 @@ FRIGG.Client = function (config){
             this.project = JSON.parse(event.target.responseText);
             this._prepareProject();
             this._projectIsReady();
+        this._ini
+
         }.bind(this));
 
         request.addEventListener('error', function (){
@@ -456,8 +458,7 @@ FRIGG.Client = function (config){
     }
     
     this._projectIsReady = function(){
-        var sceneId = this.forcedInitialScene ? this.forcedInitialScene : this.project.start_scene_id;
-        this.showScene(sceneId);
+        this._showSceneFromHash();
     }
 
     this._sceneIndexInHistory = function(sceneId){
@@ -519,7 +520,7 @@ FRIGG.Client = function (config){
         }
 
         var previousSceneId = this.sceneIdHistory[ previousSceneIndex ];
-        this.showScene(previousSceneId);
+        this.gotoScene(previousSceneId);
     }
 
     this._handleSceneVariables = function(scene) {
@@ -575,9 +576,34 @@ FRIGG.Client = function (config){
         return true;
     }
 
-    this.showScene = function(sceneId){
+    this._loadProjectFromHash = function(){
+        var projectId = this.forcedProjectId ? this.forcedProjectId : this._getHashParam("project");
 
-        window.location.hash = this.project.project_id + "-" + sceneId;
+        if (!projectId) {
+            console.error("No project to load.");
+            //todo callback
+            return;
+        }
+
+        console.log("Hash event : Will load project " + projectId);
+        this._loadProject(projectId);
+        
+    }
+
+    this._showSceneFromHash = function(){
+        var param = this._getHashParam("scene");
+
+        var sceneId = param ? param : this.project.start_scene_id;
+        console.log("Hash event : Will show scene " + sceneId);
+        this.showScene(sceneId);
+    }
+
+
+    this.gotoScene = function(sceneId) {
+        window.location.hash = "project=" + this.project.project_id + "&scene=" + sceneId;
+    }
+
+    this.showScene = function(sceneId){
 
         var scene = this.project.scenes[sceneId];
 
@@ -642,7 +668,7 @@ FRIGG.Client = function (config){
         var item = document.createElement("li");
         item.innerHTML = connection.label + " (vers scene " + connection.destination_scene_id + ")";
         item.addEventListener('click', function(){
-            this.showScene(connection.destination_scene_id);
+            this.gotoScene(connection.destination_scene_id);
         }.bind(this));
 
         return item;
@@ -698,8 +724,51 @@ FRIGG.Client = function (config){
         return slots;
     }
 
-    this.run = function(projectId, sceneId){
-        this.forcedInitialScene = sceneId;
-        this._loadProject(projectId);
+    this._hashToObject = function(){
+        var hash = window.location.hash.substr(1);
+
+        var result = hash.split('&').reduce(function (result, item) {
+            var parts = item.split('=');
+            result[parts[0]] = parts[1];
+            return result;
+        }, {});
+
+        return result;
+    }
+
+    this._getHashParam = function(paramName) {
+        var params = this._hashToObject();
+        if (params[paramName]) {
+            return params[paramName];
+        }
+
+        return null;
+    }
+
+    this._processHash = function() {
+        if (!this.project || !this.project.project_id) {
+            this._loadProjectFromHash();
+            return;
+        }
+
+        this._showSceneFromHash();
+    }
+
+   
+    this._initHashChangeListener = function() {
+        window.addEventListener("hashchange", function(){
+            console.log("Hash changed");
+            this._processHash();
+
+        }.bind(this));
+    }
+
+
+    this.run = function(forcedProjectId){
+
+        this.forcedProjectId = forcedProjectId;
+        this._initHashChangeListener();
+        this._processHash();
+
     }
 }
