@@ -29,6 +29,7 @@
             <h2 frigg-slot-html="title"  >Title placeholder</h2>
             <p frigg-slot-html="content">Content placeholder</p>
             <p><img height="50px" frigg-slot-srcAlt="photo" src="http://via.placeholder.com/35x35/00ff00/" alt="Frigg"></p>
+            
             <p><audio frigg-slot-srcAlt="sound" controls></p>
 
             <p frigg-slot-link="next">GOTO NEXT</p>
@@ -52,7 +53,13 @@
             <div frigg-slot-bg="background" class="container carded">
                 
                 <div class="card">
-                    <audio frigg-slot-srcAlt="main_audio" class="audioPlayer" controls> </audio>
+                    <div>
+                        <audio frigg-slot-srcAlt="main_audio" class="audioPlayer"> </audio>
+                        <img frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
+                        <img frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
+                    </div>
+
+                    
 
                     <div class="content">
                         <h2 frigg-slot-html="title" class="title"></h2>
@@ -67,7 +74,7 @@
 
             </div>
 
-            <li frigg-slot-html="audio_icon"  >placeholder</li>
+            
 
         </section>
 
@@ -86,17 +93,26 @@
 
                 <!-- <p class="menuButton"><img frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p> -->
                 <p class="mapButton"><img frigg-slot-srcAlt="map_icon" frigg-slot-link="map_link" /></p>
+                
             </header>
 
             <section class="mainContent">
 
                 <div class="body">
                     <h2 frigg-slot-html="title">placeholder</h2>
+
+                    <div>   
+                        <audio frigg-slot-srcAlt="main_audio"></audio>
+                        <img frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
+                        <img frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
+                    </div>
+
+
                     <div frigg-slot-html="main_text">placeholder</div>
                 </div>
 
                 
-                <p frigg-slot-bg="audio_icon" class="audioPlayer"><audio frigg-slot-srcAlt="main_audio" controls></p>
+                
             </section>
 
             <footer>
@@ -372,20 +388,9 @@
                     console.log("Map zoom : " + zoom + " vs threshold : " + thresholdLevel);
                     console.log(" items to hide : " + toHide);
 
-                    var applyClassBySelector = function(container, selector, className, method){
-                        var method = (typeof method !== 'undefined') ? method : "add";
-
-                        var allItems = container.querySelectorAll(selector);
-                        for (var i = 0; i < allItems.length; i++) {
-                            var item = allItems[i];
-                            item.classList[method](className);
-                        }
-                    }
-
-
                     var container = this.getContainer();
-                    applyClassBySelector(container, ".map-item", "hidden", "remove");
-                    if (toHide) applyClassBySelector(container, toHide, "hidden", "add");
+                    frigg.applyClassBySelector(container, ".map-item", "hidden", "remove");
+                    if (toHide) frigg.applyClassBySelector(container, toHide, "hidden", "add");
 
                     console.log(data);
                     console.log(this.getZoom());

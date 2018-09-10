@@ -95,6 +95,20 @@ body {
 
 
 
+
+.audio_control {
+    width: 3em;
+    top:0em;
+    right: 0em;
+    position: absolute;
+}
+
+.audio_control.disabled {
+    display: none;
+
+}
+
+
 /* TEMPLATES */ 
 
 
@@ -135,11 +149,9 @@ body {
 
 }
 
-.tpl_intersticiel .card .audioPlayer {
-    position: absolute;
-    top: -3em;
+.tpl_intersticiel .audio_control {
+    top:-1em;
     right: -1em;
-
 }
 
 .tpl_intersticiel .content {
@@ -202,12 +214,9 @@ body {
 }
 
 
-.contentPage .audioPlayer {
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    opacity: 0.3;
+.contentPage .audio_control {
+    top:1em;
+    right: 1em;
 }
 
 
@@ -262,6 +271,8 @@ body {
 .contentPage .mainContent .bt.heading {
     /*margin-top: 1em;
     margin-bottom: 1em;*/
+
+    padding-right: 2em;
 }
 
 .contentPage .mainContent .bt.em {
@@ -301,10 +312,34 @@ body {
 
 
 
+
+.tpl_chapitre.contentPage .mainContent{
+    height: 57%;
+}
+
+.tpl_chapitre.contentPage footer{
+    background-color: rgb(53, 32, 97);
+}
+.tpl_chapitre.contentPage .mainContent .body {
+
+    height: calc(100% - 6em);
+}
+
+
+
+
 .tpl_page_medias.contentPage .mainContent {
     height: calc(70% - 1em);
     padding-bottom: 1em;
 }
+
+.tpl_page_medias.contentPage .mainContent .body {
+    margin: 0;
+}
+
+
+
+
 
 
 

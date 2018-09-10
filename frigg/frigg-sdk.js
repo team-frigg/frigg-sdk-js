@@ -80,7 +80,32 @@ FRIGG.Client = function (config){
 
         'onTemplateLoaded' : {
             
-        }
+        },
+
+        'onPausableBinded' : function(parentElement, sceneData, pausableElements, frigg){
+            var playElements = parentElement.querySelectorAll("[frigg-media-control]");
+            var media = pausableElements[0];
+
+            var playPause = function() {
+                if (media.paused) {
+                    media.play();
+                    frigg.applyClassBySelector(parentElement, "[frigg-event-media-paused]", "disabled", 'add');
+                    frigg.applyClassBySelector(parentElement, "[frigg-event-media-started]", "disabled", 'remove');
+                } else {
+                    media.pause();
+                    frigg.applyClassBySelector(parentElement, "[frigg-event-media-paused]", "disabled", 'remove');
+                    frigg.applyClassBySelector(parentElement, "[frigg-event-media-started]", "disabled", 'add');
+                }
+            }.bind(this);
+
+            for (var i = 0; i < playElements.length; i++) {
+                playElements[i].addEventListener("click", playPause);
+            }
+
+            //initial
+            frigg.applyClassBySelector(parentElement, "[frigg-event-media-started]", "disabled", 'add');
+
+        },
     };
 
     this.allAttributes = [];
@@ -137,6 +162,17 @@ FRIGG.Client = function (config){
 
         return "CONDITION_OK";
     }
+
+    this.applyClassBySelector = function(container, selector, className, method){
+        var method = (typeof method !== 'undefined') ? method : "add";
+
+        var allItems = container.querySelectorAll(selector);
+        for (var i = 0; i < allItems.length; i++) {
+            var item = allItems[i];
+            item.classList[method](className);
+        }
+    }
+
 
     this._mergeObject = function(objectA, objectB){
 
@@ -281,6 +317,7 @@ FRIGG.Client = function (config){
             console.log(" value: " + value);
 
             this.params.slotHandler[slot].bind(this)(elementToBind, value, this);
+
         }
 
     }
@@ -339,6 +376,10 @@ FRIGG.Client = function (config){
 
         if (this.params.onTemplateLoaded[templateName] != undefined) {
             this.params.onTemplateLoaded[templateName](clone, sceneData, this);
+        }
+
+        if (this.pausableElements.length) {
+            this.params.onPausableBinded(clone, sceneData, this.pausableElements, this);
         }
     }
 
