@@ -174,7 +174,9 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 30%;
+    height: calc(30% - .5em);
+
+    border-bottom: .5em solid white;
 }
 
 .contentPage .mainContent {
@@ -231,7 +233,7 @@ body {
 }
 
 
-.contentPage footer .body {
+.items.bottom-menu {
     padding: 0.5em 2em;
     width: calc(100% - 5em);
     height: calc(100% - 1em);
@@ -242,7 +244,7 @@ body {
 
 }
 
-.contentPage footer img {
+.items.bottom-menu .item {
     display: block;
     height: 100%;
 
@@ -258,13 +260,13 @@ body {
 
 
 .contentPage .mainContent .bt.heading {
-    margin-top: 1em;
-    margin-bottom: 1em;
+    /*margin-top: 1em;
+    margin-bottom: 1em;*/
 }
 
 .contentPage .mainContent .bt.em {
     font-style: italic;
-    padding: 0.5em 0;
+   /* padding: 0.5em 0;*/
 }
 
 
@@ -273,8 +275,8 @@ body {
 .contentPage .mainContent .body {
     margin: 0em 2.5em;
     background: white;
-    padding: 3em;
-    height: calc(100% - 8em);
+    padding: 2em;
+    height: calc(100% - 4em);
     overflow-y: scroll;
 }
 
@@ -285,12 +287,23 @@ body {
 
 .tpl_livre.contentPage .mainContent .body {
     margin: 0em 0em;
-    border-radius: 0 0 50vw 50vw;
+    border-radius: 0 0 2em 2em;
+}
+
+.tpl_livre.contentPage .mainContent{
+    height: 57%;
 }
 
 .tpl_livre.contentPage footer {
     height: calc(13% - 0.5em);
     padding-bottom: 0.5em;
+}
+
+
+
+.tpl_page_medias.contentPage .mainContent {
+    height: calc(70% - 1em);
+    padding-bottom: 1em;
 }
 
 
@@ -338,7 +351,7 @@ body {
     list-style: none;
 
     color: white;
-    font-size: 3em;
+    font-size: 2em;
     line-height: 1.5em;
 
     text-transform: uppercase;
@@ -353,12 +366,28 @@ body {
 
 
 
-.mapContainer {
-    height: 100%;
+
+
+
+
+.tpl_page_carte .mapContainer {
+    height: 90%;
     width: 100%;
 }
 
-.map-marker {
+
+.tpl_page_carte footer {
+    height: 10%;
+    background: rgb(53, 32, 97);
+}
+
+.tpl_page_carte footer body {
+    height: 100%;
+}
+
+
+
+.tpl_page_carte .map-marker {
   background-color: yellow;  
   width: 50px;
   height: 50px;
@@ -368,12 +397,12 @@ body {
   z-index: 0;
 }
 
-.map-marker.hidden, .map-popup.hidden {
+.tpl_page_carte .map-marker.hidden, .tpl_page_carte  .map-popup.hidden {
     opacity: 0;
     pointer-events: none;
 }
 
-.map-popup {
+.tpl_page_carte .map-popup {
     text-align: center;
     size: 1em;
     padding: 0.5em;
@@ -386,10 +415,26 @@ body {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .menuButton {
     position: absolute;
-    top: 0.5em;
-    left: 0.5em;
+    top: 0em;
+    left: 0em;
 
 
     height: 40px;
@@ -403,8 +448,8 @@ body {
 
 .closeButton, .mapButton {
     position: absolute;
-    top: 0.5em;
-    right: 0.5em;
+    top: 0em;
+    right: 0em;
 
     height: 40px;
     width: 40px;

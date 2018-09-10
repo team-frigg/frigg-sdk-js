@@ -188,6 +188,11 @@ FRIGG.Client = function (config){
                 'pattern': /\*([^\*]+)\*/g,
                 'string': '<em class="bt em">$1</em>'
             },
+
+            {
+                'pattern': /(?:\n)/g,
+                'string': '<br>'
+            }
         ];
 
         for (var i = 0; i < converters.length; i++) {
