@@ -135,9 +135,9 @@
 
         <section id="tpl_chapitre" class="scene contentPage">
 
-            <header>
-                <div class="diaporama">
-                    <img draggable="false" frigg-slot-srcAlt="header" />
+            <header class="diapo-viewport">
+                <div class="diaporama diapo-ribbon">
+                    <img draggable="false" frigg-slot-srcAlt="header" class="diapo-item"/>
                 </div>
 
                 <p class="backButton"><img draggable="false" frigg-slot-srcAlt="back_icon" frigg-slot-link="back_link" /></p>
@@ -168,9 +168,9 @@
 
 
         <section id="tpl_page_medias" class="scene contentPage">
-            <header>
-                <div class="diaporama">
-                    <img draggable="false" frigg-slot-srcAlt="header" />
+            <header class="diapo-viewport">
+                <div class="diaporama diapo-ribbon">
+                    <img draggable="false" frigg-slot-srcAlt="header" class="diapo-item" />
                 </div>
 
                 <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
@@ -183,7 +183,6 @@
                     <div frigg-slot-html="main_text">placeholder</div>
                 </div>
 
-                <p frigg-slot-bg="audio_icon"><audio frigg-slot-srcAlt="main_audio" controls></p>
             </section>
 
         </section>
@@ -306,9 +305,7 @@
             'touchDragSpeedMultiplier': -0.8,
             'lastItemSnapRight': true,
 
-            'viewportSelector': "header",
-            'ribbonSelector': ".diaporama",
-            'itemSelector': "img",
+            'autoPlayIntervalMs': 5000,
 
             forceItemWidthPercent: function(refSize){
                 return 100;

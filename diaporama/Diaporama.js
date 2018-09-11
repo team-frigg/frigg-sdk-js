@@ -7,6 +7,8 @@ var Diaporama = function(options){
 
 		forceItemWidthPercent: undefined, 
 		updateOnResize: true,
+
+		autoPlayIntervalMs: 2000,
 		
 		mouseDragSpeedMultiplier: -0.9,
 		touchDragSpeedMultiplier: -0.9,
@@ -43,7 +45,7 @@ var Diaporama = function(options){
 	this.init();
 	this.initClickEvents();
 	this.initDragEvents();
-
+	this.initAutoPlay();
 
 }
 
@@ -230,6 +232,19 @@ Diaporama.prototype.updateSizes = function(){
 		this.options.onSmall();
 	}
 }
+
+Diaporama.prototype.moveNextOrFirst = function(){
+	this.clearSelectedElement();
+	this.currentPosition++;
+
+	if (this.currentPosition > this.children.length -1){
+		this.currentPosition = 0;
+	}
+
+	this.update();
+	this.updateSelectedElement();
+}
+
 
 Diaporama.prototype.moveNext = function(){
 	this.clearSelectedElement();
@@ -498,5 +513,25 @@ Diaporama.prototype.numberSameSign = function(firstNumber, secondNumber){
 	}
 
 	return false;
+}
+
+Diaporama.prototype.initAutoPlay = function(){
+	if (this.options.autoPlayIntervalMs <= 0){
+		return;
+	}
+
+	if (this.smallRibbon) {
+		return;
+	}
+
+	if (this.children.length <= 1){
+		return;
+	}
+
+	this.autoPlayInterval = window.setInterval(function(){
+		console.log("autoplay");
+		this.moveNextOrFirst();
+	}.bind(this), this.options.autoPlayIntervalMs);
+
 }
 

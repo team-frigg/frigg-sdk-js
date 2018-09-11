@@ -331,8 +331,7 @@ body {
 
 
 .tpl_page_medias.contentPage .mainContent {
-    height: calc(70% - 1em);
-    padding-bottom: 1em;
+    height: 70%;
 }
 
 .tpl_page_medias.contentPage .mainContent .body {
