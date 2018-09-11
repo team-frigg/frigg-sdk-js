@@ -13,9 +13,16 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
 
+    <script src="https://player.vimeo.com/api/player.js"></script>
+
 </head>
 <body>
-    
+
+    <script type="text/javascript">
+        var frigg;
+
+    </script>
+
     <div id="friggContainer">
         <p class="pleaseWait">Chargement en cours, veuillez patienter...</p>
     </div>
@@ -185,9 +192,11 @@
         </section>
 
         <section id="tpl_page_video" class="scene">
+
+            <iframe src="https://player.vimeo.com/video/161738956" afrigg-slot-srcAlt="main_video" width="100%" height="100%" class="videoFrame" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; encrypted-media"></iframe>
+
             <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
-            <li frigg-slot-html="main_video"  >placeholder</li>
         </section>
 
         <section id="tpl_page_diaporama" class="scene">
@@ -288,12 +297,23 @@
     </div>
 
 
-
 <script type="text/javascript" src="frigg/frigg-sdk.js"></script>
 <script type="text/javascript">
 
     var config = {
+
+
+
         "onTemplateLoaded" : {
+
+            'page_video': function(element, sceneData, frigg){
+                console.log("page_video");
+                var frame = element.querySelector('.videoFrame');
+                var player = new Vimeo.Player(frame);
+
+                frigg.pausableElements.push(player);
+            },
+
             'page_carte': function (element, sceneData, frigg) {
                 console.log("page_carte");
                 
@@ -402,12 +422,13 @@
         }
     }
 
-    var frigg = new FRIGG.Client(config);
+    frigg = new FRIGG.Client(config);
     frigg.run();
 
     
 
 
 </script>
+
 </body>
 </html>

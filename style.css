@@ -341,6 +341,11 @@ body {
 
 
 
+/**/
+.videoFrame {
+    background: black;
+}
+
 
 
 /* QUIZ */
@@ -493,4 +498,7 @@ body {
 .closeButton img, .mapButton img {
     width: 100%;
 }
+
+
+
 

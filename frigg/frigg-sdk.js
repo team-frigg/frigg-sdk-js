@@ -57,7 +57,12 @@ FRIGG.Client = function (config){
                     return;
                 }
 
-                element.setAttribute("src", this.params.mediaFilePrefix + slotData.content);
+                var src = slotData.content;
+                if (! src.startsWith("http")) {
+                    src = this.params.mediaFilePrefix + src;
+                }
+
+                element.setAttribute("src", src);
                 element.setAttribute("alt", slotData.description);
 
                 if (element.pause) this.pausableElements.push(element);
@@ -647,6 +652,7 @@ FRIGG.Client = function (config){
 
     this.gotoScene = function(sceneId) {
         window.location.hash = "project=" + this.project.project_id + "&scene=" + sceneId;
+        document.title = "Scene " + sceneId;
     }
 
     this.showScene = function(sceneId){
