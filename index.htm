@@ -323,14 +323,16 @@
             ga('set', 'page', window.location.hash);
             ga('send', 'pageview');
             ga('send', 'event', 'Scene', 'load', project.label + "/" + scene.label, scene.id);
+
         },
 
         'onMediaPlayed' : function(scene, project){
             ga('send', 'event', 'Scene', 'media_played', project.label + "/" + scene.label, scene.id);
         },
 
-        'onVariableChanged' : function(scene, variableName, variableValue){
+        'onVariableChanged' : function(project, scene, variableName, variableValue){
             console.log("onVariableChanged : " + scene.label);
+            ga('send', 'event', 'Scene', 'variable_changed', project.label + "/" + scene.label + "/" + variableName , scene.id);
         },
 
 

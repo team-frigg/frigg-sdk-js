@@ -95,7 +95,7 @@ FRIGG.Client = function (config){
 
         },
 
-        'onVariableChanged' : function(scene, variableName, variableValue){
+        'onVariableChanged' : function(project, scene, variableName, variableValue){
 
         },
 
@@ -132,6 +132,37 @@ FRIGG.Client = function (config){
     };
 
     this.allAttributes = [];
+
+    this._getLocalStorageKey = function(project, category){
+        var key = 'frigg_project_' + project.project_id + "_" + category;
+        return key;
+    }
+
+    this._saveVariableToLocalStorage = function(project, variableName, value) {
+        var key = this._getLocalStorageKey(project, "variables");
+        var existing = this._getVariablesFromLocalStorage(project);
+
+        existing[variableName] = value;
+        localStorage.setItem(key, JSON.stringify(existing));
+    }
+
+    this._getVariablesFromLocalStorage = function(project){
+
+        var key = this._getLocalStorageKey(project, "variables");
+        var existing = localStorage.getItem(key);
+
+        if (existing == null){
+            existing = {};
+        } else {
+            existing = JSON.parse(existing);
+        }
+
+        return existing;
+    }
+
+    this._loadVariableFromLocalStorage = function(project) {
+        this.currentVariables = this._getVariablesFromLocalStorage(project);
+    }
 
     this.getClassForLinkSlot = function(slotLinkData){
         var standardClass = "link";
@@ -527,6 +558,8 @@ FRIGG.Client = function (config){
     }
     
     this._projectIsReady = function(){
+        this._loadVariableFromLocalStorage(this.project);
+
         this.params.onProjectLoaded(this.project);
         this._showSceneFromHash();
     }
@@ -623,7 +656,8 @@ FRIGG.Client = function (config){
 
         this.currentVariables[name] = parseInt(value);
 
-        this.params.onVariableChanged(scene, name, this.currentVariables[name]);
+        this.params.onVariableChanged(this.project, scene, name, this.currentVariables[name]);
+        this._saveVariableToLocalStorage(this.project, name, this.currentVariables[name]);
 
         return true;
     }
@@ -644,7 +678,8 @@ FRIGG.Client = function (config){
         }
 
         this.currentVariables[name] = newValue;
-        this.params.onVariableChanged(scene, name, this.currentVariables[name]);
+        this.params.onVariableChanged(this.project, scene, name, this.currentVariables[name]);
+        this._saveVariableToLocalStorage(this.project, name, this.currentVariables[name]);
 
         return true;
     }
