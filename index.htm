@@ -4,10 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
 
-    <title>Frigg player</title>
+    <title>Frigg</title>
     <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" type="text/css" href="diaporama/diaporama.css">
+
+    <!-- Google Analytics -->
+    <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-125435693-1', 'auto');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 
@@ -31,7 +39,7 @@
     <div id="friggTemplates">
         
         <section id="tpl_simple" class="scene">
-            <h2 frigg-slot-html="title"  >Title placeholder</h2>
+            <h2 frigg-slot-html="title">Title placeholder</h2>
             <p frigg-slot-html="content">Content placeholder</p>
             <p><img draggable="false" height="50px" frigg-slot-srcAlt="photo" src="http://via.placeholder.com/35x35/00ff00/" alt="Frigg"></p>
             
@@ -306,6 +314,25 @@
     };
 
     var config = {
+        'onProjectLoaded' : function(project){
+            console.log("project : " + project.label);
+            ga('send', 'event', 'Project', 'load', project.label);
+        },
+
+        'onSceneLoaded' : function(scene, project){
+            ga('set', 'page', window.location.hash);
+            ga('send', 'pageview');
+            ga('send', 'event', 'Scene', 'load', project.label + "/" + scene.label, scene.id);
+        },
+
+        'onMediaPlayed' : function(scene, project){
+            ga('send', 'event', 'Scene', 'media_played', project.label + "/" + scene.label, scene.id);
+        },
+
+        'onVariableChanged' : function(scene, variableName, variableValue){
+            console.log("onVariableChanged : " + scene.label);
+        },
+
 
 
 

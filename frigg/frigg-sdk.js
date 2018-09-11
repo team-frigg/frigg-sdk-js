@@ -83,6 +83,22 @@ FRIGG.Client = function (config){
             },
         }, 
 
+        'onMediaPlayed' : function(scene){
+
+        },
+
+        'onProjectLoaded' : function(project){
+
+        },
+
+        'onSceneLoaded' : function(scene, project){
+
+        },
+
+        'onVariableChanged' : function(scene, variableName, variableValue){
+
+        },
+
         'onTemplateLoaded' : {
             
         },
@@ -93,6 +109,8 @@ FRIGG.Client = function (config){
 
             var playPause = function() {
                 if (media.paused) {
+                    frigg.params.onMediaPlayed(sceneData, frigg.project);
+
                     media.play();
                     frigg.applyClassBySelector(parentElement, "[frigg-event-media-paused]", "disabled", 'add');
                     frigg.applyClassBySelector(parentElement, "[frigg-event-media-started]", "disabled", 'remove');
@@ -304,14 +322,14 @@ FRIGG.Client = function (config){
     this._bindOneElement = function(elementToBind, index, elementSlots) {
 
         //console.log(elementToBind);
-        console.log("Bind element at index " + index);
+        //console.log("Bind element at index " + index);
         //console.log(elementSlots);
 
         for(var slot in elementSlots) {
             var slotValues = elementSlots[slot];
             var value;
 
-            console.log("Slot: " + slot);
+            //console.log("Slot: " + slot);
 
             if (index >= slotValues.length) {
                 value = slotValues[ slotValues.length -1 ];
@@ -319,7 +337,7 @@ FRIGG.Client = function (config){
                 value = slotValues[ index ];
             }
 
-            console.log(" value: " + value);
+            //console.log(" value: " + value);
 
             this.params.slotHandler[slot].bind(this)(elementToBind, value, this);
 
@@ -509,6 +527,7 @@ FRIGG.Client = function (config){
     }
     
     this._projectIsReady = function(){
+        this.params.onProjectLoaded(this.project);
         this._showSceneFromHash();
     }
 
@@ -520,9 +539,9 @@ FRIGG.Client = function (config){
     //include itself !
     this._clearHistoryUntil = function(sceneId, sceneIndex){
 
-        console.log("CURRENT HISTORY:");
-        console.log(this.sceneElementHistory);
-        console.log(this.sceneIdHistory);
+        //console.log("CURRENT HISTORY:");
+        //console.log(this.sceneElementHistory);
+        //console.log(this.sceneIdHistory);
 
         var count = this.sceneElementHistory.length;
 
@@ -536,9 +555,9 @@ FRIGG.Client = function (config){
         this.sceneElementHistory = this.sceneElementHistory.slice(0, sceneIndex);
         this.sceneIdHistory = this.sceneIdHistory.slice(0, sceneIndex);
         
-        console.log("CLEARED HISTORY:");
-        console.log(this.sceneElementHistory);
-        console.log(this.sceneIdHistory);
+        //console.log("CLEARED HISTORY:");
+        //console.log(this.sceneElementHistory);
+       // console.log(this.sceneIdHistory);
 
         return this.sceneElementHistory[ this.sceneElementHistory.length - 1];
     }
@@ -604,6 +623,8 @@ FRIGG.Client = function (config){
 
         this.currentVariables[name] = parseInt(value);
 
+        this.params.onVariableChanged(scene, name, this.currentVariables[name]);
+
         return true;
     }
 
@@ -623,6 +644,7 @@ FRIGG.Client = function (config){
         }
 
         this.currentVariables[name] = newValue;
+        this.params.onVariableChanged(scene, name, this.currentVariables[name]);
 
         return true;
     }
@@ -659,6 +681,8 @@ FRIGG.Client = function (config){
 
         var scene = this.project.scenes[sceneId];
 
+        this.params.onSceneLoaded(scene, this.project);
+
         this._handleSceneVariables(scene);
 
         var template = this.project.templates[scene.template_id];
@@ -677,8 +701,8 @@ FRIGG.Client = function (config){
         this._bindTemplate(this._cleanTemplateName(template.label), slots, sceneId)
         this._updateDebugger(scene, template);
 
-        console.log("SHOW SCENE END:");
-        console.log(this.sceneElementHistory);
+        //console.log("SHOW SCENE END:");
+        //console.log(this.sceneElementHistory);
     }
 
     this._cleanTemplateName = function(templateName){
