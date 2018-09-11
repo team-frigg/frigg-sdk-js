@@ -405,11 +405,26 @@ body {
 
 /* info */
 
-.tpl_page_informations {
+.tpl_page_informations .container {
+    overflow-y: scroll;
+}
 
+.tpl_page_informations .body {
+    padding: 2em;
+}
+
+.tpl_page_informations .title {
+    padding-top: 1em;
+    padding-bottom: 2em;
 }
 
 
+.tpl_page_informations .images img {
+    display: block;
+    text-align: center;
+    width: 80%;
+    margin: 1em auto;
+}
 
 
 
