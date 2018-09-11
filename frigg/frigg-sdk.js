@@ -138,21 +138,32 @@ FRIGG.Client = function (config){
         return key;
     }
 
+
+    this._saveHistoryToLocalStorage = function(project, scene) {
+        var key = this._getLocalStorageKey(project, "history");
+        var existing = this._getFromLocalStorage(project, "history", []);
+
+        existing.push(scene.id);
+        localStorage.setItem(key, JSON.stringify(existing));
+    }
+
+
     this._saveVariableToLocalStorage = function(project, variableName, value) {
         var key = this._getLocalStorageKey(project, "variables");
-        var existing = this._getVariablesFromLocalStorage(project);
+        var existing = this._getFromLocalStorage(project, "variables");
 
         existing[variableName] = value;
         localStorage.setItem(key, JSON.stringify(existing));
     }
 
-    this._getVariablesFromLocalStorage = function(project){
+    this._getFromLocalStorage = function(project, key, defaultValue){
+        var defaultValue = defaultValue != null ? defaultValue : {};
 
-        var key = this._getLocalStorageKey(project, "variables");
+        var key = this._getLocalStorageKey(project, key);
         var existing = localStorage.getItem(key);
 
         if (existing == null){
-            existing = {};
+            existing = defaultValue;
         } else {
             existing = JSON.parse(existing);
         }
@@ -161,7 +172,7 @@ FRIGG.Client = function (config){
     }
 
     this._loadVariableFromLocalStorage = function(project) {
-        this.currentVariables = this._getVariablesFromLocalStorage(project);
+        this.currentVariables = this._getFromLocalStorage(project, "variables");
     }
 
     this.getClassForLinkSlot = function(slotLinkData){
@@ -717,6 +728,7 @@ FRIGG.Client = function (config){
         var scene = this.project.scenes[sceneId];
 
         this.params.onSceneLoaded(scene, this.project);
+        this._saveHistoryToLocalStorage(this.project, scene);
 
         this._handleSceneVariables(scene);
 
