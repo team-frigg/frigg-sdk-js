@@ -35,7 +35,7 @@
             <p frigg-slot-html="content">Content placeholder</p>
             <p><img draggable="false" height="50px" frigg-slot-srcAlt="photo" src="http://via.placeholder.com/35x35/00ff00/" alt="Frigg"></p>
             
-            <p><audio frigg-slot-srcAlt="sound" controls></p>
+            <audio frigg-slot-srcAlt="sound">
 
             <p frigg-slot-link="next">GOTO NEXT</p>
         </section>
@@ -150,7 +150,7 @@
                     <div frigg-slot-html="main_text">placeholder</div>
                 </div>
 
-                <p frigg-slot-bg="audio_icon" class="audioPlayer"><audio frigg-slot-srcAlt="main_audio" controls></p>
+                <audio frigg-slot-srcAlt="main_audio"></audio>
             </section>
 
             <footer>
@@ -209,7 +209,7 @@
             <div frigg-slot-bg="background" class="container carded">
                 
                 <div class="card">
-                    <audio frigg-slot-srcAlt="main_audio" class="audioPlayer" controls> </audio>
+                    <audio frigg-slot-srcAlt="main_audio" class="audioPlayer"> </audio>
 
                     <div class="content">
                         <div frigg-slot-html="question" class="main_text"></div>
@@ -224,14 +224,6 @@
 
             </div>
 
-            <li frigg-slot-html="audio_icon"  >placeholder</li>
-
-
-
-            <li frigg-slot-html="background"  >placeholder</li>
-            <li frigg-slot-html="question"  >placeholder</li>
-            <li frigg-slot-html="main_audio"  >placeholder</li>
-            <li frigg-slot-html="audio_icon"  >placeholder</li>
         </section>
 
 

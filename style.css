@@ -74,16 +74,16 @@ body {
 }
 
 .container.carded  {
-    padding: 4em;
+    padding: 2em;
 
-    width: calc(100% - 8em);
-    height: calc(100% - 8em);
+    width: calc(100% - 4em);
+    height: calc(100% - 4em);
 }
 
 .card {
 
-    width: calc(100% - 1em);
-    height: calc(100% - 1em);
+    width: calc(100% - 2em);
+    height: calc(100% - 2em);
     padding: 1em;
 
     background: white;
@@ -351,8 +351,12 @@ body {
 
 /* QUIZ */
 
+.tpl_page_quiz .card .content {
+    height: 100%;
+}
+
 .tpl_page_quiz .items {
-    padding-top: 2em;
+    padding-top: 0em;
 
     display: flex;
     justify-content: space-evenly;
