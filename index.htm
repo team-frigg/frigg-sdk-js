@@ -7,6 +7,7 @@
     <title>Frigg player</title>
     <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="diaporama/diaporama.css">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 
@@ -14,14 +15,11 @@
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
 
     <script src="https://player.vimeo.com/api/player.js"></script>
+    <script src="diaporama/Diaporama.js"></script>
 
 </head>
 <body>
 
-    <script type="text/javascript">
-        var frigg;
-
-    </script>
 
     <div id="friggContainer">
         <p class="pleaseWait">Chargement en cours, veuillez patienter...</p>
@@ -35,7 +33,7 @@
         <section id="tpl_simple" class="scene">
             <h2 frigg-slot-html="title"  >Title placeholder</h2>
             <p frigg-slot-html="content">Content placeholder</p>
-            <p><img height="50px" frigg-slot-srcAlt="photo" src="http://via.placeholder.com/35x35/00ff00/" alt="Frigg"></p>
+            <p><img draggable="false" height="50px" frigg-slot-srcAlt="photo" src="http://via.placeholder.com/35x35/00ff00/" alt="Frigg"></p>
             
             <p><audio frigg-slot-srcAlt="sound" controls></p>
 
@@ -44,7 +42,7 @@
 
         <section id="tpl_accueil" class="scene tpl_accueil">
             <div frigg-slot-bg="background"  class="container">
-                <img class="front" frigg-slot-srcAlt="front"  frigg-slot-link="_anonymous_connection" />
+                <img draggable="false" class="front" frigg-slot-srcAlt="front"  frigg-slot-link="_anonymous_connection" />
 
                 <ul>
                     <li frigg-slot-html="title"  >title placeholder</li>
@@ -62,8 +60,8 @@
                 <div class="card">
                     <div>
                         <audio frigg-slot-srcAlt="main_audio" class="audioPlayer"> </audio>
-                        <img frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
-                        <img frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
+                        <img draggable="false" frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
+                        <img draggable="false" frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
                     </div>
 
                     
@@ -74,7 +72,7 @@
                     </div>
 
                     <p frigg-slot-link="_anonymous_connection" class="next">
-                        <img class="image" frigg-slot-srcAlt="button_next_image"  />
+                        <img draggable="false" class="image" frigg-slot-srcAlt="button_next_image"  />
                         <span class="string" frigg-slot-html="button_next_string"></span>
                     </p>
                 </div>
@@ -93,13 +91,13 @@
             <div frigg-slot-bg="background" class="container">
             
 
-            <header>
-                <div class="diaporama">
-                    <img frigg-slot-srcAlt="header" />
+            <header class="diapo-viewport">
+                <div class="diaporama diapo-ribbon" >
+                    <img draggable="false" frigg-slot-srcAlt="header" class="diapo-item" />
                 </div>
 
-                <!-- <p class="menuButton"><img frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p> -->
-                <p class="mapButton"><img frigg-slot-srcAlt="map_icon" frigg-slot-link="map_link" /></p>
+                <!-- <p class="menuButton"><img draggable="false" frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p> -->
+                <p class="mapButton"><img draggable="false" frigg-slot-srcAlt="map_icon" frigg-slot-link="map_link" /></p>
                 
             </header>
 
@@ -110,8 +108,8 @@
 
                     <div>   
                         <audio frigg-slot-srcAlt="main_audio"></audio>
-                        <img frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
-                        <img frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
+                        <img draggable="false" frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
+                        <img draggable="false" frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
                     </div>
 
 
@@ -124,7 +122,7 @@
 
             <footer>
                 <div class="body items bottom-menu">
-                    <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" class="item"/>
+                    <img draggable="false" frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" class="item"/>
                 </div>
             </footer>
 
@@ -139,11 +137,11 @@
 
             <header>
                 <div class="diaporama">
-                    <img frigg-slot-srcAlt="header" />
+                    <img draggable="false" frigg-slot-srcAlt="header" />
                 </div>
 
-                <!-- <p class="menuButton"><img frigg-slot-srcAlt="menu_icon"  /></p> -->
-                <p class="mapButton"><img frigg-slot-srcAlt="map_icon"  /></p>
+                <!-- <p class="menuButton"><img draggable="false" frigg-slot-srcAlt="menu_icon"  /></p> -->
+                <p class="mapButton"><img draggable="false" frigg-slot-srcAlt="map_icon"  /></p>
             </header>
 
             <section frigg-slot-bg="background" class="mainContent">
@@ -158,7 +156,7 @@
 
             <footer>
                 <div class="body items bottom-menu">
-                    <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" class="item" />
+                    <img draggable="false" frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" class="item" />
                 </div>
             </footer>
 
@@ -173,10 +171,10 @@
         <section id="tpl_page_medias" class="scene contentPage">
             <header>
                 <div class="diaporama">
-                    <img frigg-slot-srcAlt="header" />
+                    <img draggable="false" frigg-slot-srcAlt="header" />
                 </div>
 
-                <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+                <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
             </header>
 
             <section frigg-slot-bg="background" class="mainContent">
@@ -193,14 +191,14 @@
 
         <section id="tpl_page_video" class="scene">
 
-            <iframe src="https://player.vimeo.com/video/161738956" afrigg-slot-srcAlt="main_video" width="100%" height="100%" class="videoFrame" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; encrypted-media"></iframe>
+            <iframe frigg-slot-srcAlt="main_video" width="100%" height="100%" class="videoFrame" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; encrypted-media"></iframe>
 
-            <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+            <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
         </section>
 
         <section id="tpl_page_diaporama" class="scene">
-            <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+            <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
             <li frigg-slot-html="images"  >placeholder</li>
 
@@ -245,11 +243,11 @@
 
             <div class="container" style="">
                 <div class='mapContainer'></div>
-                <p class="menuButton"><img frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p>
+                <p class="menuButton"><img draggable="false" frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p>
 
                 <footer>
                     <div class="body items bottom-menu">
-                        <img frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" class="item"/>
+                        <img draggable="false" frigg-slot-srcAlt="bottom_icons" frigg-slot-link="bottom_links" class="item"/>
                     </div>
                 </footer>
             
@@ -260,7 +258,7 @@
 
         <section id="tpl_menu" class="scene">
             <div class="container">
-                <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+                <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
                 <p frigg-slot-html="title" >placeholder</p>
 
@@ -278,14 +276,14 @@
         <section id="tpl_page_informations" class="scene contentPage">
             <div class="container">
 
-                <p class="closeButton"><img frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
+                <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
                 <div class="body">
                     <h2 frigg-slot-html="title">placeholder</h2>
                     <div frigg-slot-html="main_text">placeholder</div>
 
                     <div class="images" >
-                        <img frigg-slot-srcAlt="images" />
+                        <img draggable="false" frigg-slot-srcAlt="images" />
                     </div>
                 </div>
 
@@ -300,11 +298,44 @@
 <script type="text/javascript" src="frigg/frigg-sdk.js"></script>
 <script type="text/javascript">
 
+    var getDiaporamaOptions = function(containerElement) {
+        return {
+            'containerElement': containerElement,
+            'enableDrag': true,
+            'updateOnResize': true,
+            'mouseDragSpeedMultiplier': -1.1,
+            'touchDragSpeedMultiplier': -0.8,
+            'lastItemSnapRight': true,
+
+            'viewportSelector': "header",
+            'ribbonSelector': ".diaporama",
+            'itemSelector': "img",
+
+            forceItemWidthPercent: function(refSize){
+                return 100;
+            }
+        }
+    };
+
     var config = {
 
 
 
         "onTemplateLoaded" : {
+
+            'livre': function(element, sceneData, frigg){
+                var d = new Diaporama(getDiaporamaOptions(element));
+            },
+
+            'chapitre': function(element, sceneData, frigg){
+                var d = new Diaporama(getDiaporamaOptions(element));
+            },
+
+            'page_medias': function(element, sceneData, frigg){
+                var d = new Diaporama(getDiaporamaOptions(element));
+            },
+
+
 
             'page_video': function(element, sceneData, frigg){
                 console.log("page_video");
@@ -422,7 +453,7 @@
         }
     }
 
-    frigg = new FRIGG.Client(config);
+    var frigg = new FRIGG.Client(config);
     frigg.run();
 
     

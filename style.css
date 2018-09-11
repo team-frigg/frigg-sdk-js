@@ -17,6 +17,12 @@ body {
     text-align: center;
     font-weight: bold;
     padding-top: 2em;
+    padding-bottom: 2em;
+
+    background-image: url('medias/wait.gif');
+    background-size: 1em;
+    background-position: 50% 100%;
+    background-repeat: no-repeat;
 }
 
 .scene {
@@ -189,6 +195,12 @@ body {
     height: calc(30% - .5em);
 
     border-bottom: .5em solid white;
+
+
+    background-image: url('medias/wait.gif');
+    background-size: 1em;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
 }
 
 .contentPage .mainContent {
@@ -222,25 +234,15 @@ body {
 
 .contentPage header .diaporama {
     height: 100%;
+
+    
 }
 
 .contentPage header .diaporama img {
+    object-fit: cover;
     display: block;
     height: 100%;
-    width: 100%;
-    object-fit: cover;
-
-    position: absolute;
-    top:0;
-    left:0;
-
-    transition: transform 0.3s;
 }
-
-.contentPage header .diaporama img.gone {
-    transform: translateX(-100vw) scale(0.2);
-}
-
 
 .items.bottom-menu {
     padding: 0.5em 2em;
