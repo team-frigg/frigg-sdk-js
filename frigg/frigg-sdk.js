@@ -29,7 +29,7 @@ FRIGG.Client = function (config){
     this.forcedInitialScene = null;
 
     this.params = {
-        'mediaFilePrefix': 'http://admin.systeme-frigg.org/storage/',
+        'mediaFilePrefix': 'https://admin.systeme-frigg.org/storage/',
         'templatePrefix' : "tpl_",
         'containerElement' : document.getElementById("friggContainer"),
         'templateElement' : document.getElementById("friggTemplates"),
@@ -449,7 +449,7 @@ FRIGG.Client = function (config){
     }
 
     this._loadProject = function(projectId, projectReadyCallback) {
-        var url = "http://admin.systeme-frigg.org/api/project/" + projectId;
+        var url = "https://admin.systeme-frigg.org/api/project/" + projectId;
         //var url = "http://frigg.local/api/project/" + projectId;
 
         var request = new XMLHttpRequest();
