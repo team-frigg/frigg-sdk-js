@@ -203,6 +203,12 @@ body {
     background-repeat: no-repeat;
 }
 
+.contentPage.fullscreen-diaporama header{
+    height: 100%;
+    border: 0;
+    z-index: 100;
+}
+
 .contentPage .mainContent {
     position: absolute;
     top: 30%;
@@ -234,14 +240,50 @@ body {
 
 .contentPage header .diaporama {
     height: 100%;
-
-    
 }
 
 .contentPage header .diaporama img {
     object-fit: cover;
     display: block;
     height: 100%;
+    background: black;
+}
+
+.contentPage header .diaporama img.fullview {
+    object-fit: contain;
+
+}
+
+.contentPage header .navButtons img {
+    position: absolute;
+    top: calc(50% - 1.5em);
+    height: 3em;
+
+    left: 0;
+}
+
+.contentPage header .navButtons .diaporama-close {
+    display: none;
+}
+
+
+.contentPage.fullscreen-diaporama header .navButtons .diaporama-close {
+    display: block;
+}
+
+.contentPage.fullscreen-diaporama header .mapButton {
+    display: none;
+}
+
+.contentPage header .navButtons .diaporama-next {
+    left: auto;
+    right: 0;
+}
+
+.contentPage header .navButtons .diaporama-close {
+    left: auto;
+    top: 0;
+    right: 0;
 }
 
 .items.bottom-menu {

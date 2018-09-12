@@ -104,6 +104,12 @@
                     <img draggable="false" frigg-slot-srcAlt="header" class="diapo-item" />
                 </div>
 
+                <p class="navButtons">
+                    <img draggable="false" frigg-slot-srcAlt="map_icon" class="diaporama-close"/>
+                    <img draggable="false" frigg-slot-srcAlt="map_icon" class="diaporama-previous"/>
+                    <img draggable="false" frigg-slot-srcAlt="map_icon" class="diaporama-next" />
+                </p>
+
                 <!-- <p class="menuButton"><img draggable="false" frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p> -->
                 <p class="mapButton"><img draggable="false" frigg-slot-srcAlt="map_icon" frigg-slot-link="map_link" /></p>
                 
@@ -305,13 +311,39 @@
             'touchDragSpeedMultiplier': -0.8,
             'lastItemSnapRight': true,
 
-            'autoPlayIntervalMs': 5000,
+            'autoPlayIntervalMs': 0,
+
+            onClick: function(event) {
+                var className = "fullscreen-diaporama";
+                if (containerElement.classList.contains(className)) {
+                    event.selectedItem.classList.toggle("fullview");
+                } else {
+                    containerElement.classList.add(className);
+                }
+
+            },
 
             forceItemWidthPercent: function(refSize){
                 return 100;
             }
         }
     };
+
+    var makeDiaporamaNav = function(containerElement, d) {
+        containerElement.querySelector(".diaporama-previous").addEventListener("click", function(event){
+            d.movePrevious();
+            
+        });
+
+        containerElement.querySelector(".diaporama-next").addEventListener("click", function(){
+            d.moveNext();
+        });
+
+        containerElement.querySelector(".diaporama-close").addEventListener("click", function(event){
+            containerElement.classList.remove("fullscreen-diaporama");
+        });
+
+    }
 
     var config = {
         'onProjectLoaded' : function(project){
@@ -342,14 +374,17 @@
 
             'livre': function(element, sceneData, frigg){
                 var d = new Diaporama(getDiaporamaOptions(element));
+                makeDiaporamaNav(element, d);
             },
 
             'chapitre': function(element, sceneData, frigg){
                 var d = new Diaporama(getDiaporamaOptions(element));
+                makeDiaporamaNav(element, d);
             },
 
             'page_medias': function(element, sceneData, frigg){
                 var d = new Diaporama(getDiaporamaOptions(element));
+                makeDiaporamaNav(element, d);
             },
 
 
@@ -372,8 +407,22 @@
 
                 var map = new mapboxgl.Map({
                     container: theMapId,
-                    style: 'mapbox://styles/tabascovideo/cjikfqj3209iv2snz12qvnnx7'
+                    style: 'mapbox://styles/tabascovideo/cjikfqj3209iv2snz12qvnnx7',
                 });
+
+                var geoTracker = new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                        enableHighAccuracy: true
+                    },
+                    trackUserLocation: true
+                })
+
+                map.addControl(geoTracker);
+                window.setTimeout(function(){
+                    if (! geoTracker._geolocateButton) return;
+                    geoTracker._geolocateButton.click();
+                }, 2000);
+                
 
                 //var mapElements = [];
                 var thresholdLevel = 16;
