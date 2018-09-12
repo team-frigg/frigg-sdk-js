@@ -74,6 +74,7 @@ FRIGG.Client = function (config){
 
                 var className = frigg.getClassForLinkSlot(slotData);
 
+                element.classList.add("link");
                 element.classList.add(className);
 
                 element.addEventListener("click", function(event){
@@ -337,10 +338,19 @@ FRIGG.Client = function (config){
 
         var parent = slotElement.parentNode;
 
+
+        var clones = [];
+
+        //clone before the first bind, to clone the origin element, not a binded one.
+        for (var i = 0; i < numberOfClones; i++) {
+            var clone = slotElement.cloneNode(true);
+            clones.push(clone);
+        }
+
         this._bindOneElement(slotElement, 0, elementSlots);
         
         for (var i = 0; i < numberOfClones; i++) {
-            var clone = slotElement.cloneNode(true);
+            var clone = clones[i];
             parent.appendChild(clone);
 
             this._bindOneElement(clone, i+1, elementSlots);
