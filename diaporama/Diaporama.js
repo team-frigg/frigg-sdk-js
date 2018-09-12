@@ -47,6 +47,8 @@ var Diaporama = function(options){
 	this.initDragEvents();
 	this.initAutoPlay();
 
+	this.initialEvents();
+
 }
 
 Diaporama.prototype.mergeObject = function(objectA, objectB){
@@ -535,3 +537,9 @@ Diaporama.prototype.initAutoPlay = function(){
 
 }
 
+
+
+Diaporama.prototype.initialEvents = function(){
+	var selectedElement = this.children[this.currentPosition];
+	this.triggerEvent(selectedElement, "onChange");
+}

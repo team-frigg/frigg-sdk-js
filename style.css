@@ -262,6 +262,12 @@ body {
     left: 0;
 }
 
+.contentPage.fullscreen-diaporama header .navButtons .diaporama-next,
+.contentPage.fullscreen-diaporama header .navButtons .diaporama-previous {
+    top: calc(45% - 2.5em);
+    height: 5em;
+}
+
 .contentPage header .navButtons .diaporama-close {
     display: none;
 }
@@ -271,7 +277,9 @@ body {
     display: block;
 }
 
-.contentPage.fullscreen-diaporama header .mapButton {
+.contentPage.fullscreen-diaporama header .mapButton,
+.contentPage.fullscreen-diaporama header .closeButton,
+.contentPage.fullscreen-diaporama header .backButton {
     display: none;
 }
 
@@ -284,6 +292,29 @@ body {
     left: auto;
     top: 0;
     right: 0;
+}
+
+.contentPage header .legendContainer {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    background: rgb(53, 32, 97);
+    color: white;
+    padding: 1em;
+
+    text-align: center;
+
+    transition: transform 0.2s;
+    transform-origin: bottom;
+}
+
+.contentPage.fullscreen-diaporama header .legendContainer {
+    display: block;
+}
+
+.contentPage.fullview header .legendContainer {
+    transform: scaleY(0);
+    transform-origin: bottom;
 }
 
 .items.bottom-menu {
@@ -561,6 +592,9 @@ body {
     width: 100%;
 }
 
-
+.closeButton {
+    top: 0.5em;
+    right: 0.5em;
+}
 
 

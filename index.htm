@@ -105,10 +105,12 @@
                 </div>
 
                 <p class="navButtons">
-                    <img draggable="false" frigg-slot-srcAlt="map_icon" class="diaporama-close"/>
-                    <img draggable="false" frigg-slot-srcAlt="map_icon" class="diaporama-previous"/>
-                    <img draggable="false" frigg-slot-srcAlt="map_icon" class="diaporama-next" />
+                    <img draggable="false" frigg-slot-srcAlt="diapo_close_icon" class="diaporama-close"/>
+                    <img draggable="false" frigg-slot-srcAlt="diapo_previous_icon" class="diaporama-previous"/>
+                    <img draggable="false" frigg-slot-srcAlt="diapo_next_icon" class="diaporama-next" />
                 </p>
+
+                <p class="legendContainer"></p>
 
                 <!-- <p class="menuButton"><img draggable="false" frigg-slot-srcAlt="menu_icon" frigg-slot-link="menu_link" /></p> -->
                 <p class="mapButton"><img draggable="false" frigg-slot-srcAlt="map_icon" frigg-slot-link="map_link" /></p>
@@ -154,6 +156,13 @@
                     <img draggable="false" frigg-slot-srcAlt="header" class="diapo-item"/>
                 </div>
 
+                <p class="navButtons">
+                    <img draggable="false" frigg-slot-srcAlt="diapo_close_icon" class="diaporama-close"/>
+                    <img draggable="false" frigg-slot-srcAlt="diapo_previous_icon" class="diaporama-previous"/>
+                    <img draggable="false" frigg-slot-srcAlt="diapo_next_icon" class="diaporama-next" />
+                </p>
+
+                <p class="legendContainer"></p>
                 <p class="backButton"><img draggable="false" frigg-slot-srcAlt="back_icon" frigg-slot-link="back_link" /></p>
             </header>
 
@@ -186,6 +195,14 @@
                 <div class="diaporama diapo-ribbon">
                     <img draggable="false" frigg-slot-srcAlt="header" class="diapo-item" />
                 </div>
+
+                <p class="navButtons">
+                    <img draggable="false" frigg-slot-srcAlt="diapo_close_icon" class="diaporama-close"/>
+                    <img draggable="false" frigg-slot-srcAlt="diapo_previous_icon" class="diaporama-previous"/>
+                    <img draggable="false" frigg-slot-srcAlt="diapo_next_icon" class="diaporama-next" />
+                </p>
+
+                <p class="legendContainer"></p>
 
                 <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
             </header>
@@ -313,7 +330,16 @@
 
             'autoPlayIntervalMs': 0,
 
+            onChange: function(event) {
+                containerElement.querySelector(".legendContainer").innerHTML = event.selectedItem.getAttribute("alt");
+            },
+
             onClick: function(event) {
+
+                if (! needDiaporama(containerElement)) {
+                    return;
+                }
+
                 var className1 = "fullscreen-diaporama";
                 var className2 = "fullview";
 
@@ -332,6 +358,14 @@
     };
 
     var makeDiaporamaNav = function(containerElement, d) {
+
+        if (! needDiaporama(containerElement)) {
+            containerElement.querySelector(".diaporama-previous").classList.add("empty");
+            containerElement.querySelector(".diaporama-next").classList.add("empty");
+
+            return;
+        }
+
         containerElement.querySelector(".diaporama-previous").addEventListener("click", function(event){
             d.movePrevious();
         });
@@ -344,6 +378,11 @@
             containerElement.classList.remove("fullscreen-diaporama");
         });
 
+    };
+
+    var needDiaporama = function(containerElement){
+        var items = containerElement.querySelectorAll(".diaporama .diapo-item");
+        return (items.length > 1);
     }
 
     var config = {
