@@ -314,11 +314,13 @@
             'autoPlayIntervalMs': 0,
 
             onClick: function(event) {
-                var className = "fullscreen-diaporama";
-                if (containerElement.classList.contains(className)) {
-                    event.selectedItem.classList.toggle("fullview");
+                var className1 = "fullscreen-diaporama";
+                var className2 = "fullview";
+
+                if (containerElement.classList.contains(className1)) {
+                    containerElement.classList.toggle(className2);
                 } else {
-                    containerElement.classList.add(className);
+                    containerElement.classList.add(className1);
                 }
 
             },
@@ -332,7 +334,6 @@
     var makeDiaporamaNav = function(containerElement, d) {
         containerElement.querySelector(".diaporama-previous").addEventListener("click", function(event){
             d.movePrevious();
-            
         });
 
         containerElement.querySelector(".diaporama-next").addEventListener("click", function(){

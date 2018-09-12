@@ -249,7 +249,7 @@ body {
     background: black;
 }
 
-.contentPage header .diaporama img.fullview {
+.contentPage.fullscreen-diaporama.fullview header .diaporama img {
     object-fit: contain;
 
 }
