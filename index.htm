@@ -173,7 +173,11 @@
                     <div frigg-slot-html="main_text">placeholder</div>
                 </div>
 
-                <audio frigg-slot-srcAlt="main_audio"></audio>
+                <div>   
+                    <audio frigg-slot-srcAlt="main_audio"></audio>
+                    <img draggable="false" frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
+                    <img draggable="false" frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
+                </div>
             </section>
 
             <footer>
@@ -210,8 +214,14 @@
             <section frigg-slot-bg="background" class="mainContent">
 
                 <div class="body">
-                    <h2 frigg-slot-html="title">placeholder</h2>
+                    <h2 frigg-slot-html="title" class="title">placeholder</h2>
                     <div frigg-slot-html="main_text">placeholder</div>
+                </div>
+
+                <div>   
+                    <audio frigg-slot-srcAlt="main_audio"></audio>
+                    <img draggable="false" frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
+                    <img draggable="false" frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
                 </div>
 
             </section>
@@ -240,7 +250,11 @@
             <div frigg-slot-bg="background" class="container carded">
                 
                 <div class="card">
-                    <audio frigg-slot-srcAlt="main_audio" class="audioPlayer"> </audio>
+                    <div>
+                        <audio frigg-slot-srcAlt="main_audio"></audio>
+                        <img draggable="false" frigg-slot-srcAlt="audio_icon" frigg-media-control frigg-event-media-paused class="audio_control"/>
+                        <img draggable="false" frigg-slot-srcAlt="audio_icon_pause" frigg-media-control frigg-event-media-started class="audio_control"/>
+                    </div>
 
                     <div class="content">
                         <div frigg-slot-html="question" class="main_text"></div>

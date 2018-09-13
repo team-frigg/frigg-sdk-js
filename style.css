@@ -149,29 +149,31 @@ body {
 }
 
 .tpl_intersticiel .card {
-    text-align: center;
     font-style: italic;
-    position: relative;
-
 }
 
-.tpl_intersticiel .audio_control {
+
+
+
+
+.card {
+    text-align: center;
+    position: relative;
+}
+
+.card .audio_control {
     top:-1em;
     right: -1em;
 }
 
-.tpl_intersticiel .content {
-    
-}
 
-
-.tpl_intersticiel .content .title {
+.card .content .title {
     margin-top: 1em;
     margin-bottom: 1em;
     font-weight: bold;
 }
 
-.tpl_intersticiel .content .main_text {
+.card .content .main_text {
     margin-top: 1em;
     margin-bottom: 1em;
 }
@@ -290,8 +292,10 @@ body {
 
 .contentPage header .navButtons .diaporama-close {
     left: auto;
-    top: 0;
-    right: 0;
+    top: 0.5em;
+    right: 0.5em;
+
+    height: 2em;
 }
 
 .contentPage header .legendContainer {
@@ -346,7 +350,7 @@ body {
 .contentPage .mainContent .bt.heading {
     /*margin-top: 1em;
     margin-bottom: 1em;*/
-
+    font-size: 1.3em;
     padding-right: 2em;
 }
 
@@ -397,11 +401,14 @@ body {
 }
 .tpl_chapitre.contentPage .mainContent .body {
 
-    height: calc(100% - 6em);
+    margin: 0;
 }
 
 
-
+.tpl_page_medias.contentPage .title {
+    margin-bottom: 1em;
+    padding-right: 1em;
+}
 
 .tpl_page_medias.contentPage .mainContent {
     height: 70%;
@@ -410,6 +417,8 @@ body {
 .tpl_page_medias.contentPage .mainContent .body {
     margin: 0;
 }
+
+
 
 
 

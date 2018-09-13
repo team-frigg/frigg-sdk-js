@@ -723,14 +723,19 @@ FRIGG.Client = function (config){
         var param = this._getHashParam("scene");
 
         var sceneId = param ? param : this.project.start_scene_id;
+        this.updatePageTitle(sceneId);
+
         console.log("Hash event : Will show scene " + sceneId);
         this.showScene(sceneId);
     }
 
+    this.updatePageTitle = function(sceneId){
+        document.title = this.project.label;/* + " - scène " + sceneId*/;
+    }
 
     this.gotoScene = function(sceneId) {
         window.location.hash = "project=" + this.project.project_id + "&scene=" + sceneId;
-        document.title = "Scene " + sceneId;
+        this.updatePageTitle(sceneId);
     }
 
     this.showScene = function(sceneId){
