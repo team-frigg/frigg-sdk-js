@@ -426,8 +426,62 @@ body {
 
 
 
+@media (max-width: 1024px) and (orientation: landscape) {
+        
+    .contentPage header {
+        top: 0;
+        left: 0;
+        width: calc(50% - 0.5em);
+        height: 100%;
 
-@media (min-width: 1024px) , (orientation: landscape) {
+        border-bottom: 0;
+        border-right: .5em solid white;
+    }
+
+
+    .contentPage .mainContent {
+        top: 0;
+        left: 50%;
+        right: 0;
+        height: 88%;
+
+
+    }
+
+    .contentPage footer {
+        top: 81%;
+        left: 50%;
+        right: 0;
+        height: 19%;
+        
+    }
+
+    .tpl_livre.contentPage .mainContent {
+        height: 80%;
+    }
+
+    .tpl_page_medias.contentPage .mainContent {
+        height: 100%;
+    }
+
+    .tpl_chapitre.contentPage .mainContent {
+        height: 80%;
+    }
+
+    .contentPage .items.bottom-menu {
+        max-width: none;
+    }
+
+    .tpl_livre.contentPage footer {
+        height: calc(20% - 0.5em);
+    }
+
+
+
+}
+
+
+@media (min-width: 1024px) and (orientation: landscape) {
         
     .contentPage .container {
     }
@@ -594,7 +648,7 @@ body {
 }
 
 
-@media (min-width: 1024px) , (orientation: landscape) {
+@media (min-width: 1024px) and (orientation: landscape) {
     .tpl_page_carte .mapContainer {
         height: 95%;
     }
@@ -608,6 +662,22 @@ body {
         max-width: 300px;
     }
 }
+
+@media (max-width: 1024px) and (orientation: landscape) {
+    .tpl_page_carte .mapContainer {
+        height: 85%;
+    }
+
+
+    .tpl_page_carte footer {
+        height: 15%;
+    }
+
+    .items.bottom-menu {
+        max-width: 300px;
+    }
+}
+
 
 
 
