@@ -539,6 +539,19 @@ body {
   z-index: 0;
 }
 
+.tpl_page_carte .map-marker.to-chapitre {
+  width: 30px;
+  height: 30px;
+}
+
+.tpl_page_carte .map-popup.to-chapitre {
+    background-color: rgb(154,11,71);
+
+}
+
+
+
+
 .tpl_page_carte .map-marker.hidden, .tpl_page_carte  .map-popup.hidden {
     opacity: 0;
     pointer-events: none;

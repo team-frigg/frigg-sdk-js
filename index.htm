@@ -4,7 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
 
-    <title>Frigg</title>
+    <title>BigBangBourse</title>
+
+    <meta property="og:url"           content="http://www.bigbangbourse.com" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="Big-Bang-Bourse" />
+    <meta property="og:description"   content="C’est une application web qui propose un parcours interactif et connecté pour smartphone, à la découverte de l’histoire antique, récente et contemporaine du quartier dit de « Derrière la Bourse » à Marseille, situé entre la Canebière, le Cours Belsunce, la rue Colbert et la rue de la République" />
+    
+    <meta property="og:image"         content="http://www.tabascovideo.com/wp-content/uploads/2018/02/bandeau-DLB.jpg" />
+
     <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" type="text/css" href="diaporama/diaporama.css">
@@ -498,6 +506,10 @@
                     var destinationSceneId = connection.destination_scene_id;
                     var destionationScene = frigg.project.scenes[destinationSceneId];
 
+                    //console.log(destionationScene.template_id);
+                    var toSceneTemplate = "to-" + frigg._cleanTemplateName(frigg.project.templates[destionationScene.template_id].label);
+
+
                     var latitude = destionationScene.geo_latitude;
                     var longitude = destionationScene.geo_longitude;
                     var level = getLevelName(destionationScene.geo_level);
@@ -513,7 +525,7 @@
                     }
 
                     var popupElt = document.createElement('div');
-                    popupElt.className = 'map-popup map-item map-level-'+ level;
+                    popupElt.className = toSceneTemplate + ' map-popup map-item map-level-'+ level;
                     popupElt.innerHTML = "<h3>" + label + '</h3>';
 
                     var popupMarker = new mapboxgl.Marker({'element': popupElt, anchor: 'bottom'})
@@ -523,7 +535,7 @@
 
                     
                     var markerElt = document.createElement('div');
-                    markerElt.className = 'map-marker map-item map-level-'+ level;
+                    markerElt.className = toSceneTemplate + ' map-marker map-item map-level-'+ level;
 
                     var marker = new mapboxgl.Marker(markerElt)
                       .setLngLat([longitude, latitude])
