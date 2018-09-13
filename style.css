@@ -207,6 +207,7 @@ body {
 
 .contentPage.fullscreen-diaporama header{
     height: 100%;
+    width: 100%;
     border: 0;
     z-index: 100;
 }
@@ -330,6 +331,8 @@ body {
     flex-direction: row;
     justify-content: space-between;
 
+    max-width: 700px;
+    margin: auto;
 }
 
 .items.bottom-menu .item {
@@ -369,6 +372,9 @@ body {
     height: calc(100% - 4em);
     overflow-y: scroll;
 }
+
+
+
 
 
 
@@ -418,6 +424,65 @@ body {
     margin: 0;
 }
 
+
+
+
+@media (min-width: 1024px) , (orientation: landscape) {
+        
+    .contentPage .container {
+    }
+
+    .contentPage header {
+        top: 0;
+        left: 0;
+        width: calc(50% - 0.5em);
+        height: 100%;
+
+        border-bottom: 0;
+        border-right: .5em solid white;
+    }
+
+
+    .contentPage .mainContent {
+        top: 0;
+        left: 50%;
+        right: 0;
+        height: 88%;
+
+
+    }
+
+    .contentPage footer {
+        top: 92%;
+        left: 50%;
+        right: 0;
+        height: 8%;
+        
+    }
+
+    .tpl_livre.contentPage .mainContent {
+        height: 90%;
+    }
+
+    .tpl_page_medias.contentPage .mainContent {
+        height: 100%;
+    }
+
+    .tpl_chapitre.contentPage .mainContent {
+        height: 90%;
+    }
+
+    .contentPage .items.bottom-menu {
+        max-width: none;
+    }
+
+    .tpl_livre.contentPage footer {
+        height: calc(8% - 0.5em);
+    }
+
+
+
+}
 
 
 
@@ -504,7 +569,8 @@ body {
 .tpl_page_informations .images img {
     display: block;
     text-align: center;
-    width: 80%;
+    width: 100%;
+    max-width: 200px;
     margin: 1em auto;
 }
 
@@ -525,6 +591,22 @@ body {
 
 .tpl_page_carte footer body {
     height: 100%;
+}
+
+
+@media (min-width: 1024px) , (orientation: landscape) {
+    .tpl_page_carte .mapContainer {
+        height: 95%;
+    }
+
+
+    .tpl_page_carte footer {
+        height: 5%;
+    }
+
+    .items.bottom-menu {
+        max-width: 300px;
+    }
 }
 
 

@@ -70,7 +70,8 @@ Diaporama.prototype.triggerEvent = function(element, eventName){
 
 	var eventData = {
 		selectedItemIndex: element.getAttribute("position"),
-		selectedItem: element
+		selectedItem: element,
+		diaporama: this
 	};
 	
 	//console.log("Trigger event " + eventName );
