@@ -217,7 +217,7 @@ body {
     top: 30%;
     left: 0;
     right: 0;
-    height: 60%;
+    height: calc(70% - 4rem);
 
     overflow-y: scroll;
 
@@ -225,10 +225,10 @@ body {
 
 .contentPage footer {
     position: absolute;
-    top: 87%;
+    bottom: 0;
     left: 0;
     right: 0;
-    height: 13%;
+    height: 4rem;
     padding: 0em;
 
     text-align: center;
@@ -351,15 +351,12 @@ body {
 
 
 .contentPage .mainContent .bt.heading {
-    /*margin-top: 1em;
-    margin-bottom: 1em;*/
     font-size: 1.3em;
     padding-right: 2em;
 }
 
 .contentPage .mainContent .bt.em {
     font-style: italic;
-   /* padding: 0.5em 0;*/
 }
 
 
@@ -387,23 +384,21 @@ body {
 }
 
 .tpl_livre.contentPage .mainContent{
-    height: calc(57% - 1em);
-    padding-bottom: 1em;
+    height: calc(70% - 5rem);
+
+    padding-bottom: 1rem;
     background: white;
     border-radius: 0 0 2em 2em;
 }
 
-.tpl_livre.contentPage footer {
-    height: calc(13% - 0.5em);
-    padding-bottom: 0.5em;
-}
 
 
 
 
 .tpl_chapitre.contentPage .mainContent{
-    height: calc(57% - 1em);
-    padding-bottom: 1em;
+    height: calc(70% - 5rem);
+
+    padding-bottom: 1rem;
     background-color: white;
 }
 
@@ -422,7 +417,7 @@ body {
 }
 
 .tpl_page_medias.contentPage .mainContent {
-    height: 70%;
+    height: calc(70% - 1em);
 }
 
 .tpl_page_medias.contentPage .mainContent .body {
@@ -431,7 +426,7 @@ body {
 
 
 
-@media (max-width: 1024px) and (orientation: landscape) {
+@media (min-width: 900px) , (orientation: landscape) {
         
     .contentPage header {
         top: 0;
@@ -444,34 +439,37 @@ body {
     }
 
 
+    .contentPage header {
+        width: 50%;
+        border: 0;
+    }
+
     .contentPage .mainContent {
         top: 0;
         left: 50%;
         right: 0;
-        height: 88%;
+        height: calc(100% - 4rem);
 
 
     }
 
     .contentPage footer {
-        top: 81%;
         left: 50%;
         right: 0;
-        height: 19%;
-        
+
     }
 
     .tpl_livre.contentPage .mainContent {
-        height: calc(80% - 1em);
+        height: calc(100% - 5rem);
 
     }
 
     .tpl_page_medias.contentPage .mainContent {
-        height: 100%;
+        height: calc(100% - 1em);
     }
 
     .tpl_chapitre.contentPage .mainContent {
-        height: calc(80% - 1em);
+        height: calc(100% - 5rem);
     }
 
     .contentPage .items.bottom-menu {
@@ -479,14 +477,14 @@ body {
     }
 
     .tpl_livre.contentPage footer {
-        height: calc(20% - 0.5em);
+        /*height: calc(20% - 0.5em);*/
     }
 
 
 
 }
 
-
+/*
 @media (min-width: 1024px) and (orientation: landscape) {
         
     .contentPage .container {
@@ -542,7 +540,7 @@ body {
 
 
 
-}
+}*/
 
 
 
