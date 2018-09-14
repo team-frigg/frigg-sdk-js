@@ -383,11 +383,14 @@ body {
 
 .tpl_livre.contentPage .mainContent .body {
     margin: 0em 0em;
-    border-radius: 0 0 2em 2em;
+    
 }
 
 .tpl_livre.contentPage .mainContent{
-    height: 57%;
+    height: calc(57% - 1em);
+    padding-bottom: 1em;
+    background: white;
+    border-radius: 0 0 2em 2em;
 }
 
 .tpl_livre.contentPage footer {
@@ -399,7 +402,9 @@ body {
 
 
 .tpl_chapitre.contentPage .mainContent{
-    height: 57%;
+    height: calc(57% - 1em);
+    padding-bottom: 1em;
+    background-color: white;
 }
 
 .tpl_chapitre.contentPage footer{
@@ -457,7 +462,8 @@ body {
     }
 
     .tpl_livre.contentPage .mainContent {
-        height: 80%;
+        height: calc(80% - 1em);
+
     }
 
     .tpl_page_medias.contentPage .mainContent {
@@ -465,7 +471,7 @@ body {
     }
 
     .tpl_chapitre.contentPage .mainContent {
-        height: 80%;
+        height: calc(80% - 1em);
     }
 
     .contentPage .items.bottom-menu {
@@ -515,7 +521,7 @@ body {
     }
 
     .tpl_livre.contentPage .mainContent {
-        height: 90%;
+        height: calc(90% - 1em);
     }
 
     .tpl_page_medias.contentPage .mainContent {
@@ -523,7 +529,7 @@ body {
     }
 
     .tpl_chapitre.contentPage .mainContent {
-        height: 90%;
+        height: calc(90% - 1em);
     }
 
     .contentPage .items.bottom-menu {
