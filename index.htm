@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
 
-    <title>Big-Bang-Bourse</title>
+    <title>Big Bang Bourse</title>
 
     <link rel="icon" type="image/png" href="medias/favicon.png" />
 
@@ -13,6 +13,8 @@
     <meta property="og:title"         content="Big Bang Bourse" />
     <meta property="og:description"   content="Une application web pour arpenter Marseille ! Embarquez avec l’archéonaute pour un voyage insolite au coeur de Marseille et découvrez l’histoire incroyable du quartier de la Bourse, de l’antiquité à nos jours." />
     <meta property="og:image"         content="https://www.bigbangbourse.com/medias/partage.jpg" />
+
+    <meta name="description" content="Une application web pour arpenter Marseille ! Embarquez avec l’archéonaute pour un voyage insolite au coeur de Marseille et découvrez l’histoire incroyable du quartier de la Bourse, de l’antiquité à nos jours." />
 
     <link rel="stylesheet" type="text/css" href="frigg/frigg-base.css">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -48,13 +50,13 @@
     <div id="friggTemplates">
         
         <section id="tpl_simple" class="scene">
-            <h2 frigg-slot-html="title">Title placeholder</h2>
-            <p frigg-slot-html="content">Content placeholder</p>
+            <h2 frigg-slot-html="title"></h2>
+            <p frigg-slot-html="content"></p>
             <p><img draggable="false" height="50px" frigg-slot-srcAlt="photo"  alt="Frigg"></p>
             
             <audio frigg-slot-srcAlt="sound">
 
-            <p frigg-slot-link="next">GOTO NEXT</p>
+            <p frigg-slot-link="next">suivant</p>
         </section>
 
         <section id="tpl_accueil" class="scene tpl_accueil">
@@ -62,9 +64,9 @@
                 <img draggable="false" class="front" frigg-slot-srcAlt="front"  frigg-slot-link="_anonymous_connection" />
 
                 <ul>
-                    <li frigg-slot-html="title"  >title placeholder</li>
-                    <li frigg-slot-html="baseline"  >baseline placeholder</li>
-                    <li frigg-slot-html="button_next"  >next placeholder</li>
+                    <li frigg-slot-html="title"  ></li>
+                    <li frigg-slot-html="baseline"  ></li>
+                    <li frigg-slot-html="button_next"  ></li>
                 </ul>
             </div>
 
@@ -129,7 +131,7 @@
             <section class="mainContent">
 
                 <div class="body">
-                    <h2 frigg-slot-html="title">placeholder</h2>
+                    <h2 frigg-slot-html="title"></h2>
 
                     <div>   
                         <audio frigg-slot-srcAlt="main_audio"></audio>
@@ -138,7 +140,7 @@
                     </div>
 
 
-                    <div frigg-slot-html="main_text">placeholder</div>
+                    <div frigg-slot-html="main_text"></div>
                 </div>
 
                 
@@ -178,8 +180,8 @@
             <section NOPE-frigg-slot-bg="background" class="mainContent">
 
                 <div class="body">
-                    <h2 frigg-slot-html="title">placeholder</h2>
-                    <div frigg-slot-html="main_text">placeholder</div>
+                    <h2 frigg-slot-html="title"></h2>
+                    <div frigg-slot-html="main_text"></div>
                 </div>
 
                 <div>   
@@ -223,8 +225,8 @@
             <section frigg-slot-bg="background" class="mainContent">
 
                 <div class="body">
-                    <h2 frigg-slot-html="title" class="title">placeholder</h2>
-                    <div frigg-slot-html="main_text">placeholder</div>
+                    <h2 frigg-slot-html="title" class="title"></h2>
+                    <div frigg-slot-html="main_text"></div>
                 </div>
 
                 <div>   
@@ -248,7 +250,7 @@
         <section id="tpl_page_diaporama" class="scene">
             <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
-            <li frigg-slot-html="images"  >placeholder</li>
+            <li frigg-slot-html="images"  ></li>
 
         </section>
 
@@ -304,10 +306,10 @@
             <div class="container">
                 <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
-                <p frigg-slot-html="title" >placeholder</p>
+                <p frigg-slot-html="title" ></p>
 
                 <ul class="items">
-                    <li frigg-slot-html="items" frigg-slot-link="items_target">placeholder</li>
+                    <li frigg-slot-html="items" frigg-slot-link="items_target"></li>
                 </ul>
             </div>
 
@@ -323,8 +325,8 @@
                 <p class="closeButton"><img draggable="false" frigg-slot-srcAlt="close_icon" frigg-slot-link="close_link" /></p>
 
                 <div class="body">
-                    <h2 frigg-slot-html="title" class="title">placeholder</h2>
-                    <div frigg-slot-html="main_text">placeholder</div>
+                    <h2 frigg-slot-html="title" class="title"></h2>
+                    <div frigg-slot-html="main_text"></div>
 
                     <div class="images" >
                         <img draggable="false" frigg-slot-srcAlt="images" />
