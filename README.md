@@ -7,8 +7,8 @@ var config = {
     'onVariableChanged' : function(project, scene, variableName, variableValue){},
 
     "onTemplateLoaded" : {
-        'livre': function(element, sceneData, frigg){},
-        'chapitre': function(element, sceneData, frigg){},
+        'map': function(element, sceneData, frigg){},
+        'content': function(element, sceneData, frigg){},
         //others templates
     }
 };

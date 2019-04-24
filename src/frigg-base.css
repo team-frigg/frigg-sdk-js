@@ -9,25 +9,29 @@
     font-size: 0.8em;
     position: absolute;
     top: 0%;
-    left: 20%;
+    left: 0%;
 
     background: white;
     padding: 1em;
     border: 1px solid black;
 
-    transform-origin: 50% 0;
-    transition: transform 0.2s;
+    transform-origin: 0 0;
+    transition: all 0.2s;
+
+
 }
 
-#friggDebugger.hidden {
-    transform: scale(0.3);
+
+#friggDebugger.opposite {
+    left: auto;
+    right: 0;
+    transform-origin: 100% 0;
 }
 
 
-#friggDebugger.hidden li {
-    pointer-events: none;
+.showDebugger #friggDebugger {
+    display: block;
 }
-
 
 
 #friggDebugger .separated {

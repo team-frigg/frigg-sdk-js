@@ -29,6 +29,7 @@ FRIGG.Client = function (config){
     this.forcedInitialScene = null;
 
     this.params = {
+        'projectUrlPrefix': "https://admin.systeme-frigg.org/api/project/",
         'mediaFilePrefix': 'https://admin.systeme-frigg.org/storage/',
         'templatePrefix' : "tpl_",
         'containerElement' : document.getElementById("friggContainer"),
@@ -49,7 +50,19 @@ FRIGG.Client = function (config){
                     return;
                 }
 
+                element.classList.add("with-slot-bg");
                 element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + slotData.content + ")";
+            },
+            'frigg-slot-class' : function(element, slotData) {
+
+                if (slotData == null) {
+                    return;
+                }
+
+                var newClasses = slotData.content.split(' ');
+                for(var className in newClasses) {
+                    element.classList.add(newClasses[className]);
+                }
             },
             'frigg-slot-srcAlt' : function(element, slotData) {
                 if (slotData == null) {
@@ -436,12 +449,19 @@ FRIGG.Client = function (config){
 
         var fullTemplateName = this.params.templatePrefix + templateName;
         var clone = this._cloneElement(fullTemplateName);
-        clone.classList.add(fullTemplateName); //replace id by class...
+        
+        clone.classList.add(fullTemplateName);
+        clone.classList.add('scene_' + sceneId);
+        clone.classList.add('scene');
 
         var selector = "[" + this.allAttributes.join("],[") + "]";
 
         var slotElements = clone.querySelectorAll(selector);
-        
+
+        //bind the element itself...
+        this._bindElement(clone, sceneData);
+
+        //then the children
         for (var i = 0; i < slotElements.length; i++) {
             var slotElement = slotElements[i];
             this._bindElement(slotElement, sceneData);
@@ -459,9 +479,7 @@ FRIGG.Client = function (config){
     }
 
     this._loadProject = function(projectId, projectReadyCallback) {
-        var url = "https://admin.systeme-frigg.org/api/project/" + projectId;
-        //var url = "http://frigg.local/api/project/" + projectId;
-
+        var url = this.params.projectUrlPrefix + projectId
         var request = new XMLHttpRequest();
 
         request.open('GET', url);
@@ -484,14 +502,28 @@ FRIGG.Client = function (config){
 
         this._mapAnonymousConnections();
         this._fixSvgBug();
-        
         this._prepareDebugger();
     }
 
     this._prepareDebugger = function(){
         this.params.debuggerElement.addEventListener("click", function(){
-            this.classList.toggle("hidden");
+            var isSmall = this.classList.toggle("small");
+            var isOpposite = this.classList.toggle("opposite");
+
+            if (isSmall) {
+                this.classList.remove("small");
+                return;
+            }
+
+            if (! isOpposite) {
+                this.classList.add("opposite");
+                return;
+            }
+
+            this.classList.remove("opposite");
+
         })
+
     }
 
     this._mapAnonymousConnections = function(){
@@ -578,9 +610,39 @@ FRIGG.Client = function (config){
         }
     }
     
+    this._initCustomStyle = function(){
+        if (!this.project.custom_css) {
+            return
+        }
+
+        var customStyle = document.createElement('style');
+        customStyle.type = 'text/css';
+
+        customStyle.appendChild(document.createTextNode(this.project.custom_css));
+        document.head.appendChild(customStyle)
+    }
+
+    this._initCustomData = function(){
+        if (!this.project.custom_data) {
+            return;
+        }
+
+        var baseElement = document.body //this.params.containerElement
+
+        var classes = baseElement.getAttribute('class') + ' ' + this.project.custom_data;
+        baseElement.setAttribute('class', classes);
+    }
+
+    this._initProjectDom = function(){
+        console.log(this.project)
+
+        this._initCustomStyle();
+        this._initCustomData();
+    }
+
     this._projectIsReady = function(){
         this._loadVariableFromLocalStorage(this.project);
-
+        this._initProjectDom();
         this.params.onProjectLoaded(this.project);
         this._showSceneFromHash();
     }
