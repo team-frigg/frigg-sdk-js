@@ -325,7 +325,7 @@ FRIGG.Client = function (config){
         return source;
     }
 
-    this._bindElement = function(slotElement, sceneData) {
+    this._bindElement = function(slotElement, sceneData, summary) {
         var numberOfClones = 0;
         var elementSlots = {};
 
@@ -347,8 +347,11 @@ FRIGG.Client = function (config){
 
             if (!slotData) {
                 recap.missing[attribute] = value;
+                summary.hasNot.push(value);
                 continue;
             }
+
+            summary.has.push(value);
 
             recap.binded[attribute] = true;
             elementSlots[attribute] = {
@@ -381,7 +384,7 @@ FRIGG.Client = function (config){
 
 
         //console.log("Recap slots : ");
-        //console.log(recap);
+        
         
         var binded = Object.keys(recap.binded).length;
         var missing = Object.keys(recap.missing).length;
@@ -393,20 +396,21 @@ FRIGG.Client = function (config){
             }
         }
 
+
     }
 
     this._bindOneElement = function(elementToBind, index, elementSlots) {
 
         //console.log(elementToBind);
-        console.log("Bind element at index " + index);
-        console.log(elementSlots);
+        //console.log("Bind element at index " + index);
+        //console.log(elementSlots);
 
         for(var slot in elementSlots) {
             var slotValues = elementSlots[slot].data;
             var slotIdentifier = elementSlots[slot].identifier;
             var value;
 
-            console.log("Slot: " + slotIdentifier);
+            //console.log("Slot: " + slotIdentifier);
 
             if (index >= slotValues.length) {
                 value = slotValues[ slotValues.length -1 ];
@@ -414,7 +418,7 @@ FRIGG.Client = function (config){
                 value = slotValues[ index ];
             }
 
-            console.log(" value: " + value);
+            //console.log(" value: " + value);
 
             this.params.slotHandler[slot].bind(this)(elementToBind, value, slotIdentifier, this);
 
@@ -468,16 +472,23 @@ FRIGG.Client = function (config){
 
         var selector = "[" + this.allAttributes.join("],[") + "]";
 
+        //all elements with at least one frigg-* attribute
         var slotElements = clone.querySelectorAll(selector);
+        var summary = {
+            has: [],
+            hasNot: [],
+        };
 
         //bind the element itself...
-        this._bindElement(clone, sceneData);
+        this._bindElement(clone, sceneData, summary);
 
         //then the children
         for (var i = 0; i < slotElements.length; i++) {
             var slotElement = slotElements[i];
-            this._bindElement(slotElement, sceneData);
-        }
+            this._bindElement(slotElement, sceneData, summary);
+        }  
+
+        this._bindElementClasses(clone, summary);
 
         this._pushNewScene(clone, sceneId);
 
@@ -487,6 +498,20 @@ FRIGG.Client = function (config){
 
         if (this.pausableElements.length) {
             this.params.onPausableBinded(clone, sceneData, this.pausableElements, this);
+        }
+    }
+
+    this._bindElementClasses = function(element, summary){
+
+        this._bindElementClassList(element, "has_", summary.has);
+        this._bindElementClassList(element, "has_not_", summary.hasNot);
+        
+    }
+
+    this._bindElementClassList = function(element, prefix, list){
+        for(var i in list) {
+            var className = prefix + list[i];
+            element.classList.add(className);
         }
     }
 
