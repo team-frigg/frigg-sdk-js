@@ -24,8 +24,10 @@
 
 #friggDebugger.opposite {
     left: auto;
+    top: auto;
     right: 0;
-    transform-origin: 100% 0;
+    bottom: 0;
+    transform-origin: 100% 100%;
 }
 
 

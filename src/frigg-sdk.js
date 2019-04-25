@@ -37,69 +37,73 @@ FRIGG.Client = function (config){
         'debuggerElement' : document.getElementById("friggDebugger"),
 
         'slotHandler' : {
-            /*'frigg-has-slot' : function(element, slotData, slotIdentifier, frigg) {
-                if (slotData == null) {
-                    element.classList.add("has_not_" + slotIdentifier);
-                } else {
-                    element.classList.add("has_" + slotIdentifier);
-                }
-            },*/ //@todo how to slotSingle handler ?
-            'frigg-slot-html' : function(element, slotData, slotIdentifier, frigg) {
-                if (slotData == null) {
+
+            'frigg-slot-html' : function(element, data) {
+                if (data.valueToBind == null) {
                     element.classList.add("empty");
                     return;
                 }
 
-                element.innerHTML = frigg.betterText(slotData.content);
+                element.innerHTML = frigg.betterText(data.valueToBind.content);
             },
-            'frigg-slot-bg' : function(element, slotData) {
-                if (slotData == null) {
+            'frigg-slot-bg' : function(element, data) {
+                if (data.valueToBind == null) {
                     return;
                 }
 
                 element.classList.add("with-slot-bg");
-                element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + slotData.content + ")";
+                element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + data.valueToBind.content + ")";
             },
-            'frigg-slot-class' : function(element, slotData) {
+            'frigg-slot-class' : function(element, data) {
 
-                if (slotData == null) {
+                if (data.valueToBind == null) {
                     return;
                 }
 
-                var newClasses = slotData.content.split(' ');
+                var newClasses = data.valueToBind.content.split(' ');
                 for(var className in newClasses) {
                     element.classList.add(newClasses[className]);
                 }
             },
-            'frigg-slot-srcAlt' : function(element, slotData) {
-                if (slotData == null) {
+            'frigg-slot-srcAlt' : function(element, data) {
+                if (data.valueToBind == null) {
                     element.classList.add("empty");
                     return;
                 }
 
-                var src = slotData.content;
+                var src = data.valueToBind.content;
                 if (! src.startsWith("http")) {
                     src = this.params.mediaFilePrefix + src;
                 }
 
                 element.setAttribute("src", src);
-                element.setAttribute("alt", slotData.description);
+                element.setAttribute("alt", data.valueToBind.description);
 
-                if (element.pause) this.pausableElements.push(element);
+                //media elements (audio or video)
+                if (element.pause) {
+                    this.pausableElements.push(element);
+                    this._mediaEventToClass(element, element);
+                    this._mediaEventToClass(element, data.sceneElement);
+
+                    var type = this._ucFirstConcat(element.tagName, "autoPlay");
+                    if (this.hasCustomData( type )) {
+                        element.play();  
+                    }
+                }
             },
-            'frigg-slot-link' : function(element, slotData, slotIdentifier, frigg) {
-                if (slotData == null) {
+            'frigg-slot-link' : function(element, data) {
+                if (data.valueToBind == null) {
                     return;
                 }
 
-                var className = frigg.getClassForLinkSlot(slotData);
+                var className = this.getClassForLinkSlot(data.valueToBind);
 
                 element.classList.add("link");
                 element.classList.add(className);
 
                 element.addEventListener("click", function(event){
                     event.preventDefault();
-                    this.gotoScene(slotData.destination_scene_id);
+                    this.gotoScene(data.valueToBind.destination_scene_id);
                 }.bind(this))
             },
         }, 
@@ -168,6 +172,9 @@ FRIGG.Client = function (config){
         localStorage.setItem(key, JSON.stringify(existing));
     }
 
+    this._ucFirstConcat = function(string, prefix) {
+        return prefix + string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
+    } 
 
     this._saveVariableToLocalStorage = function(project, variableName, value) {
         var key = this._getLocalStorageKey(project, "variables");
@@ -194,6 +201,58 @@ FRIGG.Client = function (config){
 
     this._loadVariableFromLocalStorage = function(project) {
         this.currentVariables = this._getFromLocalStorage(project, "variables");
+    }
+
+    this._mediaEventToClass = function(mediaElement, targetElement) {
+        var ready = "media_ready";
+        var playing = "media_playing";
+        var paused = "media_paused";
+        var finished = "media_finished";
+
+        var canPlay = "media_can_play";
+        var canPause = "media_can_pause";
+
+        //default
+        targetElement.classList.add(ready);
+        targetElement.classList.add(canPlay);
+
+        mediaElement.addEventListener("playing", function(){
+            targetElement.classList.remove(ready);
+            targetElement.classList.add(playing);
+            targetElement.classList.remove(paused);
+            targetElement.classList.remove(finished);
+
+            targetElement.classList.remove(canPlay);
+            targetElement.classList.add(canPause);
+        });
+
+        mediaElement.addEventListener("pause", function(){
+            targetElement.classList.remove(ready);
+            targetElement.classList.remove(playing);
+            targetElement.classList.add(paused);
+            targetElement.classList.remove(finished);
+
+            targetElement.classList.add(canPlay);
+            targetElement.classList.remove(canPause);
+        });
+
+        mediaElement.addEventListener("ended", function(){
+            targetElement.classList.remove(ready);
+            targetElement.classList.remove(playing);
+            targetElement.classList.remove(paused);
+            targetElement.classList.add(finished);
+
+            targetElement.classList.add(canPlay);
+            targetElement.classList.remove(canPause);
+        });
+    }
+
+    this.hasCustomData = function(needle) {
+        if (!this.project || !this.project.custom_data) {
+            return false;
+        }
+
+        return (this.project.custom_data.indexOf(needle) >= 0);
     }
 
     this.getClassForLinkSlot = function(slotLinkData){
@@ -325,7 +384,7 @@ FRIGG.Client = function (config){
         return source;
     }
 
-    this._bindElement = function(slotElement, sceneData, summary) {
+    this._bindElement = function(slotElement, sceneData, summary, sceneElement) {
         var numberOfClones = 0;
         var elementSlots = {};
 
@@ -373,13 +432,13 @@ FRIGG.Client = function (config){
             clones.push(clone);
         }
 
-        this._bindOneElement(slotElement, 0, elementSlots);
+        this._bindOneElement(slotElement, 0, elementSlots, sceneElement);
         
         for (var i = 0; i < numberOfClones; i++) {
             var clone = clones[i];
             parent.appendChild(clone);
 
-            this._bindOneElement(clone, i+1, elementSlots);
+            this._bindOneElement(clone, i+1, elementSlots, sceneElement);
         }
 
 
@@ -392,14 +451,20 @@ FRIGG.Client = function (config){
         if (binded == 0 && missing > 0) {
             for (var attribute in recap.missing) {
                 var identifier = recap.missing[attribute]
-                this.params.slotHandler[attribute].bind(this)(slotElement, null, identifier, this);
+                
+                this.params.slotHandler[attribute].bind(this)(slotElement, {
+                    'valueToBind': null, 
+                    'slotIdentifier': identifier, 
+                    'sceneElement': sceneElement,
+                    'frigg': this
+                });
             }
         }
 
 
     }
 
-    this._bindOneElement = function(elementToBind, index, elementSlots) {
+    this._bindOneElement = function(elementToBind, index, elementSlots, sceneElement) {
 
         //console.log(elementToBind);
         //console.log("Bind element at index " + index);
@@ -420,7 +485,13 @@ FRIGG.Client = function (config){
 
             //console.log(" value: " + value);
 
-            this.params.slotHandler[slot].bind(this)(elementToBind, value, slotIdentifier, this);
+            this.params.slotHandler[slot].bind(this)(elementToBind, {
+                'valueToBind': value, 
+                'slotIdentifier': slotIdentifier, 
+                'sceneElement': sceneElement,
+                'frigg': this
+            });
+        
 
         }
 
@@ -480,12 +551,12 @@ FRIGG.Client = function (config){
         };
 
         //bind the element itself...
-        this._bindElement(clone, sceneData, summary);
+        this._bindElement(clone, sceneData, summary, clone);
 
         //then the children
         for (var i = 0; i < slotElements.length; i++) {
             var slotElement = slotElements[i];
-            this._bindElement(slotElement, sceneData, summary);
+            this._bindElement(slotElement, sceneData, summary, clone);
         }  
 
         this._bindElementClasses(clone, summary);
@@ -544,20 +615,8 @@ FRIGG.Client = function (config){
 
     this._prepareDebugger = function(){
         this.params.debuggerElement.addEventListener("click", function(){
-            var isSmall = this.classList.toggle("small");
-            var isOpposite = this.classList.toggle("opposite");
 
-            if (isSmall) {
-                this.classList.remove("small");
-                return;
-            }
-
-            if (! isOpposite) {
-                this.classList.add("opposite");
-                return;
-            }
-
-            this.classList.remove("opposite");
+                this.classList.toggle("opposite");
 
         })
 
@@ -660,6 +719,7 @@ FRIGG.Client = function (config){
     }
 
     this._initCustomData = function(){
+        this.project.custom_data = "test autoPlayAudio showDebugger";
         if (!this.project.custom_data) {
             return;
         }
@@ -671,8 +731,6 @@ FRIGG.Client = function (config){
     }
 
     this._initProjectDom = function(){
-        console.log(this.project)
-
         this._initCustomStyle();
         this._initCustomData();
     }
@@ -874,7 +932,7 @@ FRIGG.Client = function (config){
     this._updateDebugger = function(scene, template){
         var sceneId = scene.id;
 
-        this.params.debuggerElement.innerHTML = "<h2>Scene "+sceneId+ " (" + template.label + ")</h2>";
+        this.params.debuggerElement.innerHTML = "<h2>Scene n°"+sceneId+ " (" + template.label + ")</h2>";
         var connectionCount = 0;
         
         for (var i in this.project.connections) {
@@ -903,8 +961,9 @@ FRIGG.Client = function (config){
 
     this._makeDebuggerItem = function(connection){
         var item = document.createElement("li");
-        item.innerHTML = connection.label + " (vers scene " + connection.destination_scene_id + ")";
-        item.addEventListener('click', function(){
+        item.innerHTML = connection.label + " (n°" + connection.destination_scene_id + ")";
+        item.addEventListener('click', function(event){
+            event.stopPropagation();
             this.gotoScene(connection.destination_scene_id);
         }.bind(this));
 
@@ -915,7 +974,8 @@ FRIGG.Client = function (config){
         var item = document.createElement("li");
         item.setAttribute("class", "separated");
         item.innerHTML = "Scéne précédente";
-        item.addEventListener('click', function(){
+        item.addEventListener('click', function(event){
+            event.stopPropagation();
             this.previousScene();
         }.bind(this));
 
