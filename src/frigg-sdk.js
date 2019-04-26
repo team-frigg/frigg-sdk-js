@@ -719,7 +719,7 @@ FRIGG.Client = function (config){
     }
 
     this._initCustomData = function(){
-        this.project.custom_data = "test autoPlayAudio showDebugger";
+        //this.project.custom_data = "test autoPlayAudio showDebugger";
         if (!this.project.custom_data) {
             return;
         }
