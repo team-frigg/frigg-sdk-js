@@ -65,6 +65,8 @@ FRIGG.Client = function (config){
                     element.classList.add(newClasses[className]);
                 }
             },
+
+
             'frigg-slot-srcAlt' : function(element, data) {
                 if (data.valueToBind == null) {
                     element.classList.add("empty");
@@ -91,6 +93,18 @@ FRIGG.Client = function (config){
                     }
                 }
             },
+
+            'frigg-slot-data' : function(element, data) {
+                if (data.valueToBind == null) {
+                    return;
+                }
+
+                var data = data.valueToBind.content;
+                
+                element.setAttribute("frigg-data", data);
+            },
+
+
             'frigg-slot-link' : function(element, data) {
                 if (data.valueToBind == null) {
                     return;
@@ -103,7 +117,20 @@ FRIGG.Client = function (config){
 
                 element.addEventListener("click", function(event){
                     event.preventDefault();
-                    this.gotoScene(data.valueToBind.destination_scene_id);
+
+                    if (data.valueToBind.destination_scene_id) {
+                        return this.gotoScene(data.valueToBind.destination_scene_id);
+                    }
+
+                    if (data.valueToBind.command == "first") {
+                        return this.firstScene();
+                    }
+
+                    if (data.valueToBind.command == "back") {
+                        return this.previousScene();
+                    }
+
+                    
                 }.bind(this))
             },
         }, 
@@ -804,6 +831,11 @@ FRIGG.Client = function (config){
         this.gotoScene(previousSceneId);
     }
 
+    this.firstScene = function(){
+        var firstSceneId = this.sceneIdHistory[ 0 ];
+        this.gotoScene(firstSceneId);
+    }
+
     this._handleSceneVariables = function(scene) {
         if (! scene.variables) {
             return;
@@ -880,6 +912,11 @@ FRIGG.Client = function (config){
         var param = this._getHashParam("scene");
 
         var sceneId = param ? param : this.project.start_scene_id;
+
+        if (!sceneId) {
+            return console.error("No initial scene to show. Have you defined a start scene in the studio ?")
+        }
+
         this.updatePageTitle(sceneId);
 
         console.log("Hash event : Will show scene " + sceneId);
