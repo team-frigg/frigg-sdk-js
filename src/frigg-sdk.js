@@ -147,6 +147,10 @@ FRIGG.Client = function (config){
 
         },
 
+        'onSceneBinded' : function(scene, project){
+
+        },
+
         'onVariableChanged' : function(project, scene, variableName, variableValue){
 
         },
@@ -393,15 +397,73 @@ FRIGG.Client = function (config){
             },
 
             {
+                'pattern': /\n\+\+\+(.+)/g,
+                'string': '<h4 class="bt heading heading3">$1</h3>'
+            },
+
+            {
+                'pattern': /\n\+\+(.+)/g,
+                'string': '<h3 class="bt heading heading2">$1</h3>'
+            },
+
+            {
+                'pattern': /\n\+(.+)/g,
+                'string': '<h2 class="bt heading heading1">$1</h2>'
+            },
+
+
+            {
+                'pattern': /\n\-(.+)/g,
+                'string': '<li class="bt item">$1</li>'
+            },
+
+            {
                 'pattern': /\*([^\*]+)\*/g,
                 'string': '<em class="bt em">$1</em>'
             },
+
+            {
+                'pattern': /\#([^\#]+)\#/g,
+                'string': '<em class="bt em">$1</em>'
+            },
+
+            {
+                'pattern': /\@([^\@]+)\@/g,
+                'string': '<strong class="bt strong">$1</strong>'
+            },
+
+            //link with title
+            {
+                'pattern': /\[([^=]+) ?= ?(http[^\]]*)?\]/g,
+                'string': '<a class="bt anchor " target="_blank" href="$2">$1</a>'
+            },
+
+            //link without title
+            {
+                'pattern': /\[(http[^\]]*)?\]/g,
+                'string': '<a class="bt anchor url" href="$1">$1</a>'
+            },
+
+            //image url
+            {
+                'pattern': /\{(http[^\}]*)?\}/g,
+                'string': '<img class="bt img" src="$1" />'
+            },
+
+            //image number
+            {
+                'pattern': /\{media:([0-9]*)?\}/g,
+                'string': '<img class="bt media mediaId-$1" frigg-media="$1" src="" />'
+            },
+
 
             {
                 'pattern': /(?:\n)/g,
                 'string': '<br>'
             }
         ];
+
+        source = "\n" + source;
 
         for (var i = 0; i < converters.length; i++) {
             converter = converters[i];
@@ -787,7 +849,7 @@ FRIGG.Client = function (config){
             console.log("Remove child : " + i);
             var sceneElement = this.sceneElementHistory[i];
             sceneElement.parentNode.removeChild(sceneElement);
-            console.log(sceneElement);
+            //console.log(sceneElement);
         }
 
         this.sceneElementHistory = this.sceneElementHistory.slice(0, sceneIndex);
@@ -957,6 +1019,7 @@ FRIGG.Client = function (config){
         this._bindTemplate(this._cleanTemplateName(template.label), slots, sceneId)
         this._updateDebugger(scene, template);
 
+        this.onSceneBinded(scene, this.project);
         //console.log("SHOW SCENE END:");
         //console.log(this.sceneElementHistory);
     }
@@ -1099,10 +1162,44 @@ FRIGG.Client = function (config){
 
 
     this.run = function(forcedProjectId){
-
+        
         this.forcedProjectId = forcedProjectId;
         this._initHashChangeListener();
         this._processHash();
 
+
+
     }
+
+    this.onSceneBinded = function(){
+        this.handleBetterText();
+        this.params.onSceneBinded();
+    }
+
+    this.handleBetterText = function() {
+        var items = document.querySelectorAll(".bt.media");
+
+        items.forEach(function(item){
+            this.mapMediaSrc(item)
+        }, this);
+
+
+    }
+
+    this.mapMediaSrc = function(item){
+        try{
+            var mediaId = item.getAttribute("frigg-media");
+            var media = this.project.medias[mediaId];
+
+            if (media.type != 'image'){
+                throw new Exception("");
+            }
+
+            item.setAttribute("src", this.params.mediaFilePrefix + media.content);
+        } catch (e) {
+            item.classList.add("invalid");
+        }
+
+    }
+
 }
