@@ -456,6 +456,10 @@ FRIGG.Client = function (config){
                 'string': '<img class="bt media mediaId-$1" frigg-media="$1" src="" />'
             },
 
+            {
+                'pattern': /^\n/g,
+                'string': ''
+            },
 
             {
                 'pattern': /(?:\n)/g,
