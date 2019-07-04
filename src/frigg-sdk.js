@@ -283,7 +283,10 @@ FRIGG.Client = function (config){
             return false;
         }
 
-        return (this.project.custom_data.indexOf(needle) >= 0);
+        needle = " " + needle + " ";
+        var data = " " + this.project.custom_data + " ";
+
+        return (data.indexOf(needle) >= 0);
     }
 
     this.getClassForLinkSlot = function(slotLinkData){
