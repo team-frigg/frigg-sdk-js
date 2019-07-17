@@ -1001,16 +1001,33 @@ FRIGG.Client = function (config){
         this.updatePageTitle(sceneId);
     }
 
+    this.getDestinationSceneId = function (connectionId) {
+        if (!connectionId) {
+            return null;
+        }
+
+        return this.project.connections[connectionId].destination_scene_id
+    }
+
     this.showScene = function(sceneId){
+        console.log("Showing scene " + sceneId);
 
         var scene = this.project.scenes[sceneId];
+        var template = this.project.templates[scene.template_id];
+
+        if (template.label == "meta") {
+            console.log("Meta scene found. Redirecting to next concrete scene");
+            var nextConnection = scene.connections[0].id[0];
+            this.showScene(this.getDestinationSceneId(nextConnection));
+            return
+        }
 
         this.params.onSceneLoaded(scene, this.project);
         this._saveHistoryToLocalStorage(this.project, scene);
 
         this._handleSceneVariables(scene);
 
-        var template = this.project.templates[scene.template_id];
+        
 
         var sceneIndex = this._sceneIndexInHistory(sceneId);
 
