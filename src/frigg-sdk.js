@@ -437,13 +437,13 @@ FRIGG.Client = function (config){
 
             //link with title
             {
-                'pattern': /\[([^=]+) ?= ?(http[^\]]*)?\]/g,
+                'pattern': /\[([^=\n]+) ?= ?(http[^\]\n]*)?\]/g,
                 'string': '<a class="bt anchor " target="_blank" href="$2">$1</a>'
             },
 
             //link without title
             {
-                'pattern': /\[(http[^\]]*)?\]/g,
+                'pattern': /\[(http[^\]\n]*)?\]/g,
                 'string': '<a class="bt anchor url" href="$1">$1</a>'
             },
 
