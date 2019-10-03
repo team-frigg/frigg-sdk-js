@@ -185,7 +185,7 @@ FRIGG.Client = function (config){
             return standardClass;
         }
 
-        var conditionGt = this._handleConditionGt(slotLinkData.conditions.variables, this.currentVariables);
+        var conditionGt = this._handleConditionsGt(slotLinkData.conditions.variables, this.currentVariables);
         if (conditionGt == "CONDITION_NOK") {
             return closedLinkClass;
         }
@@ -197,18 +197,43 @@ FRIGG.Client = function (config){
         return standardClass;
     }
 
-    this._handleConditionGt = function(condition, currentVariables) {
+    this._handleConditionsGt = function(conditions, currentVariables) {
 
-        if (!condition) {
+        if (!conditions) {
             return;
         }
 
-        if (condition.length == 0) {
+        if (conditions.length == 0) {
             return;
         }
 
-        var condition = condition[0];
+        var conditionsResult = {
+            'NO_CONDITION': 0,
+            'CONDITION_OK': 0,
+            'CONDITION_NOK': 0
+        };
 
+        for(var index in conditions){
+            var condition = conditions[index];
+            var result = this._handleOneConditionGt(condition, currentVariables);
+
+            conditionsResult[result] += 1;
+        }
+
+        if (conditionsResult.CONDITION_NOK > 1) {
+            return 'CONDITION_NOK'
+        }
+
+        if (conditionsResult.CONDITION_OK > 1) {
+            return 'CONDITION_OK'
+        }
+
+        return 'NO_CONDITION'
+
+    }
+
+
+    this._handleOneConditionGt = function(condition, currentVariables){
         var parts = condition.split(">");
 
         if (parts.length != 2) {
