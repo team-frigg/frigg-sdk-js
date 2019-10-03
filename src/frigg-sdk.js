@@ -220,11 +220,11 @@ FRIGG.Client = function (config){
             conditionsResult[result] += 1;
         }
 
-        if (conditionsResult.CONDITION_NOK > 1) {
+        if (conditionsResult.CONDITION_NOK >= 1) {
             return 'CONDITION_NOK'
         }
 
-        if (conditionsResult.CONDITION_OK > 1) {
+        if (conditionsResult.CONDITION_OK >= 1) {
             return 'CONDITION_OK'
         }
 
