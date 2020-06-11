@@ -19,7 +19,13 @@ FRIGG.Client = function (config){
 
     this.pausableElements = [];
 
-    this.currentVariables = {}
+    this.currentVariables = {};
+    this.currentLocation = {
+        'status': 'disabled',
+        'latitude': 0,
+        'longitude': 0,
+        'timestamp': 0
+    };
     this.project = {};
 
     this.sceneElementHistory = [];
@@ -290,34 +296,106 @@ FRIGG.Client = function (config){
     }
 
     this.getClassForLinkSlot = function(slotLinkData){
+        
         var standardClass = "link";
         var openLinkClass = "open-link";
         var closedLinkClass = "closed-link";
 
-        if (!slotLinkData.conditions.variables) {
-            return standardClass;
-        }
+        var variableStatus = this._handleConditionVar(slotLinkData.conditions.variables);
+        var geoStatus = this._handleConditionGeo(slotLinkData.conditions.geolocation);
 
-        var conditionGt = this._handleConditionGt(slotLinkData.conditions.variables, this.currentVariables);
-        if (conditionGt == "CONDITION_NOK") {
+        var finalStatus = {};
+        finalStatus[variableStatus] = true;
+        finalStatus[geoStatus] = true;
+
+        if (finalStatus.CONDITION_NOK) {
             return closedLinkClass;
         }
 
-        if (conditionGt == "CONDITION_OK") {
+        if (finalStatus.CONDITION_OK){
             return openLinkClass;
         }
 
         return standardClass;
     }
 
+    this._handleConditionVar = function(conditionVariables) {
+        
+        if (!conditionVariables) {
+            return "NO_CONDITION";
+        }
+
+        var conditionGt = this._handleConditionGt(conditionVariables, this.currentVariables);
+        return conditionGt;
+    }
+
+    this._handleConditionGeo = function(conditionGeo) {
+
+        if (!conditionGeo) {
+            return "NO_CONDITION";
+        }
+
+        var realCount = 0;
+
+        for (var i = 0; i < conditionGeo.length; i++) {
+            var line = conditionGeo[i] ? conditionGeo[i].trim() : null;
+
+            if (!line){
+                continue;
+            }
+
+            if (line.startsWith("#")) {
+                continue;
+            }
+
+            if (this.currentLocation.status != "ok") {
+                return "CONDITION_NOK"; 
+            }
+
+            realCount++;
+            var res = this._handleConditionGeoRect(line);
+
+            if (res == "CONDITION_OK") {
+                return "CONDITION_OK";
+            }
+
+        }
+
+        return (realCount==0) ? "CONDITION_OK" : "CONDITION_NOK";
+    }
+
+    this._handleConditionGeoRect = function(conditionLine){
+        var pattern = /(.*), +(.*)\/ +(.*), +(.*)/;
+        var parts = conditionLine.match(pattern);
+
+        console.log(conditionLine);
+        console.log(parts);
+
+        if (parts.length != 5) {
+            return "NO_CONDITION";
+        }
+
+        var minLatitude = Math.min(parts[1], parts[3]);
+        var maxLatitude = Math.max(parts[1], parts[3]);
+
+        var minLongitude = Math.min(parts[2], parts[4]);
+        var maxLongitude = Math.max(parts[2], parts[4]);
+
+        var latitudeOk = (this.currentLocation.latitude >= minLatitude && this.currentLocation.latitude <= maxLatitude);
+        var longitudeOk = (this.currentLocation.longitude >= minLongitude && this.currentLocation.longitude <= maxLongitude);
+
+        return (latitudeOk && longitudeOk) ? "CONDITION_OK" : "CONDITION_NOK";
+
+    }
+
     this._handleConditionGt = function(condition, currentVariables) {
 
         if (!condition) {
-            return;
+            return "NO_CONDITION";
         }
 
         if (condition.length == 0) {
-            return;
+            return "NO_CONDITION";
         }
 
         var condition = condition[0];
@@ -1081,6 +1159,24 @@ FRIGG.Client = function (config){
             this.params.debuggerElement.appendChild(this._makeDebuggerVariableItem(count++, v, this.currentVariables[v]) );
         }
         
+        if (this.project.custom_data){
+            this.params.debuggerElement.appendChild(this._makeDebuggerSimpleItem(this.project.custom_data, "Custom data"));
+        }
+
+        this.params.debuggerElement.appendChild(this._makeDebuggerSimpleItem(this.currentLocation.status, "Location status", "separated"));
+
+        if (this.currentLocation.status == "ok") {
+            this.params.debuggerElement.appendChild(this._makeDebuggerSimpleItem(this.currentLocation.latitude, "Latitude"));
+            this.params.debuggerElement.appendChild(this._makeDebuggerSimpleItem(this.currentLocation.longitude, "Longitude"));
+        }
+    }
+
+    this._makeDebuggerSimpleItem = function(text, title, theClass){
+        var item = document.createElement("li");
+        if (theClass) item.setAttribute("class", theClass);
+
+        item.innerHTML = (title?title+" : " : '') + text;
+        return item;
     }
 
     this._makeDebuggerItem = function(connection){
@@ -1090,6 +1186,22 @@ FRIGG.Client = function (config){
             event.stopPropagation();
             this.gotoScene(connection.destination_scene_id);
         }.bind(this));
+
+        if (connection.conditions.variables) {
+            var moreInfo = document.createElement("span");
+            moreInfo.setAttribute("class", "moreInfo");
+            moreInfo.innerHTML = connection.conditions.variables.join("<br/>");
+
+            item.appendChild(moreInfo);
+        }
+
+        if (connection.conditions.geolocation) {
+            var moreInfo = document.createElement("span");
+            moreInfo.setAttribute("class", "moreInfo");
+            moreInfo.innerHTML = connection.conditions.geolocation.join("<br/>");
+
+            item.appendChild(moreInfo);
+        }
 
         return item;
     }
@@ -1184,10 +1296,78 @@ FRIGG.Client = function (config){
         }.bind(this));
     }
 
+    this._initFirstClick = function(){
+
+        document.body.classList.add('geo-nok');
+
+        var that = this;
+        document.addEventListener("click", function fn() {
+            //console.log("First click");
+            that._initLocationListener();
+            document.removeEventListener("click", fn);
+        });
+
+    }
+
+
+    this._initLocationListener = function(){
+
+        if (! this.hasCustomData("enableGeolocation")) {
+            return;
+        }
+
+        if (! navigator.geolocation) {
+            console.error("No geolocation on this device.");
+            return;
+        }
+
+        var options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        };
+
+        navigator.geolocation.watchPosition(function(event){
+            this._processLocation(event.coords, event.timestamp)
+        }.bind(this), function(){
+            this._processErrorLocation();
+        }.bind(this), options);
+    }
+
+    this._processLocation = function(location, timestamp) {
+        this.currentLocation.status = "ok";
+        this.currentLocation.latitude = location.latitude;
+        this.currentLocation.longitude = location.longitude;
+        this.currentLocation.timestamp = timestamp;
+
+        document.body.classList.remove('geo-nok');
+        document.body.classList.add('geo-ok');
+
+    }
+
+    this._processErrorLocation = function() {
+        var now = Date.now();
+
+        if (this.currentLocation.status == "ok" && this.currentLocation.timestamp > now - (60*60)) {
+            console.log("ignore error.");
+            return;
+        }
+
+        this.currentLocation.status = "error";
+        this.currentLocation.latitude = 0;
+        this.currentLocation.longitude = 0;
+        this.currentLocation.timestamp = now;
+
+        document.body.classList.remove('geo-ok');
+        document.body.classList.add('geo-nok');
+    }
 
     this.run = function(forcedProjectId){
         
         this.forcedProjectId = forcedProjectId;
+
+        this._initFirstClick();
+
         this._initHashChangeListener();
         this._processHash();
 

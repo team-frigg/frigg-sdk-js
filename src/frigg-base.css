@@ -41,3 +41,11 @@
 	padding-top: 0.3em;
 	margin-top: 0.3em;
 }
+
+#friggDebugger .moreInfo {
+    display: block;
+    color: #999;
+    font-size: 0.9em;
+    padding: 0.1em;
+    padding-left: 1.5em;
+}
