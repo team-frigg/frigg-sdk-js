@@ -238,6 +238,10 @@ FRIGG.Client = function (config){
 
     this._loadVariableFromLocalStorage = function(project) {
         this.currentVariables = this._getFromLocalStorage(project, "variables");
+
+        //force contextual variables...
+        this.currentVariables['GEO-OK'] = 0;
+        this.currentVariables['GEO-NOK'] = 1;
     }
 
     this._mediaEventToClass = function(mediaElement, targetElement) {
@@ -1343,6 +1347,9 @@ FRIGG.Client = function (config){
         document.body.classList.remove('geo-nok');
         document.body.classList.add('geo-ok');
 
+        this.currentVariables['GEO-OK'] = 1;
+        this.currentVariables['GEO-NOK'] = 0;
+
     }
 
     this._processErrorLocation = function() {
@@ -1360,6 +1367,9 @@ FRIGG.Client = function (config){
 
         document.body.classList.remove('geo-ok');
         document.body.classList.add('geo-nok');
+
+        this.currentVariables['GEO-OK'] = 0;
+        this.currentVariables['GEO-NOK'] = 1;
     }
 
     this.run = function(forcedProjectId){
