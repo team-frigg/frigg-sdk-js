@@ -1093,6 +1093,7 @@ FRIGG.Client = function (config){
 
     this.showScene = function(sceneId){
         console.log("Showing scene " + sceneId);
+        this.currentSceneId = sceneId;
 
         var scene = this.project.scenes[sceneId];
         var template = this.project.templates[scene.template_id];
