@@ -304,7 +304,7 @@ FRIGG.Client = function (config){
         var standardClass = "link";
         var openLinkClass = "open-link";
         var closedLinkClass = "closed-link";
-console.log("GET CLASS");
+
         var variableStatus = this._handleConditionVar(slotLinkData.conditions.variables);
         var geoStatus = this._handleConditionGeo(slotLinkData.conditions.geolocation);
 
@@ -369,13 +369,13 @@ console.log("GET CLASS");
     }
 
     this._handleConditionGeoRect = function(conditionLine){
-        var pattern = /(.*), +(.*)\/ +(.*), +(.*)/;
+        var pattern = /(.*), ?(.*)\/ ?(.*), ?(.*)/;
         var parts = conditionLine.match(pattern);
 
         console.log(conditionLine);
         console.log(parts);
 
-        if (parts.length != 5) {
+        if (! parts || (parts.length != 5) ) {
             return "NO_CONDITION";
         }
 
