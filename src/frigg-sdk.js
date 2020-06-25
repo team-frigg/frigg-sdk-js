@@ -1097,7 +1097,7 @@ FRIGG.Client = function (config){
     }
 
     this.gotoScene = function(sceneId) {
-        window.location.hash = "project=" + this.project.project_id + "&scene=" + sceneId;
+        window.location.hash = "project=" + this.project.project_id + "&scene=" + sceneId + "&time=" + Date.now();
         this.updatePageTitle(sceneId);
     }
 
