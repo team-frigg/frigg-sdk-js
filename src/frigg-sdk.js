@@ -304,7 +304,7 @@ FRIGG.Client = function (config){
         var standardClass = "link";
         var openLinkClass = "open-link";
         var closedLinkClass = "closed-link";
-
+console.log("GET CLASS");
         var variableStatus = this._handleConditionVar(slotLinkData.conditions.variables);
         var geoStatus = this._handleConditionGeo(slotLinkData.conditions.geolocation);
 
@@ -392,18 +392,36 @@ FRIGG.Client = function (config){
 
     }
 
-    this._handleConditionGt = function(condition, currentVariables) {
+    this._handleConditionGt = function(conditions, currentVariables) {
 
-        if (!condition) {
+        if (!conditions) {
             return "NO_CONDITION";
         }
 
-        if (condition.length == 0) {
+        if (conditions.length == 0) {
             return "NO_CONDITION";
         }
 
-        var condition = condition[0];
+        var returnValue = "NO_CONDITION";
 
+        for(index in conditions) {
+            var condition = conditions[index];
+            var result = this._handleOneConditionGt(condition, currentVariables);
+
+            if (result == "CONDITION_NOK") {
+                return "CONDITION_NOK";
+            }
+
+            if (result == "CONDITION_OK") {
+                returnValue = "CONDITION_OK";
+            }
+
+        }
+
+        return returnValue;
+    }
+
+    this._handleOneConditionGt = function(condition, currentVariables) {
         var parts = condition.split(">");
 
         if (parts.length != 2) {
