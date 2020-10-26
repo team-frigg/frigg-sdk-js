@@ -719,16 +719,20 @@ FRIGG.Client = function (config){
         this.currentSceneElement = newScene;
     }
 
-    this._pauseAndResetPausableElements = function(){
-        for (var i = 0; i < this.pausableElements.length; i++) {
-            this.pausableElements[i].pause();
+    this._pauseAndResetPausableElements = function(sceneData){
+        if (!this.hasCustomData('keepAudio')) {
+
+            for (var i = 0; i < this.pausableElements.length; i++) {
+                this.pausableElements[i].pause();
+            }
+
         }
 
         this.pausableElements = [];
     }
 
     this._bindTemplate = function(templateName, sceneData, sceneId) {
-        this._pauseAndResetPausableElements();
+        this._pauseAndResetPausableElements(sceneData);
 
         var fullTemplateName = this.params.templatePrefix + templateName;
         var clone = this._cloneElement(fullTemplateName);
@@ -993,6 +997,7 @@ FRIGG.Client = function (config){
         var previousSceneIndex = this.sceneIdHistory.length -2;
 
         if (previousSceneIndex < 0) {
+            this.firstScene();
             return;
         }
 
@@ -1001,8 +1006,8 @@ FRIGG.Client = function (config){
     }
 
     this.firstScene = function(){
-        var firstSceneId = this.sceneIdHistory[ 0 ];
-        this.gotoScene(firstSceneId);
+        //var firstSceneId = this.sceneIdHistory[ 0 ];
+        this.gotoScene(this.project.start_scene_id);
     }
 
     this._handleSceneVariables = function(scene) {
