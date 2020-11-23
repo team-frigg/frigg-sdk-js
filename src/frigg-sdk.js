@@ -180,8 +180,8 @@ FRIGG.Client = function (config){
             media.addEventListener("timeupdate", function (event){
 
                 var updateData = {
-                    elapsedSeconds: media.currentTime,
-                    durationSeconds: media.duration,
+                    elapsedSeconds: Math.round(media.currentTime * 10)/10,
+                    durationSeconds: Math.round(media.duration * 10)/10,
                     elapsedPercent: ((media.currentTime * 100) / media.duration )
                     //elapsedPercent: Math.round( (media.currentTime * 100) / media.duration )
                 };
