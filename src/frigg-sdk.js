@@ -142,7 +142,11 @@ FRIGG.Client = function (config){
             },
         }, 
 
-        'onMediaPlayed' : function(scene){
+        'onMediaPlayed' : function(scene,project){
+
+        },
+
+        'onMediaPlayedUpdate' : function(scene, project, updateData, element) {
 
         },
 
@@ -167,12 +171,27 @@ FRIGG.Client = function (config){
         },
 
         'onPausableBinded' : function(parentElement, sceneData, pausableElements, frigg){
-            var playElements = parentElement.querySelectorAll("[frigg-media-control]");
+            var playPauseElements = parentElement.querySelectorAll("[frigg-media-control].play,[frigg-media-control].pause");
+            var rewindElements = parentElement.querySelectorAll("[frigg-media-control].rewind");
+            var forwardElements = parentElement.querySelectorAll("[frigg-media-control].forward");
+
             var media = pausableElements[0];
+
+            media.addEventListener("timeupdate", function (event){
+
+                var updateData = {
+                    elapsedSeconds: media.currentTime,
+                    durationSeconds: media.duration,
+                    elapsedPercent: ((media.currentTime * 100) / media.duration )
+                    //elapsedPercent: Math.round( (media.currentTime * 100) / media.duration )
+                };
+
+                frigg.params.onMediaPlayedUpdate(sceneData, frigg.project, updateData, parentElement);
+            });
 
             var playPause = function() {
                 if (media.paused) {
-                    frigg.params.onMediaPlayed(sceneData, frigg.project);
+                    frigg.params.onMediaPlayed(sceneData, frigg.project, parentElement);
 
                     media.play();
                     frigg.applyClassBySelector(parentElement, "[frigg-event-media-paused]", "disabled", 'add');
@@ -184,9 +203,27 @@ FRIGG.Client = function (config){
                 }
             }.bind(this);
 
-            for (var i = 0; i < playElements.length; i++) {
-                playElements[i].addEventListener("click", playPause);
+            var rewind = function(){
+                media.currentTime -= 10; 
+                //onMediaChanged(+10/-10)
             }
+
+            var forward = function(){
+                media.currentTime += 10;
+            }
+
+            for (var i = 0; i < playPauseElements.length; i++) {
+                playPauseElements[i].addEventListener("click", playPause);
+            }
+
+            for (var i = 0; i < rewindElements.length; i++) {
+                rewindElements[i].addEventListener("click", rewind);
+            }
+
+            for (var i = 0; i < forwardElements.length; i++) {
+                forwardElements[i].addEventListener("click", forward);
+            }
+            
 
             //initial
             frigg.applyClassBySelector(parentElement, "[frigg-event-media-started]", "disabled", 'add');
