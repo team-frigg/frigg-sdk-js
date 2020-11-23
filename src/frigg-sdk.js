@@ -45,12 +45,13 @@ FRIGG.Client = function (config){
         'slotHandler' : {
 
             'frigg-slot-html' : function(element, data) {
+
                 if (data.valueToBind == null) {
                     element.classList.add("empty");
                     return;
                 }
 
-                element.innerHTML = frigg.betterText(data.valueToBind.content);
+                element.innerHTML = frigg.betterText(data.valueToBind.content, true);
             },
             'frigg-slot-bg' : function(element, data) {
                 if (data.valueToBind == null) {
@@ -492,7 +493,7 @@ FRIGG.Client = function (config){
         return clone;
     }
 
-    this.betterText = function(source){
+    this.betterText = function(source, wrapIt){
         var converters = [
             {
                 'pattern': /\*\*([^\*]+)\*\*/g,
@@ -577,7 +578,11 @@ FRIGG.Client = function (config){
             source = source.replace(converter.pattern, converter.string);
         }
 
-        return source;
+        if (! wrapIt) {
+            return source;
+        }
+
+        return '<div class="wrapper">' + source + '</div>';
     }
 
     this._bindElement = function(slotElement, sceneData, summary, sceneElement) {
