@@ -177,13 +177,23 @@ FRIGG.Client = function (config){
 
             var media = pausableElements[0];
 
+            media.addEventListener("canplay", function (event){
+
+                var initialData = {
+                    elapsedSeconds: 0,
+                    durationSeconds: Math.round(media.duration),
+                    elapsedPercent: 0
+                };
+
+                frigg.params.onMediaPlayedUpdate(sceneData, frigg.project, initialData, parentElement);
+            });
+
             media.addEventListener("timeupdate", function (event){
 
                 var updateData = {
-                    elapsedSeconds: Math.round(media.currentTime * 10)/10,
-                    durationSeconds: Math.round(media.duration * 10)/10,
+                    elapsedSeconds: Math.round(media.currentTime),
+                    durationSeconds: Math.round(media.duration),
                     elapsedPercent: ((media.currentTime * 100) / media.duration )
-                    //elapsedPercent: Math.round( (media.currentTime * 100) / media.duration )
                 };
 
                 frigg.params.onMediaPlayedUpdate(sceneData, frigg.project, updateData, parentElement);
@@ -227,6 +237,7 @@ FRIGG.Client = function (config){
 
             //initial
             frigg.applyClassBySelector(parentElement, "[frigg-event-media-started]", "disabled", 'add');
+
 
         },
     };
@@ -533,28 +544,28 @@ FRIGG.Client = function (config){
     this.betterText = function(source, wrapIt){
         var converters = [
             {
-                'pattern': /\*\*([^\*]+)\*\*/g,
+                'pattern': /\*\*([^\*]+)\*\*\n/g,
                 'string': '<h2 class="bt heading">$1</h2>'
             },
 
             {
-                'pattern': /\n\+\+\+(.+)/g,
+                'pattern': /\n\+\+\+(.+)\n/g,
                 'string': '<h4 class="bt heading heading3">$1</h3>'
             },
 
             {
-                'pattern': /\n\+\+(.+)/g,
+                'pattern': /\n\+\+(.+)\n/g,
                 'string': '<h3 class="bt heading heading2">$1</h3>'
             },
 
             {
-                'pattern': /\n\+(.+)/g,
+                'pattern': /\n\+(.+)\n/g,
                 'string': '<h2 class="bt heading heading1">$1</h2>'
             },
 
 
             {
-                'pattern': /\n\-(.+)/g,
+                'pattern': /\n\-(.+)\n/g,
                 'string': '<li class="bt item">$1</li>'
             },
 
