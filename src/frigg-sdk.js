@@ -80,17 +80,51 @@ FRIGG.Client = function (config){
                     return;
                 }
 
-                var src = data.valueToBind.content;
+                var rawSrc = data.valueToBind.content;
+                var src = rawSrc;
+
                 if (! src.startsWith("http")) {
                     src = this.params.mediaFilePrefix + src;
                 }
 
                 element.setAttribute("src", src);
                 element.setAttribute("alt", data.valueToBind.description);
+                element.setAttribute("frigg-raw-src", rawSrc);
+
+                var parentNode = element.parentNode;
 
                 //media elements (audio or video)
                 if (element.pause) {
-                    this.pausableElements.push(element);
+                    console.log("Element is pausable...");
+                    if (element.tagName == "AUDIO") { //audio as global....
+                        console.log("Element is audio : remove from DOM");
+                        element.parentNode.removeChild(element);
+
+                        //replace by global if possible
+                        if (this.pausableElements && this.pausableElements[0]){
+                            console.log("Element is audio : checking VS previous");
+                            var nowPlaying = this.pausableElements[0].getAttribute('frigg-raw-src');
+                            if (nowPlaying == rawSrc) {
+                                console.log("Element is audio : same raw url, rebind element");
+                                element = this.pausableElements[0];
+
+                                if (! element.paused) {
+                                    element.pause();
+                                    element.play(); //refresh events if already playing
+                                }
+
+                                
+                            }
+                        } else {
+                            console.log("Element is audio : new audio element");
+                            this.pausableElements.push(element);
+                        }
+
+                        parentNode.appendChild(element);
+                    }
+
+                    console.log("Map media event to : ", element, data.sceneElement);
+
                     this._mediaEventToClass(element, element);
                     this._mediaEventToClass(element, data.sceneElement);
 
@@ -171,11 +205,13 @@ FRIGG.Client = function (config){
         },
 
         'onPausableBinded' : function(parentElement, sceneData, pausableElements, frigg){
+            console.log("onPausableBinded on element : ", parentElement);
             var playPauseElements = parentElement.querySelectorAll("[frigg-media-control].play,[frigg-media-control].pause");
             var rewindElements = parentElement.querySelectorAll("[frigg-media-control].rewind");
             var forwardElements = parentElement.querySelectorAll("[frigg-media-control].forward");
 
             var media = pausableElements[0];
+            media.setAttribute("frigg-scene-id", sceneData.id);
 
             media.addEventListener("canplay", function (event){
 
@@ -305,6 +341,7 @@ FRIGG.Client = function (config){
         //default
         targetElement.classList.add(ready);
         targetElement.classList.add(canPlay);
+//        console.log("mediaElement", mediaElement);
 
         mediaElement.addEventListener("playing", function(){
             targetElement.classList.remove(ready);
@@ -337,13 +374,18 @@ FRIGG.Client = function (config){
         });
     }
 
-    this.hasCustomData = function(needle) {
-        if (!this.project || !this.project.custom_data) {
-            return false;
+    this.hasCustomData = function(needle, container) {
+
+        if (! container) {
+            if (!this.project || !this.project.custom_data) {
+                return false;
+            }
+
+            container = this.project.custom_data;
         }
 
         needle = " " + needle + " ";
-        var data = " " + this.project.custom_data + " ";
+        var data = " " + container + " ";
 
         return (data.indexOf(needle) >= 0);
     }
@@ -773,18 +815,49 @@ FRIGG.Client = function (config){
     }
 
     this._pauseAndResetPausableElements = function(sceneData){
-        if (!this.hasCustomData('keepAudio')) {
+        var keepAudio = this.hasCustomData('keepAudio', this._extractContent(sceneData, 'custom_data') );
 
-            for (var i = 0; i < this.pausableElements.length; i++) {
+        if (keepAudio) {
+            console.log("keepAudio");
+            return;
+        }
+
+        var currentSceneAudio = this._extractContent(sceneData, 'audio');
+        var elements = [];
+
+        for (var i = 0; i < this.pausableElements.length; i++) {
+            var playingAudio =  this.pausableElements[i].getAttribute("frigg-raw-src");
+
+            console.log("check audio : " + currentSceneAudio + " vs " + playingAudio);
+
+            if (currentSceneAudio == playingAudio) {
+                console.log("keep playing, for next scene ");
+                elements.push(this.pausableElements[i]);
+            } else {
+                console.log("pause and discard audio");
                 this.pausableElements[i].pause();
             }
 
         }
 
-        this.pausableElements = [];
+        this.pausableElements = elements;
     }
 
+
+
+
+    this._extractContent = function(container, key) {
+        try{
+            return container[key][0].content;
+        } catch(e) {
+            return "";
+        }
+    }
+
+
+
     this._bindTemplate = function(templateName, sceneData, sceneId) {
+
         this._pauseAndResetPausableElements(sceneData);
 
         var fullTemplateName = this.params.templatePrefix + templateName;
@@ -800,7 +873,7 @@ FRIGG.Client = function (config){
         var slotElements = clone.querySelectorAll(selector);
         var summary = {
             has: [],
-            hasNot: [],
+            hasNot: []
         };
 
         //bind the element itself...
@@ -1010,10 +1083,11 @@ FRIGG.Client = function (config){
         var count = this.sceneElementHistory.length;
 
         for (var i = count - 1; i >= sceneIndex; i--) {
-            console.log("Remove child : " + i);
+            
             var sceneElement = this.sceneElementHistory[i];
             sceneElement.parentNode.removeChild(sceneElement);
-            //console.log(sceneElement);
+            
+            console.log("Remove scene " + sceneElement.getAttribute("frigg-scene-id"));
         }
 
         this.sceneElementHistory = this.sceneElementHistory.slice(0, sceneIndex);
