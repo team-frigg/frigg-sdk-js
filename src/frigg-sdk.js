@@ -211,6 +211,10 @@ FRIGG.Client = function (config){
             var forwardElements = parentElement.querySelectorAll("[frigg-media-control].forward");
 
             var media = pausableElements[0];
+            if (! media.setAttribute) { //not an HTML element. Custom embed video player for exemple
+                return;
+            }
+
             media.setAttribute("frigg-scene-id", sceneData.id);
 
             media.addEventListener("canplay", function (event){
@@ -826,11 +830,16 @@ FRIGG.Client = function (config){
         var elements = [];
 
         for (var i = 0; i < this.pausableElements.length; i++) {
-            var playingAudio =  this.pausableElements[i].getAttribute("frigg-raw-src");
+            var pausableElement = this.pausableElements[i];
+
+            var playingAudio = null;
+            if (pausableElement.getAttribute) { 
+                playingAudio = pausableElement.getAttribute("frigg-raw-src");
+            }
 
             console.log("check audio : " + currentSceneAudio + " vs " + playingAudio);
 
-            if (currentSceneAudio == playingAudio) {
+            if (playingAudio && (currentSceneAudio == playingAudio)) {
                 console.log("keep playing, for next scene ");
                 elements.push(this.pausableElements[i]);
             } else {
