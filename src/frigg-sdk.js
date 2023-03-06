@@ -61,6 +61,14 @@ FRIGG.Client = function (config){
                 element.classList.add("with-slot-bg");
                 element.style.backgroundImage = "url(" + this.params.mediaFilePrefix + data.valueToBind.content + ")";
             },
+            'frigg-slot-border' : function(element, data) {
+                if (data.valueToBind == null) {
+                    return;
+                }
+
+                element.classList.add("with-slot-border");
+                element.style.borderImage = "url(" + this.params.mediaFilePrefix + data.valueToBind.content + ")";
+            },
             'frigg-slot-class' : function(element, data) {
 
                 if (data.valueToBind == null) {
