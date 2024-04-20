@@ -1272,6 +1272,16 @@ FRIGG.Client = function (config){
             return
         }
 
+        //event for iframe
+        if (window.parent && window.parent.postMessage && this.project && scene) {
+            window.parent.postMessage({
+                event: "FRIGG_SCENE_LOADED",
+                project: this.project.project_id,
+                scene: sceneId,
+                template: scene.template_id,
+            }, '*');
+        }
+        
         this.params.onSceneLoaded(scene, this.project);
         this._saveHistoryToLocalStorage(this.project, scene);
 
